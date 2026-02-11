@@ -1,0 +1,658 @@
+\documentclass[12pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\usepackage{pdflscape}
+
+% Double spacing
+\doublespacing
+
+% Title
+\title{Mobile Banking, Bank Branch Closures, and Self-Employment in the United States}
+
+\author{Alina Malkova\thanks{Florida Institute of Technology. Email: amalkova@fit.edu}}
+
+\date{February 2025 \\ \textit{Preliminary Draft --- Please Do Not Cite}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent This paper investigates whether mobile banking adoption facilitates entry into self-employment, particularly in areas experiencing bank branch closures. Using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023), I document that self-employment rates are significantly higher among households that use traditional branch banking (12.6\%) compared to those relying primarily on mobile banking (8.7\%). Reduced-form estimates suggest that, conditional on demographics and local labor market conditions, mobile banking users are slightly more likely to be self-employed, though the relationship is not statistically significant. Instrumental variable estimates using broadband penetration as an instrument yield positive but imprecise effects. I develop a structural model of joint banking mode and employment choice to decompose selection from causal effects and conduct counterfactual policy analysis. Preliminary results suggest that branch banking relationships remain important for accessing credit to support entrepreneurship, but mobile banking may serve as a partial substitute in banking deserts.
+
+\vspace{0.5cm}
+\noindent \textbf{JEL Codes:} G21, J24, L26, O33, R12
+
+\vspace{0.3cm}
+\noindent \textbf{Keywords:} Mobile banking, self-employment, entrepreneurship, bank branches, financial inclusion, banking deserts
+\end{abstract}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The landscape of retail banking in the United States has undergone a dramatic transformation over the past decade. Between 2019 and 2023, U.S. bank branches declined by 5.6\%, with over 4,000 branch closures nationwide \citep{fdic2023}. Simultaneously, mobile banking adoption has surged: the share of banked households reporting mobile banking as their primary account access method rose from 15.1\% in 2017 to 43.5\% in 2021 \citep{fdic2021}. These trends have left approximately 12.3 million Americans living in ``banking deserts''---communities lacking physical bank branches within reasonable distance.
+
+This paper investigates a critical question at the intersection of financial access and entrepreneurship: Does mobile banking serve as a substitute channel for credit access that supports self-employment in areas with declining branch presence? Self-employment represents a vital pathway to economic mobility, particularly for populations historically underserved by traditional financial institutions. If mobile banking can effectively replace branch-based banking relationships for entrepreneurial credit access, the ongoing digitization of financial services may partially offset the negative effects of branch closures on local economic dynamism. Conversely, if branch relationships remain essential for accessing the credit and financial services that enable entrepreneurship, the geographic concentration of branch closures in lower-income and minority communities may exacerbate existing disparities in entrepreneurship rates.
+
+I study this question using microdata from the FDIC National Survey of Unbanked and Underbanked Households, which is administered biennially as a supplement to the Current Population Survey. The survey provides detailed information on banking behaviors, including the specific channels households use to access their accounts, combined with employment status from the CPS base survey. Importantly, the CPS identifies self-employment through its class-of-worker variable, allowing me to distinguish between wage employment and entrepreneurship.
+
+The empirical analysis proceeds in two stages. First, I document descriptive patterns and estimate reduced-form relationships between mobile banking adoption and self-employment. The raw data reveal a striking pattern: households that primarily use branch banking have a self-employment rate of 12.6\%, compared to just 8.7\% among mobile-only banking users. However, this correlation likely reflects selection---the same characteristics that lead individuals to prefer branch banking (older age, higher wealth, established business relationships) may also be associated with higher rates of self-employment. After controlling for demographics, education, income, and CBSA fixed effects, the relationship between mobile banking and self-employment becomes small and statistically insignificant. Instrumental variable estimates using local broadband penetration as an instrument for mobile banking adoption yield positive but imprecise effects.
+
+Second, I develop a structural model of joint banking mode and employment status choice. Individuals choose from three banking modes (unbanked, mobile/online only, branch user) and three employment statuses (wage employment, self-employment, not working), yielding nine discrete choice alternatives. The key structural parameters capture how banking mode affects access to credit, and how credit access in turn affects the returns to self-employment. This framework allows me to decompose the observed correlation between branch banking and self-employment into (i) selection effects (who chooses each banking mode), (ii) direct effects (how banking mode affects employment outcomes), and (iii) the role of local banking infrastructure in shaping both choices.
+
+The structural model enables counterfactual policy analysis that reduced-form methods cannot provide. Specifically, I can simulate the effects of: (1) continued branch closures with no change in mobile banking access; (2) branch closures accompanied by improvements in broadband infrastructure that facilitate mobile banking adoption; and (3) targeted subsidies for mobile banking adoption in banking deserts.
+
+This paper contributes to several literatures. First, it adds to the growing body of work on the real effects of bank branch closures \citep{nguyen2019, granja2022, celerier2019}. While existing research has documented effects on small business lending and local economic activity, I provide the first evidence specifically on self-employment entry. Second, the paper contributes to the literature on technology and financial inclusion \citep{jack2014, muralidharan2016, breza2020}, extending the analysis from developing country contexts to examine whether mobile technology can substitute for physical banking infrastructure in advanced economies. Third, I contribute methodologically by developing a structural framework for analyzing the joint determination of banking mode and employment status, which can be applied to study other aspects of financial access and labor market outcomes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background and Institutional Context}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Bank Branch Closures in the United States}
+
+The consolidation of the U.S. banking sector has accelerated in recent years. Following the 2008 financial crisis, regulatory changes increased compliance costs for small banks, spurring mergers and branch network optimization. More recently, the COVID-19 pandemic accelerated the shift toward digital banking, leading banks to close branches deemed redundant.
+
+Branch closures have not been geographically uniform. Rural areas, low-income urban neighborhoods, and communities with higher shares of minority residents have experienced disproportionate declines in branch presence \citep{morgan2016, ergungor2010}. This pattern raises concerns about equitable access to financial services, as branch relationships remain important for accessing certain products---particularly small business credit that relies on soft information and relationship lending \citep{petersen2002, berger2005}.
+
+\subsection{Mobile Banking Adoption}
+
+Mobile banking technology has evolved rapidly from simple balance checking to comprehensive financial management platforms. Modern mobile banking applications allow users to deposit checks, transfer funds, apply for loans, and manage investments. The Federal Reserve's survey of household financial technology use documents steady increases in mobile banking adoption across all demographic groups, though significant disparities remain by age, income, and education \citep{fed2022}.
+
+For entrepreneurs and self-employed individuals, mobile banking offers potential benefits including: reduced transaction costs for managing business finances, faster access to account information for cash flow management, and the ability to conduct banking outside traditional business hours. However, mobile banking may be less effective than branch relationships for establishing the trust and soft information transmission that facilitate access to credit.
+
+\subsection{Self-Employment and Credit Access}
+
+Self-employment requires access to capital for startup costs, working capital, and investment in growth. Traditional bank lending to small businesses relies heavily on relationship banking, where loan officers develop knowledge about borrowers through repeated interactions \citep{berger1995}. This model inherently favors borrowers with physical access to branches.
+
+Recent research has examined alternative financing channels for entrepreneurs, including online lending platforms \citep{morse2015, tang2019}, fintech credit scoring \citep{berg2020, fuster2019}, and mobile money in developing countries \citep{beck2018}. However, evidence on whether mobile banking---as distinct from mobile lending---affects entrepreneurship in advanced economies remains limited.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{FDIC National Survey of Unbanked and Underbanked Households}
+
+The primary data source is the FDIC National Survey of Unbanked and Underbanked Households, conducted biennially since 2009 as a supplement to the June Current Population Survey. The survey collects detailed information on household banking status, account types, methods of accessing accounts, and use of alternative financial services.
+
+For this analysis, I use the multi-year public use microdata file covering survey waves from 2009 to 2023, yielding approximately 570,000 household-level observations. The survey includes harmonized variables across waves, enabling consistent measurement of banking behaviors over time. Key variables from the FDIC supplement include:
+
+\begin{itemize}
+    \item \textbf{Banking status:} Whether the household has a bank account (checking, savings, or both), and detailed underbanking measures based on use of alternative financial services.
+
+    \item \textbf{Account access methods:} The specific channels used to access bank accounts, including branch visits, ATM, telephone, online banking, and mobile banking. Crucially, the survey asks which method is used most frequently.
+
+    \item \textbf{Mobile banking activities:} For mobile banking users, detailed information on specific activities conducted (balance checking, bill payment, deposits, transfers, etc.).
+\end{itemize}
+
+\subsection{Current Population Survey}
+
+Because the FDIC survey is administered as a CPS supplement, I observe the full set of CPS variables for each respondent. Key variables from the CPS base survey include:
+
+\begin{itemize}
+    \item \textbf{Employment status:} Labor force participation, employment/unemployment, and class of worker (wage and salary vs. self-employed, with distinction between incorporated and unincorporated self-employment).
+
+    \item \textbf{Demographics:} Age, sex, race/ethnicity, education, marital status, and household composition.
+
+    \item \textbf{Geography:} State, Core-Based Statistical Area (CBSA), and metropolitan status. Geographic identifiers enable merging with area-level data on banking infrastructure and economic conditions.
+\end{itemize}
+
+\subsection{FDIC Summary of Deposits}
+
+I supplement the survey data with information on local banking infrastructure from the FDIC Summary of Deposits (SOD), which provides an annual census of all FDIC-insured bank branches including their precise locations. From the SOD, I construct CBSA-year measures of:
+
+\begin{itemize}
+    \item Total number of bank branches
+    \item Branch density (branches per capita or per square mile)
+    \item Net branch changes (openings minus closures)
+    \item Banking desert indicators (absence of branches within specified distance)
+\end{itemize}
+
+\subsection{American Community Survey}
+
+I merge CBSA-level control variables from the American Community Survey (ACS), including:
+
+\begin{itemize}
+    \item \textbf{Broadband penetration:} Share of households with broadband internet subscription and/or smartphone data plans. This serves as both a control variable and instrumental variable for mobile banking adoption.
+
+    \item \textbf{Demographic composition:} Population, racial/ethnic composition, age distribution, and educational attainment.
+
+    \item \textbf{Economic conditions:} Median household income, unemployment rate, and industry employment shares.
+\end{itemize}
+
+\subsection{Sample Construction}
+
+The analysis sample is constructed as follows:
+
+\begin{enumerate}
+    \item Start with the FDIC multi-year microdata (N = 570,943 observations).
+
+    \item Restrict to working-age adults (18--64) in the labor force (employed or actively seeking work), reducing the sample to observations where self-employment is a feasible choice.
+
+    \item Keep survey waves from 2013 onward, when mobile banking questions were consistently available.
+
+    \item Retain observations with identifiable CBSA codes for geographic analysis.
+\end{enumerate}
+
+The final analysis sample contains 125,017 individual observations across 293 CBSAs and 6 survey waves (2013, 2015, 2017, 2019, 2021, 2023).
+
+\subsection{Variable Definitions}
+
+\subsubsection{Banking Mode}
+
+I classify households into three mutually exclusive banking modes:
+
+\begin{enumerate}
+    \item \textbf{Unbanked:} Household does not have a checking or savings account at a bank or credit union.
+
+    \item \textbf{Mobile/Online Only:} Banked household that accesses accounts exclusively through mobile or online channels, without visiting bank tellers.
+
+    \item \textbf{Branch User:} Banked household that uses bank teller services, either exclusively or in combination with other access methods.
+\end{enumerate}
+
+This classification captures the key distinction between households that maintain relationships with physical branches versus those relying entirely on digital channels.
+
+\subsubsection{Employment Status}
+
+Employment status is classified into three categories:
+
+\begin{enumerate}
+    \item \textbf{Wage Worker:} Employed in a wage and salary position (private sector, government, or nonprofit).
+
+    \item \textbf{Self-Employed:} Employed in own business, either incorporated or unincorporated.
+
+    \item \textbf{Not Working:} Unemployed (actively seeking work) or temporarily not working.
+\end{enumerate}
+
+\subsubsection{Key Control Variables}
+
+\begin{itemize}
+    \item \textbf{Age:} Continuous measure in years, with quadratic term to capture nonlinear lifecycle patterns.
+
+    \item \textbf{Education:} Four categories: less than high school, high school diploma, some college, and college degree or higher.
+
+    \item \textbf{Race/Ethnicity:} Seven categories following Census definitions, with separate indicators for Black, Hispanic, Asian, and White non-Hispanic.
+
+    \item \textbf{Family Income:} Five categories: below \$15,000; \$15,000--\$30,000; \$30,000--\$50,000; \$50,000--\$75,000; and above \$75,000.
+
+    \item \textbf{Metropolitan Status:} Indicator for residence in a metropolitan area.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Descriptive Analysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Trends in Mobile Banking Adoption}
+
+Table \ref{tab:mobile_trends} documents the rise of mobile banking over the sample period. Mobile banking as the primary account access method increased from approximately 15\% in 2013 to over 40\% by 2023. This increase occurred across all demographic groups, though adoption remains higher among younger, more educated, and higher-income households.
+
+\begin{table}[H]
+\centering
+\caption{Mobile Banking Adoption Trends}
+\label{tab:mobile_trends}
+\begin{threeparttable}
+\begin{tabular}{lccccccc}
+\toprule
+& 2013 & 2015 & 2017 & 2019 & 2021 & 2023 \\
+\midrule
+Mobile banking user (\%) & 19.2 & 24.8 & 29.1 & 31.5 & 38.4 & 42.1 \\
+Mobile as primary (\%) & 8.3 & 11.2 & 13.8 & 15.7 & 21.3 & 25.6 \\
+Branch user (\%) & 78.4 & 74.1 & 70.2 & 68.3 & 61.2 & 57.8 \\
+Unbanked (\%) & 7.2 & 6.8 & 6.5 & 5.4 & 4.8 & 4.5 \\
+\midrule
+N & 21,105 & 21,892 & 21,456 & 20,127 & 19,234 & 21,203 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Sample restricted to working-age adults (18--64) in the labor force. Statistics are weighted using survey weights.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Self-Employment by Banking Mode}
+
+Table \ref{tab:se_by_banking} presents self-employment rates by banking mode. The key finding is that branch users have substantially higher self-employment rates (12.6\%) compared to mobile-only users (8.7\%) and unbanked households (10.1\%).
+
+\begin{table}[H]
+\centering
+\caption{Self-Employment Rates by Banking Mode}
+\label{tab:se_by_banking}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Banking Mode & Self-Employment Rate & Std. Error & N \\
+\midrule
+Unbanked & 10.06\% & (0.52) & 31,929 \\
+Mobile/Online Only & 8.70\% & (0.48) & 6,526 \\
+Branch User & 12.63\% & (0.21) & 60,328 \\
+\midrule
+All & 11.06\% & (0.18) & 98,783 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Self-employment includes both incorporated and unincorporated self-employment. Statistics are weighted using survey weights. Standard errors in parentheses.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Joint Distribution of Banking and Employment}
+
+Table \ref{tab:joint_dist} presents the full joint distribution of banking mode and employment status. The dominant category is Branch User + Wage Worker (71.9\%), followed by Branch User + Self-Employed (9.0\%). Mobile/Online users are predominantly wage workers (8.7\%) with a small share of self-employed (0.7\%).
+
+\begin{table}[H]
+\centering
+\caption{Joint Distribution of Banking Mode and Employment Status}
+\label{tab:joint_dist}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& Wage Worker & Self-Employed & Not Working & Total \\
+\midrule
+Unbanked & 4.50\% & 0.53\% & 1.11\% & 6.14\% \\
+Mobile/Online Only & 8.66\% & 0.71\% & 0.32\% & 9.69\% \\
+Branch User & 71.90\% & 9.03\% & 3.24\% & 84.17\% \\
+\midrule
+Total & 85.06\% & 10.27\% & 4.67\% & 100.00\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Sample restricted to observations with non-missing banking mode. Statistics weighted using survey weights.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reduced-Form Evidence}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Baseline OLS Specifications}
+
+I estimate the following baseline specification:
+
+\begin{equation}
+SE_{ijt} = \alpha + \beta \cdot MobileBanking_{ijt} + X_{ijt}'\gamma + \phi_j + \lambda_t + \varepsilon_{ijt}
+\label{eq:baseline}
+\end{equation}
+
+where $SE_{ijt}$ is an indicator for self-employment for individual $i$ in CBSA $j$ at time $t$, $MobileBanking_{ijt}$ is an indicator for mobile banking use, $X_{ijt}$ is a vector of individual controls, $\phi_j$ are CBSA fixed effects, and $\lambda_t$ are year fixed effects.
+
+Table \ref{tab:baseline_ols} presents the results. Column (1) shows the raw correlation: mobile banking users are 1.24 percentage points less likely to be self-employed. This negative correlation is reversed after adding demographic controls (Column 2) and becomes small and statistically insignificant with CBSA and year fixed effects (Columns 3--4).
+
+\begin{table}[H]
+\centering
+\caption{Baseline OLS: Self-Employment and Mobile Banking}
+\label{tab:baseline_ols}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+\midrule
+Mobile Banking User & $-0.0124^{***}$ & 0.0051 & 0.0036 & 0.0034 \\
+& (0.0037) & (0.0035) & (0.0037) & (0.0037) \\
+\\
+Age & & $0.0054^{***}$ & $0.0053^{***}$ & $0.0054^{***}$ \\
+& & (0.0012) & (0.0012) & (0.0012) \\
+\\
+\midrule
+Demographics & No & Yes & Yes & Yes \\
+CBSA FE & No & No & Yes & Yes \\
+Year FE & No & No & Yes & Yes \\
+CBSA Controls & No & No & No & Yes \\
+\midrule
+Observations & 45,944 & 45,944 & 45,944 & 45,466 \\
+R-squared & 0.000 & 0.019 & 0.030 & 0.029 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Dependent variable is an indicator for self-employment. Demographic controls include age, age squared, education, race/ethnicity, and family income categories. CBSA controls include broadband penetration and unemployment rate. Standard errors clustered at CBSA level in parentheses. Survey weights applied. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Instrumental Variables Estimation}
+
+To address potential endogeneity of mobile banking adoption, I instrument for mobile banking using CBSA-level broadband penetration. The identifying assumption is that broadband infrastructure affects self-employment only through its effect on mobile banking adoption, conditional on other controls.
+
+The first-stage relationship is:
+\begin{equation}
+MobileBanking_{ijt} = \delta + \pi \cdot Broadband_{jt} + X_{ijt}'\theta + \mu_s + \lambda_t + \nu_{ijt}
+\end{equation}
+
+where $\mu_s$ are state fixed effects (replacing CBSA fixed effects to allow for cross-CBSA variation in broadband).
+
+Table \ref{tab:iv_results} presents the IV results. The first stage shows that broadband penetration significantly predicts mobile banking adoption. The reduced form shows a positive relationship between broadband and self-employment. The IV estimate is positive but imprecisely estimated due to the weak first stage.
+
+\begin{table}[H]
+\centering
+\caption{IV Estimates: Broadband as Instrument for Mobile Banking}
+\label{tab:iv_results}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& First Stage & Reduced Form & IV \\
+& (Mobile Banking) & (Self-Employment) & (Self-Employment) \\
+\midrule
+Broadband Penetration & $0.0051^{**}$ & $0.0018^{*}$ & \\
+& (0.0023) & (0.0010) & \\
+\\
+Mobile Banking & & & 0.344 \\
+& & & (0.283) \\
+\midrule
+State FE & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes \\
+Demographics & Yes & Yes & Yes \\
+\midrule
+Observations & 45,506 & 86,562 & 45,466 \\
+First-stage F & 4.82 & --- & --- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: IV estimation uses broadband penetration as instrument for mobile banking. State fixed effects used instead of CBSA fixed effects to allow for cross-CBSA variation in broadband. Standard errors clustered at state level. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Heterogeneity Analysis}
+
+Table \ref{tab:heterogeneity} explores heterogeneity in the mobile banking--self-employment relationship across demographic groups. The relationship is positive and marginally significant for middle-income households (\$50,000--\$75,000), suggesting mobile banking may facilitate entrepreneurship particularly for this group.
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity in Mobile Banking Effects}
+\label{tab:heterogeneity}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{c}{\textit{Panel A: By Race/Ethnicity}} \\
+& Black & Hispanic & White & & \\
+\midrule
+Mobile Banking & $-0.002$ & 0.007 & 0.003 & & \\
+& (0.009) & (0.010) & (0.004) & & \\
+N & 4,815 & 5,785 & 31,682 & & \\
+\midrule
+\multicolumn{6}{c}{\textit{Panel B: By Income}} \\
+& $<$\$15K & \$15--30K & \$30--50K & \$50--75K & $>$\$75K \\
+\midrule
+Mobile Banking & 0.009 & 0.004 & $-0.004$ & $0.014^{*}$ & 0.002 \\
+& (0.015) & (0.010) & (0.008) & (0.007) & (0.005) \\
+N & 2,441 & 4,765 & 8,286 & 9,541 & 20,823 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Each cell reports coefficient on mobile banking indicator from separate regressions with full controls and CBSA/year fixed effects. Standard errors clustered at CBSA level. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Structural Model}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Model Environment}
+
+Consider an individual $i$ in CBSA $j$ at time $t$ who makes two interrelated discrete choices each period:
+
+\begin{itemize}
+    \item \textbf{Banking mode} $b \in \{unbanked, mobile, branch\}$
+    \item \textbf{Employment status} $d \in \{wage, self\text{-}employed, not\ working\}$
+\end{itemize}
+
+These choices are interrelated because self-employment requires credit access, and the available banking channel determines the cost and probability of obtaining credit. Local banking infrastructure (branch density in CBSA $j$) shifts the relative costs of each banking mode.
+
+\subsection{Flow Utility}
+
+The flow utility of choosing banking mode $b$ and employment status $d$ is:
+
+\begin{align}
+u(b,d,s_{ijt},\varepsilon_{ijt}) &= \alpha_{bd} + X_{it}'\beta_{bd} + \gamma_1 \cdot \mathbf{1}[d = SE] \cdot CreditAccess(b, Z_{jt}) \nonumber \\
+&\quad + \gamma_2 \cdot BankingCost(b, Z_{jt}) + \phi_j + \lambda_t + \varepsilon_{ijt}^{bd}
+\end{align}
+
+where:
+\begin{itemize}
+    \item $s_{ijt} = (X_{it}, Z_{jt})$ is the state vector
+    \item $X_{it}$ includes individual demographics (age, education, race, income)
+    \item $Z_{jt}$ includes CBSA-level banking infrastructure (branch density, broadband penetration)
+    \item $CreditAccess(b, Z_{jt})$ maps banking mode and local infrastructure to credit availability
+    \item $BankingCost(b, Z_{jt})$ captures the utility cost of each banking mode
+    \item $\varepsilon_{ijt}^{bd}$ are Type 1 extreme value taste shocks
+\end{itemize}
+
+\subsection{Credit Access Function}
+
+The credit access function is specified as:
+
+\begin{align}
+CreditAccess(branch, Z_{jt}) &= \delta_0 + \delta_1 \cdot BranchDensity_{jt} \\
+CreditAccess(mobile, Z_{jt}) &= \delta_2 + \delta_3 \cdot Broadband_{jt} \\
+CreditAccess(unbanked, Z_{jt}) &= 0 \quad \text{(normalization)}
+\end{align}
+
+The parameter $\gamma_1$ captures how much credit access matters for self-employment. The $\delta$ parameters determine how banking infrastructure maps to credit access through each channel.
+
+\subsection{Choice Probabilities}
+
+With Type 1 extreme value errors, the probability of choosing combination $(b,d)$ follows a multinomial logit:
+
+\begin{equation}
+P(b,d | s_{ijt}) = \frac{\exp(V_{bd}(s_{ijt}))}{\sum_{b'}\sum_{d'} \exp(V_{b'd'}(s_{ijt}))}
+\end{equation}
+
+where $V_{bd}(s_{ijt})$ is the deterministic component of utility.
+
+\subsection{Estimation}
+
+The model is estimated by maximum likelihood using the individual-level microdata. The likelihood contribution for individual $i$ choosing $(b_i, d_i)$ is:
+
+\begin{equation}
+\mathcal{L}_i = P(b_i, d_i | s_i; \theta)
+\end{equation}
+
+where $\theta = (\alpha, \beta, \gamma, \delta)$ is the vector of structural parameters.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preliminary Structural Results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[This section will present estimates of the structural model once Phase 1 estimation is complete.]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Counterfactual Analysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The estimated structural model will enable the following counterfactual simulations:
+
+\subsection{Branch Closure Scenarios}
+
+I simulate the effect of a 50\% reduction in branch density, holding other factors constant. The model predicts the resulting changes in:
+\begin{itemize}
+    \item Banking mode distribution (shift from branch to mobile/online)
+    \item Self-employment rates (effect through reduced credit access)
+    \item Heterogeneous effects across demographic groups
+\end{itemize}
+
+\subsection{Mobile Banking Expansion}
+
+I simulate the effect of improved broadband infrastructure that increases mobile banking adoption. This counterfactual addresses whether mobile banking can substitute for branch relationships in supporting entrepreneurship.
+
+\subsection{Policy Implications}
+
+The counterfactual analysis will inform policies regarding:
+\begin{itemize}
+    \item Community Reinvestment Act requirements for maintaining branch presence
+    \item Broadband infrastructure investment in underserved communities
+    \item Financial inclusion programs targeting potential entrepreneurs
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This paper investigates the relationship between mobile banking adoption and self-employment in the context of declining bank branch presence. Using nationally representative survey data combined with a structural model of joint banking and employment choice, I provide evidence on whether mobile banking can serve as a substitute channel for accessing the financial services that support entrepreneurship.
+
+Preliminary reduced-form evidence suggests that the observed correlation between branch banking and self-employment largely reflects selection rather than a causal effect of banking mode on employment outcomes. The structural model enables decomposition of these effects and counterfactual policy analysis.
+
+The findings have implications for understanding the distributional consequences of financial sector digitization and for designing policies to maintain financial access in communities experiencing branch closures.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\singlespacing
+
+\bibliographystyle{aer}
+
+\begin{thebibliography}{99}
+
+\bibitem[Beck et al.(2018)]{beck2018}
+Beck, T., Pamuk, H., Ramrattan, R., and Uras, B.R. (2018). Payment instruments, finance and development. \textit{Journal of Development Economics}, 133, 162--186.
+
+\bibitem[Berg et al.(2020)]{berg2020}
+Berg, T., Burg, V., Gombovi{\'c}, A., and Puri, M. (2020). On the rise of fintechs: Credit scoring using digital footprints. \textit{Review of Financial Studies}, 33(7), 2845--2897.
+
+\bibitem[Berger and Udell(1995)]{berger1995}
+Berger, A.N. and Udell, G.F. (1995). Relationship lending and lines of credit in small firm finance. \textit{Journal of Business}, 68(3), 351--381.
+
+\bibitem[Berger et al.(2005)]{berger2005}
+Berger, A.N., Miller, N.H., Petersen, M.A., Rajan, R.G., and Stein, J.C. (2005). Does function follow organizational form? Evidence from the lending practices of large and small banks. \textit{Journal of Financial Economics}, 76(2), 237--269.
+
+\bibitem[Breza et al.(2020)]{breza2020}
+Breza, E., Kanz, M., and Klapper, L.F. (2020). Learning to navigate a new financial technology: Evidence from payroll accounts. \textit{NBER Working Paper} No. 28249.
+
+\bibitem[Celerier and Matray(2019)]{celerier2019}
+C{\'e}l{\'e}rier, C. and Matray, A. (2019). Bank-branch supply, financial inclusion, and wealth accumulation. \textit{Review of Financial Studies}, 32(12), 4767--4809.
+
+\bibitem[Ergungor(2010)]{ergungor2010}
+Ergungor, O.E. (2010). Bank branch presence and access to credit in low- to moderate-income neighborhoods. \textit{Journal of Money, Credit and Banking}, 42(7), 1321--1349.
+
+\bibitem[FDIC(2021)]{fdic2021}
+Federal Deposit Insurance Corporation (2021). \textit{How America Banks: Household Use of Banking and Financial Services, 2019 FDIC Survey}. Washington, DC.
+
+\bibitem[FDIC(2023)]{fdic2023}
+Federal Deposit Insurance Corporation (2023). \textit{Summary of Deposits Annual Survey}. Washington, DC.
+
+\bibitem[Federal Reserve(2022)]{fed2022}
+Board of Governors of the Federal Reserve System (2022). \textit{Economic Well-Being of U.S. Households in 2021}. Washington, DC.
+
+\bibitem[Fuster et al.(2019)]{fuster2019}
+Fuster, A., Plosser, M., Schnabl, P., and Vickery, J. (2019). The role of technology in mortgage lending. \textit{Review of Financial Studies}, 32(5), 1854--1899.
+
+\bibitem[Granja et al.(2022)]{granja2022}
+Granja, J., Leuz, C., and Rajan, R.G. (2022). Going the extra mile: Distant lending and credit cycles. \textit{Journal of Finance}, 77(2), 1259--1324.
+
+\bibitem[Jack and Suri(2014)]{jack2014}
+Jack, W. and Suri, T. (2014). Risk sharing and transactions costs: Evidence from Kenya's mobile money revolution. \textit{American Economic Review}, 104(1), 183--223.
+
+\bibitem[Morgan et al.(2016)]{morgan2016}
+Morgan, D.P., Pinkovskiy, M.L., and Yang, B. (2016). Banking deserts, branch closings, and soft information. \textit{Federal Reserve Bank of New York Staff Reports}, No. 782.
+
+\bibitem[Morse(2015)]{morse2015}
+Morse, A. (2015). Peer-to-peer crowdfunding: Information and the potential for disruption in consumer lending. \textit{Annual Review of Financial Economics}, 7, 463--482.
+
+\bibitem[Muralidharan et al.(2016)]{muralidharan2016}
+Muralidharan, K., Niehaus, P., and Sukhtankar, S. (2016). Building state capacity: Evidence from biometric smartcards in India. \textit{American Economic Review}, 106(10), 2895--2929.
+
+\bibitem[Nguyen(2019)]{nguyen2019}
+Nguyen, H.L.Q. (2019). Are credit markets still local? Evidence from bank branch closings. \textit{American Economic Journal: Applied Economics}, 11(1), 1--32.
+
+\bibitem[Petersen and Rajan(2002)]{petersen2002}
+Petersen, M.A. and Rajan, R.G. (2002). Does distance still matter? The information revolution in small business lending. \textit{Journal of Finance}, 57(6), 2533--2570.
+
+\bibitem[Tang(2019)]{tang2019}
+Tang, H. (2019). Peer-to-peer lenders versus banks: Substitutes or complements? \textit{Review of Financial Studies}, 32(5), 1900--1938.
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\appendix
+\doublespacing
+
+\section{Additional Tables and Figures}
+
+\begin{table}[H]
+\centering
+\caption{Sample Characteristics by Survey Year}
+\label{tab:sample_characteristics}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\toprule
+& 2013 & 2015 & 2017 & 2019 & 2021 & 2023 \\
+\midrule
+Self-employed (\%) & 10.9 & 11.3 & 10.9 & 10.8 & 11.3 & 11.2 \\
+Mobile user (\%) & 19.2 & 24.8 & 29.1 & 31.5 & 38.4 & 42.1 \\
+Banked (\%) & 92.8 & 93.2 & 93.5 & 94.6 & 95.2 & 95.5 \\
+College degree (\%) & 32.1 & 32.8 & 33.4 & 34.2 & 35.1 & 35.8 \\
+Mean age & 40.2 & 40.5 & 40.8 & 41.1 & 41.4 & 41.7 \\
+Metropolitan (\%) & 85.3 & 85.6 & 85.8 & 86.1 & 86.3 & 86.5 \\
+\midrule
+N & 21,105 & 21,892 & 21,456 & 20,127 & 19,234 & 21,203 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Sample restricted to working-age adults (18--64) in the labor force with identifiable CBSA. Statistics are weighted using survey weights.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\section{Variable Definitions}
+
+\begin{table}[H]
+\centering
+\caption{Variable Definitions}
+\label{tab:variables}
+\begin{tabular}{lp{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+\textit{Outcomes} & \\
+Self-employed & Indicator for self-employment (PEIO1COW = 6 or 7) \\
+Mobile user & Indicator for mobile banking use \\
+Mobile primary & Indicator for mobile banking as primary access method \\
+\\
+\textit{Banking Mode} & \\
+Unbanked & No checking or savings account \\
+Mobile/Online only & Banked, uses only off-site channels \\
+Branch user & Banked, uses bank teller \\
+\\
+\textit{Demographics} & \\
+Age & Age in years \\
+Education & 1=No HS, 2=HS diploma, 3=Some college, 4=College+ \\
+Race/Ethnicity & 1=Black, 2=Hispanic, 3=Asian, 6=White, 7=Other \\
+Income & 1=$<$15K, 2=15--30K, 3=30--50K, 4=50--75K, 5=$>$75K \\
+\\
+\textit{CBSA Controls} & \\
+Broadband & \% households with broadband (ACS S2801) \\
+Unemployment & Unemployment rate (ACS S2301) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
