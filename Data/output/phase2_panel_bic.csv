@@ -1,0 +1,17 @@
+method,item,value,K
+Hao-Kasahara,Panel_BIC,-80112.258,1
+Hao-Kasahara,Panel_BIC,-80482.047,2
+Hao-Kasahara,Panel_BIC,-82172.703,3
+Hao-Kasahara,Panel_BIC,-83651.82,4
+Standard,BIC,-80044.922,1
+Standard,BIC,-80400.281,2
+Standard,BIC,-82076.5,3
+Standard,BIC,-83541.188,4
+BLM,CF_50pct,.57451224,1
+BLM,CF_50pct,2.9700446,2
+BLM,CF_50pct,8.8314819,3
+BLM,CF_50pct,11.008471,4
+Selected,optimal_K_panel,4,
+Selected,optimal_K_std,4,
+OSCE,active_types,4,
+Baseline,se_rate,.10558994,
