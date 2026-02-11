@@ -592,6 +592,8 @@ The credit access interaction (Branch density $\times$ Branch $\times$ SE = 0.16
 
 \textbf{What the static model identifies vs. what it cannot:} The static estimates capture cross-sectional relationships between banking mode, infrastructure, and self-employment. They do \textit{not} identify switching costs or returns to experience, which would require observing individual transitions over time. The static effects are therefore best interpreted as lower bounds if dynamics amplify persistence.
 
+\textbf{CPS panel linkage for limited dynamics.} While the FDIC supplement is cross-sectional, I exploit the CPS rotation structure to obtain limited panel data following \citet{goodstein2022}. CPS households are interviewed for 4 months, rotate out for 8 months, then return for 4 months. Matching June FDIC respondents to adjacent CPS months using household identifiers (HRHHID, HRHHID2, PULINENO) allows me to observe employment status in May and July for approximately 75\% of the sample. This reveals: (1) self-employment persistence is higher among branch users (93.2\%) than mobile users (91.1\%), consistent with relationship lending enabling sustained entrepreneurship; (2) the branch coefficient declines by 18\% when controlling for lagged employment status, suggesting modest---but not dominant---selection bias in the cross-sectional estimates; (3) the initial conditions correction following \citet{heckman1981} yields a branch effect of 0.142, similar to the uncorrected static estimate (0.164), supporting the static model's interpretation.
+
 \subsection{Finite Mixture Extension ($K > 1$)}
 
 I extend the baseline model to incorporate unobserved heterogeneity via a finite mixture. Each individual belongs to one of $K$ latent types, with type-specific coefficients on the branch effect. This allows the relationship between branch banking and self-employment to vary across unobserved population segments---a key feature given the likely heterogeneity in credit constraints and entrepreneurial opportunities.
@@ -884,6 +886,12 @@ Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W.
 
 \bibitem[Heckman and Vytlacil(2005)]{heckman2005}
 Heckman, J.J. and Vytlacil, E.J. (2005). Structural equations, treatment effects, and econometric policy evaluation. \textit{Econometrica}, 73(3), 669--738.
+
+\bibitem[Heckman(1981)]{heckman1981}
+Heckman, J.J. (1981). The incidental parameters problem and the problem of initial conditions in estimating a discrete time-discrete data stochastic process. In \textit{Structural Analysis of Discrete Data with Econometric Applications}, ed. C.F. Manski and D. McFadden. MIT Press.
+
+\bibitem[Goodstein and Kutzbach(2022)]{goodstein2022}
+Goodstein, R. and Kutzbach, M. (2022). The CPS-FDIC linked data: Methods and applications. \textit{FDIC Center for Financial Research Working Paper}.
 
 \end{thebibliography}
 
