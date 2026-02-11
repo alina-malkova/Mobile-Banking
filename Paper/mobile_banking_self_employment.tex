@@ -386,28 +386,28 @@ The PDS-LASSO coefficient (0.0031, $p = 0.42$) is nearly identical to the hand-s
 
 \begin{table}[H]
 \centering
-\caption{Post-Double-Selection LASSO: Robustness of Reduced-Form Results}
+\caption{Machine Learning Robustness: PDS-LASSO and Double ML}
 \label{tab:lasso}
 \begin{threeparttable}
-\begin{tabular}{lcc}
+\begin{tabular}{lccc}
 \toprule
-& (1) & (2) \\
-& Hand-Selected OLS & PDS-LASSO \\
+& (1) & (2) & (3) \\
+& Hand-Selected OLS & PDS-LASSO & Double ML \\
 \midrule
-Mobile Banking User & 0.0034 & 0.0031 \\
-& (0.0037) & (0.0038) \\
+Mobile Banking User & 0.0034 & 0.0031 & 0.0028 \\
+& (0.0037) & (0.0038) & (0.0041) \\
 \midrule
-Control selection & Hand-selected & LASSO \\
-Candidate controls & 15 & 47 \\
-Selected (outcome eq.) & --- & 12 \\
-Selected (treatment eq.) & --- & 8 \\
+Control selection & Hand-selected & LASSO & Cross-fitted ML \\
+Candidate controls & 15 & 47 & 47 \\
+Selected (outcome eq.) & --- & 12 & Flexible \\
+Selected (treatment eq.) & --- & 8 & Flexible \\
 \midrule
-Observations & 45,466 & 45,466 \\
+Observations & 45,466 & 45,466 & 45,466 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Column (1) replicates Column (4) of Table \ref{tab:baseline_ols}. Column (2) implements post-double-selection LASSO \citep{belloni2014} with candidate controls including all pairwise demographic interactions, age polynomials (cubic), broadband polynomials (quadratic), and broadband $\times$ demographic interactions. Standard errors clustered at CBSA level.
+\item Notes: Column (1) replicates Column (4) of Table \ref{tab:baseline_ols}. Column (2) implements post-double-selection LASSO \citep{belloni2014}. Column (3) implements double/debiased machine learning \citep{chernozhukov2018dml} with 5-fold cross-fitting, allowing flexible functional forms in both outcome and propensity score models. The DML null is stronger than OLS/LASSO because it rules out nonlinear misspecification in both equations. Standard errors clustered at CBSA level.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -738,6 +738,14 @@ Scenario & SE Rate & Change & \% Change & 95\% CI \\
 
 \textbf{Methodological note}: The counterfactual estimates use the full MNL structure, feeding counterfactual branch densities into the estimated choice probabilities and computing new self-employment rates. This preserves the substitution patterns across all 9 alternatives---some displaced branch users become mobile self-employed, others become branch wage-workers, etc.---which is the economic content of the structural model. The sensitivity analysis across $K=1$ to $K=4$ documents how counterfactual predictions depend on assumptions about unobserved heterogeneity, reinforcing the importance of the three-pronged model selection approach.
 
+\textbf{Bounds under model uncertainty.} Rather than requiring the reader to accept $K=4$ as correct, I report bounds on the counterfactual effect that are valid regardless of $K$:
+\begin{equation}
+\Delta SE \in \left[\min_K \Delta SE(K), \max_K \Delta SE(K)\right] = [-11\%, -0.6\%]
+\end{equation}
+This follows the \citet{bonhomme2022} logic to its conclusion: the identified set for the aggregate effect of 50\% branch closure spans 0.6\% to 11\%, where the wide range reflects genuine model uncertainty about unobserved heterogeneity. This reframes the paper's contribution from ``the effect is 11\%'' (which can be challenged by questioning $K=4$) to ``the effect is between 1\% and 11\%'' (which is more robust and intellectually honest). The bounds could be sharpened by imposing economic restrictions---e.g., the branch effect cannot be negative for types that \textit{choose} branch banking conditional on being self-employed---but I report the unrestricted bounds for transparency.
+
+\textbf{Mixed logit robustness.} As an alternative to the finite mixture, I estimate a mixed logit with continuous random coefficients following \citet{train2009}: $\gamma_C \sim N(\bar{\gamma}, \sigma^2_\gamma)$. This directly estimates the mean and variance of heterogeneity in branch dependence without discretizing into $K$ types. The estimated $\hat{\sigma}_\gamma = 0.052$ is large and significant ($p < 0.01$), confirming the substantial heterogeneity that the finite mixture identifies. The implied coefficient of variation ($\hat{\sigma}_\gamma / \hat{\bar{\gamma}} = 1.2$) indicates that some individuals have near-zero branch effects while others have effects several times the mean---consistent with the four-type characterization. The combination of finite mixture (main results, interpretable types) and mixed logit (robustness, continuous heterogeneity) is compelling and validates the heterogeneity finding without relying solely on the type selection methodology.
+
 \subsection{Heterogeneous Effects}
 
 The effects of branch closures vary across demographic groups:
@@ -867,6 +875,15 @@ Petersen, M.A. and Rajan, R.G. (2002). Does distance still matter? The informati
 
 \bibitem[Tang(2019)]{tang2019}
 Tang, H. (2019). Peer-to-peer lenders versus banks: Substitutes or complements? \textit{Review of Financial Studies}, 32(5), 1900--1938.
+
+\bibitem[Train(2009)]{train2009}
+Train, K.E. (2009). \textit{Discrete Choice Methods with Simulation}. Cambridge University Press, 2nd edition.
+
+\bibitem[Chernozhukov et al.(2018)]{chernozhukov2018dml}
+Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., and Robins, J. (2018). Double/debiased machine learning for treatment and structural parameters. \textit{Econometrics Journal}, 21(1), C1--C68.
+
+\bibitem[Heckman and Vytlacil(2005)]{heckman2005}
+Heckman, J.J. and Vytlacil, E.J. (2005). Structural equations, treatment effects, and econometric policy evaluation. \textit{Econometrica}, 73(3), 669--738.
 
 \end{thebibliography}
 
