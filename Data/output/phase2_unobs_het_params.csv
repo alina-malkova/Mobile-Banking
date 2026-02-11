@@ -1,0 +1,18 @@
+parameter,value,type
+pi,.071926191,Type 1
+pi,.28925717,Type 2
+pi,.63881665,Type 3
+gamma_dynamic,.28512084,Type 1
+gamma_dynamic,.47223344,Type 2
+gamma_dynamic,.82485938,Type 3
+kappa_switch,1.0908381,Type 1
+kappa_switch,0,Type 2
+kappa_switch,-.83365214,Type 3
+gamma_bb_se,.5152781,Type 1
+gamma_bb_se,-.11108781,Type 2
+gamma_bb_se,-.17548999,Type 3
+cf_se,.27540499,Type 1
+cf_se,.094826207,Type 2
+cf_se,.085276864,Type 3
+baseline_se,.11404566,All
+cf_se_weighted,.10171427,All

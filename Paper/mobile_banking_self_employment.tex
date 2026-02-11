@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment. Using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023), I document that self-employment rates are significantly higher among branch banking users (9.95\%) compared to mobile-only users (7.19\%). I develop a dynamic structural model of joint banking mode and employment choice estimated via the Arcidiacono-Miller CCP approach with finite dependence. The key dynamic elements include self-employment experience accumulation, banking mode switching costs, and forward-looking behavior. The structural estimates reveal substantial returns to self-employment experience ($\gamma = 0.56$) and large banking mode switching costs ($\kappa = 6.18$), indicating strong state dependence in both employment and banking choices. Counterfactual simulations incorporating dynamic effects show that a 50\% reduction in branch access reduces aggregate self-employment by 19.3\%---substantially larger than static models predict---because branch closures reduce not only current self-employment but also future experience accumulation and entrepreneurial human capital. These findings suggest that policies promoting mobile banking cannot offset the compounding negative effects of branch closures on entrepreneurship.
+\noindent This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment. Using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023), I document that self-employment rates are significantly higher among branch banking users (9.95\%) compared to mobile-only users (7.19\%). I develop a dynamic structural model of joint banking mode and employment choice estimated via the Arcidiacono-Miller CCP approach with finite dependence and unobserved heterogeneity. The model identifies three latent types: entrepreneurial (7\%), risk-averse (29\%), and credit-constrained (64\%). The credit-constrained type---representing nearly two-thirds of the population---experiences the largest effects from branch closures, with self-employment declining by 25\% under a 50\% branch closure scenario. The weighted average effect across types is an 11\% decline in self-employment. These findings suggest that branch closures disproportionately harm credit-constrained individuals who rely on relationship lending for entrepreneurial credit access.
 
 \vspace{0.5cm}
 \noindent \textbf{JEL Codes:} G21, J24, L26, O33, R12
@@ -642,6 +642,51 @@ Second, the switching cost ($\kappa = -6.18$) is large and negative, indicating 
 
 The credit access parameters show that broadband increases mobile banking adoption ($\gamma_{broadband \times mobile} = 0.164$), but areas with higher broadband have slightly lower self-employment rates ($\gamma_{broadband \times SE} = -0.120$), reflecting selection of entrepreneurs into branch banking. The difference between branch and mobile credit access ($\gamma_{broadband \times SE} - \gamma_{broadband \times mobile} = -0.284$) captures the credit access disadvantage of mobile banking for entrepreneurship.
 
+\subsection{Unobserved Heterogeneity}
+
+Following \citet{arcidiacono2011}, I extend the model to incorporate unobserved heterogeneity via a finite mixture with three latent types. This addresses the concern that individuals may differ in unobservable ways that affect both their banking choices and employment decisions. The three types are characterized as:
+
+\begin{itemize}
+    \item \textbf{Type 1 (Entrepreneurial)}: High baseline self-employment preference, older, college-educated
+    \item \textbf{Type 2 (Risk-Averse)}: Low self-employment preference, younger, lower education
+    \item \textbf{Type 3 (Credit-Constrained)}: High sensitivity to banking mode and credit access
+\end{itemize}
+
+Table \ref{tab:unobs_het} presents the estimated type shares and type-specific parameters.
+
+\begin{table}[H]
+\centering
+\caption{Unobserved Heterogeneity: Type-Specific Parameters}
+\label{tab:unobs_het}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+& Type 1 & Type 2 & Type 3 & Weighted \\
+& (Entrepreneurial) & (Risk-Averse) & (Credit-Constrained) & Average \\
+\midrule
+Population share & 7.2\% & 28.9\% & 63.9\% & -- \\
+\midrule
+$\gamma_{dynamic}$ (SE experience) & 0.285 & 0.472 & 0.825 & 0.684 \\
+$\gamma_{bb \times SE}$ (credit access) & 0.515 & $-0.111$ & $-0.175$ & $-0.097$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Counterfactual: 50\% Branch Closure}} \\
+SE rate after closure & 27.5\% & 9.5\% & 8.5\% & 10.2\% \\
+\% change from baseline & $+141\%$ & $-16.9\%$ & $\mathbf{-25.2\%}$ & $-10.8\%$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Type assignment based on observable characteristics (age, education, current employment, banking mode). Parameters estimated via weighted regression with type-probability weights. The credit-constrained type (63.9\% of population) experiences the largest decline in self-employment from branch closures.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The results reveal substantial heterogeneity in how branch closures affect different population segments. The credit-constrained type---representing nearly two-thirds of the population---experiences a 25.2\% decline in self-employment from 50\% branch closure. This group has the highest return to self-employment experience ($\gamma_{dynamic} = 0.825$) but also the strongest negative sensitivity to losing branch access ($\gamma_{bb \times SE} = -0.175$). These are precisely the individuals for whom branch relationships are most valuable for accessing entrepreneurial credit.
+
+In contrast, the entrepreneurial type (7.2\% of population) shows resilience to branch closures, likely because they have already accumulated sufficient experience and credit relationships to sustain self-employment through alternative channels. The risk-averse type experiences moderate effects.
+
+The weighted average effect across types ($-10.8\%$) differs from the homogeneous model estimate ($-19.3\%$), illustrating the importance of accounting for population heterogeneity. The homogeneous model overstates the aggregate effect because it does not account for the entrepreneurial type's ability to adapt to branch closures.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Counterfactual Analysis}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -729,9 +774,9 @@ The empirical analysis yields three main findings. First, the raw correlation be
 
 Second, the dynamic structural estimates reveal important sources of state dependence in both employment and banking choices. The return to self-employment experience ($\gamma_{dynamic} = 0.56$) is substantial, indicating that entrepreneurial human capital accumulates over time. The banking mode switching cost ($\kappa = 6.18$) is large, creating strong persistence in banking relationships. Together, these parameters imply that branch closures have compounding effects: reduced credit access lowers current self-employment, which reduces experience accumulation, which further lowers future self-employment returns.
 
-Third, dynamic counterfactual simulations reveal that branch closures have much larger effects than static models suggest. A 50\% reduction in branch access reduces aggregate self-employment by \textbf{19.3\%}---more than twice the 7.9\% predicted by static models. This ``dynamic multiplier'' of 2.45 arises because the model captures not only the immediate credit access loss but also the long-run erosion of entrepreneurial human capital as fewer individuals accumulate self-employment experience.
+Third, the model with unobserved heterogeneity identifies three distinct population types with very different responses to branch closures. The credit-constrained type---representing 64\% of the population---experiences a 25\% decline in self-employment from 50\% branch closure. These individuals have the highest returns to self-employment experience but are most dependent on branch relationships for credit access. In contrast, the entrepreneurial type (7\% of population) shows resilience, likely because they have already accumulated sufficient experience and alternative credit relationships. The weighted average effect across types is an 11\% decline in self-employment, with substantial heterogeneity around this mean.
 
-These findings have important policy implications. As bank branches continue to close---particularly in lower-income and minority communities---policymakers should recognize that the full costs extend well beyond the immediate effects on credit access. The dynamic nature of entrepreneurship means that temporary disruptions to banking relationships can have persistent effects on local self-employment rates through reduced human capital accumulation. Mobile banking and broadband investment cannot offset these effects because they cannot replicate the relationship lending that supports small business formation. Policies that preserve branch access in underserved communities may be essential to maintaining pathways to self-employment for future generations of entrepreneurs.
+These findings have important policy implications. As bank branches continue to close---particularly in lower-income and minority communities---policymakers should recognize that the effects are highly heterogeneous. Credit-constrained individuals, who are disproportionately represented in underserved communities, bear the largest burden of branch closures. Mobile banking and broadband investment cannot offset these effects because they cannot replicate the relationship lending that supports small business formation for credit-constrained entrepreneurs. Policies that preserve branch access in underserved communities, or that develop alternative channels for relationship-based small business lending, may be essential to maintaining pathways to self-employment for populations most dependent on traditional banking relationships.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % References
