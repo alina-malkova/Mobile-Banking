@@ -732,37 +732,38 @@ Using the estimated structural parameters, I simulate the effects of three polic
 
 \subsection{Branch Closure Scenarios}
 
-Table \ref{tab:counterfactual} presents counterfactual predictions from the dynamic structural model. The dynamic framework captures three channels through which branch closures affect self-employment:
+Table \ref{tab:counterfactual} presents counterfactual predictions from the structural model. Critically, the counterfactual choice probabilities are derived from re-solving the model under changed branch density---they are \textit{not} imposed exogenously. When branch density falls, individuals re-optimize their joint banking-employment choices given the new environment, and the model predicts the redistribution across all nine alternatives. This is the key advantage of the structural approach.
 
+The counterfactual mechanism operates through the utility function. When branch density declines by 50\%, the utility of self-employment for branch banking users falls (due to reduced credit access via the $\gamma_{branch \times density}$ interaction). This causes substitution along two margins:
 \begin{enumerate}
-    \item \textbf{Static credit access}: Immediate loss of branch-based relationship lending
-    \item \textbf{Dynamic experience effects}: Reduced self-employment entry leads to less experience accumulation
-    \item \textbf{Compounding over time}: Lower experience reduces future self-employment returns, creating a downward spiral
+    \item \textbf{Extensive margin}: Some individuals switch banking modes (from branch to mobile/unbanked)
+    \item \textbf{Intensive margin}: Among those who remain branch users, some switch from self-employment to wage employment
 \end{enumerate}
 
-Under 50\% branch closure, I assume 80\% of displaced branch users switch to mobile banking and 20\% become unbanked. The self-employment adjustment incorporates both static credit access differentials and dynamic experience effects.
+Both margins are captured by the multinomial choice model---the transition probabilities emerge from the model rather than being assumed.
 
 \begin{table}[H]
 \centering
-\caption{Dynamic Counterfactual Policy Simulations}
+\caption{Structural Counterfactual Policy Simulations}
 \label{tab:counterfactual}
 \begin{threeparttable}
 \begin{tabular}{lcccc}
 \toprule
-Scenario & SE Rate & Change & \% Change & Dynamic Multiplier \\
+Scenario & SE Rate & Change & \% Change & Source \\
 \midrule
-\textbf{Baseline} & 11.40\% & -- & -- & -- \\
+\textbf{Baseline} & 10.58\% & -- & -- & Data \\
 \midrule
-\multicolumn{5}{l}{\textit{Branch Closures (Dynamic Model)}} \\
-\quad 50\% closure & 9.20\% & $-2.20$ pp & $\mathbf{-19.3\%}$ & 2.45$\times$ \\
+\multicolumn{5}{l}{\textit{Structural Counterfactual (Model-Predicted Transitions)}} \\
+\quad 25\% density reduction & 4.17\% & $-6.41$ pp & $-60.6\%$ & Model \\
+\quad 50\% density reduction & 1.85\% & $-8.73$ pp & $-82.5\%$ & Model \\
 \midrule
-\multicolumn{5}{l}{\textit{Comparison: Static Model}} \\
-\quad 50\% closure (static) & 10.27\% & $-0.88$ pp & $-7.9\%$ & 1.00$\times$ \\
+\multicolumn{5}{l}{\textit{Comparison: Assumed Transition Approach}} \\
+\quad 50\% reduction (80/20 split) & 9.66\% & $-0.92$ pp & $-8.7\%$ & Assumed \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Dynamic counterfactual predictions based on Arcidiacono-Miller CCP estimates with $\beta = 0.90$. Branch closure assumes 80\% switch to mobile, 20\% become unbanked. Static adjustment factor: $\exp(\gamma_{bb,SE} - \gamma_{bb,mobile}) = 0.74$. Dynamic adjustment factor: static $\times$ $\exp(\gamma_{dynamic} \times (-0.5)) = 0.56$. Dynamic multiplier shows the ratio of dynamic to static effects.
+\item Notes: Structural counterfactuals derive choice probabilities from the estimated logit model: $P(SE|X, density') = \Lambda(X'\hat{\beta} + \hat{\gamma}_{branch \times density} \times branch \times density')$. The ``assumed transition'' approach imposes that 80\% of displaced branch users switch to mobile and 20\% become unbanked, inheriting the SE rates of those groups. The large difference reflects the intensive margin: the structural model predicts branch users substantially reduce SE even without switching banks.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -770,12 +771,14 @@ Scenario & SE Rate & Change & \% Change & Dynamic Multiplier \\
 \subsection{Key Findings}
 
 \begin{enumerate}
-    \item \textbf{Dynamic effects substantially amplify branch closure impacts}: The dynamic model predicts a 19.3\% decline in self-employment from 50\% branch closure, compared to only 7.9\% in the static model---a \textbf{dynamic multiplier of 2.45}. This amplification occurs because branch closures not only reduce current self-employment but also reduce experience accumulation, which lowers future self-employment returns through the $\gamma_{dynamic}$ channel.
+    \item \textbf{Structural counterfactuals differ dramatically from assumed transitions}: The model-predicted effect of 50\% density reduction is an 82.5\% decline in self-employment---nearly ten times larger than the 8.7\% decline implied by the commonly-used assumed transition approach. This difference arises because the structural model captures the \textit{intensive margin}: branch users who do not switch banking modes still reduce self-employment when credit access falls. The assumed transition approach misses this channel entirely.
 
-    \item \textbf{Path dependence creates persistent effects}: The large switching cost ($\kappa = -6.18$) means that individuals displaced from branch banking are unlikely to return even if branches reopen. Combined with reduced experience accumulation, this creates hysteresis: temporary branch closures can have permanent effects on local entrepreneurship rates.
+    \item \textbf{Credit access effects are highly nonlinear}: The relationship between branch density and self-employment operates through the logit choice probability, which is nonlinear. Small reductions in density have modest effects, but large reductions (50\%+) push many individuals past the threshold where self-employment is no longer optimal. This nonlinearity explains why extrapolating from marginal effects can substantially understate the impact of large policy changes.
 
-    \item \textbf{Mobile banking cannot substitute for branches}: The credit access differential ($\gamma_{bb,SE} - \gamma_{bb,mobile} = -0.28$) means that even perfect mobile banking access cannot replicate the relationship lending that supports small business formation. The dynamic framework reveals that this gap compounds over time as entrepreneurs accumulate less experience.
+    \item \textbf{Mobile banking provides incomplete substitution}: Even with full mobile banking availability, the credit access differential means that mobile users have lower self-employment utility than branch users. The structural estimates show that this gap is substantial: reducing branch density while holding mobile access constant still produces large negative effects on self-employment.
 \end{enumerate}
+
+\textbf{Important caveat}: The large structural effects (60--80\%) involve extrapolation beyond the observed variation in branch density. While the model is internally consistent, these estimates should be interpreted as upper bounds reflecting the model's prediction under the maintained assumptions. The sensitivity to model specification (documented in Table \ref{tab:bic_selection}) underscores the uncertainty in these counterfactuals.
 
 \subsection{Heterogeneous Effects}
 

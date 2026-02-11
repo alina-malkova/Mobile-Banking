@@ -1,0 +1,13 @@
+item,value
+baseline_se_data,.10558994
+baseline_se_model,.10577498
+cf_se_50pct,.018483363
+effect_pp,-.087291613
+effect_pct,-82.525772
+b_branch_density,.051016036
+b_mobile_density,.026820859
+assumed_cf_se,.096568801
+assumed_effect_pct,-8.7035513
+branch_users_base_se,.10979571
+branch_users_cf_se,.012058189
+branch_users_effect_pct,-89.017616
