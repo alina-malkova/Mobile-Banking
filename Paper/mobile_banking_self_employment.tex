@@ -732,38 +732,45 @@ Using the estimated structural parameters, I simulate the effects of three polic
 
 \subsection{Branch Closure Scenarios}
 
-Table \ref{tab:counterfactual} presents counterfactual predictions from the structural model. Critically, the counterfactual choice probabilities are derived from re-solving the model under changed branch density---they are \textit{not} imposed exogenously. When branch density falls, individuals re-optimize their joint banking-employment choices given the new environment, and the model predicts the redistribution across all nine alternatives. This is the key advantage of the structural approach.
+Table \ref{tab:counterfactual} presents counterfactual predictions from the structural model with unobserved heterogeneity. The counterfactual effect is computed using the type-specific branch coefficients from the BIC-selected $K=4$ model:
+\begin{equation}
+\Delta SE = \sum_{k=1}^{4} \pi_k \cdot \beta_k^{branch} \cdot \Delta_{closure}
+\end{equation}
+where $\pi_k$ is the population share of type $k$, $\beta_k^{branch}$ is the type-specific effect of branch access on self-employment, and $\Delta_{closure}$ is the fraction of branches closed (e.g., 0.50 for 50\% closure).
 
-The counterfactual mechanism operates through the utility function. When branch density declines by 50\%, the utility of self-employment for branch banking users falls (due to reduced credit access via the $\gamma_{branch \times density}$ interaction). This causes substitution along two margins:
+This approach has several advantages over naive extrapolation methods:
 \begin{enumerate}
-    \item \textbf{Extensive margin}: Some individuals switch banking modes (from branch to mobile/unbanked)
-    \item \textbf{Intensive margin}: Among those who remain branch users, some switch from self-employment to wage employment
+    \item \textbf{Heterogeneity-consistent}: The aggregate effect properly weights type-specific responses, rather than imposing a common effect across the population.
+    \item \textbf{Avoids extrapolation bias}: Using linear probability model coefficients avoids the well-known problem of logit extrapolation, where the sigmoid function produces extreme predictions for large covariate changes.
+    \item \textbf{Transparent sensitivity}: The table shows how counterfactual predictions depend on $K$, allowing readers to assess robustness.
 \end{enumerate}
-
-Both margins are captured by the multinomial choice model---the transition probabilities emerge from the model rather than being assumed.
 
 \begin{table}[H]
 \centering
-\caption{Structural Counterfactual Policy Simulations}
+\caption{Counterfactual Policy Simulations: Branch Closure Effects by Unobserved Type}
 \label{tab:counterfactual}
 \begin{threeparttable}
 \begin{tabular}{lcccc}
 \toprule
-Scenario & SE Rate & Change & \% Change & Source \\
+Scenario & SE Rate & Change & \% Change & 95\% CI \\
 \midrule
-\textbf{Baseline} & 10.58\% & -- & -- & Data \\
+\textbf{Baseline} & 10.56\% & -- & -- & -- \\
 \midrule
-\multicolumn{5}{l}{\textit{Structural Counterfactual (Model-Predicted Transitions)}} \\
-\quad 25\% density reduction & 4.17\% & $-6.41$ pp & $-60.6\%$ & Model \\
-\quad 50\% density reduction & 1.85\% & $-8.73$ pp & $-82.5\%$ & Model \\
+\multicolumn{5}{l}{\textit{Branch Closure Scenarios (K=4 Type Model)}} \\
+\quad 25\% branch closure & 9.98\% & $-0.58$ pp & $-5.5\%$ & [$-3.2$, $-7.8$] \\
+\quad 50\% branch closure & 9.40\% & $-1.16$ pp & $-11.0\%$ & [$-6.4$, $-15.6$] \\
+\quad 75\% branch closure & 8.82\% & $-1.74$ pp & $-16.5\%$ & [$-9.6$, $-23.4$] \\
 \midrule
-\multicolumn{5}{l}{\textit{Comparison: Assumed Transition Approach}} \\
-\quad 50\% reduction (80/20 split) & 9.66\% & $-0.92$ pp & $-8.7\%$ & Assumed \\
+\multicolumn{5}{l}{\textit{Sensitivity to Number of Types}} \\
+\quad $K=1$ (homogeneous) & 10.50\% & $-0.06$ pp & $-0.6\%$ & -- \\
+\quad $K=2$ types & 10.24\% & $-0.32$ pp & $-3.0\%$ & -- \\
+\quad $K=3$ types & 9.63\% & $-0.93$ pp & $-8.8\%$ & -- \\
+\quad $K=4$ types (selected) & 9.40\% & $-1.16$ pp & $-11.0\%$ & -- \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Structural counterfactuals derive choice probabilities from the estimated logit model: $P(SE|X, density') = \Lambda(X'\hat{\beta} + \hat{\gamma}_{branch \times density} \times branch \times density')$. The ``assumed transition'' approach imposes that 80\% of displaced branch users switch to mobile and 20\% become unbanked, inheriting the SE rates of those groups. The large difference reflects the intensive margin: the structural model predicts branch users substantially reduce SE even without switching banks.
+\item Notes: Counterfactual effects computed using the type-specific branch coefficients from the BIC-selected $K=4$ model. The aggregate effect is $\sum_k \pi_k \cdot \beta_k^{branch} \cdot \Delta_{closure}$, where $\pi_k$ is the type share and $\beta_k^{branch}$ is the type-specific branch effect on self-employment. Standard errors via delta method; 95\% confidence intervals assume asymptotic normality. The sensitivity analysis shows how counterfactual predictions vary with the number of types, highlighting the importance of proper model selection.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -771,14 +778,14 @@ Scenario & SE Rate & Change & \% Change & Source \\
 \subsection{Key Findings}
 
 \begin{enumerate}
-    \item \textbf{Structural counterfactuals differ dramatically from assumed transitions}: The model-predicted effect of 50\% density reduction is an 82.5\% decline in self-employment---nearly ten times larger than the 8.7\% decline implied by the commonly-used assumed transition approach. This difference arises because the structural model captures the \textit{intensive margin}: branch users who do not switch banking modes still reduce self-employment when credit access falls. The assumed transition approach misses this channel entirely.
+    \item \textbf{Substantial heterogeneity in branch dependence}: The counterfactual effects vary dramatically with assumptions about unobserved heterogeneity. The homogeneous model ($K=1$) predicts a modest 0.6\% decline in self-employment from 50\% branch closure, while the BIC-selected four-type model predicts an 11.0\% decline. This tenfold difference arises because the homogeneous model averages over types with opposite-signed branch effects, masking the substantial negative impact on the high-dependence type (Type 4).
 
-    \item \textbf{Credit access effects are highly nonlinear}: The relationship between branch density and self-employment operates through the logit choice probability, which is nonlinear. Small reductions in density have modest effects, but large reductions (50\%+) push many individuals past the threshold where self-employment is no longer optimal. This nonlinearity explains why extrapolating from marginal effects can substantially understate the impact of large policy changes.
+    \item \textbf{Type 4 drives the aggregate effect}: Approximately 24\% of the population (Type 4) exhibits a large positive branch effect on self-employment ($\beta = 0.093$). These individuals---likely small business owners dependent on relationship lending---account for most of the aggregate counterfactual effect. Branch closures disproportionately harm this group.
 
-    \item \textbf{Mobile banking provides incomplete substitution}: Even with full mobile banking availability, the credit access differential means that mobile users have lower self-employment utility than branch users. The structural estimates show that this gap is substantial: reducing branch density while holding mobile access constant still produces large negative effects on self-employment.
+    \item \textbf{Mobile banking provides incomplete substitution}: Types 3 and 4 show positive branch effects on self-employment, indicating that branch banking provides credit access benefits that mobile banking cannot fully replicate. Even with widespread mobile banking availability, reducing branch access lowers self-employment among these credit-constrained types.
 \end{enumerate}
 
-\textbf{Important caveat}: The large structural effects (60--80\%) involve extrapolation beyond the observed variation in branch density. While the model is internally consistent, these estimates should be interpreted as upper bounds reflecting the model's prediction under the maintained assumptions. The sensitivity to model specification (documented in Table \ref{tab:bic_selection}) underscores the uncertainty in these counterfactuals.
+\textbf{Methodological note}: The counterfactual estimates use the linear probability model (LPM) coefficients and local linear approximation. This approach avoids the extrapolation issues that arise when applying the logit CDF to large counterfactual changes in density. The sensitivity analysis across $K=1$ to $K=4$ documents how counterfactual predictions depend on assumptions about unobserved heterogeneity, reinforcing the importance of the three-pronged model selection approach.
 
 \subsection{Heterogeneous Effects}
 
