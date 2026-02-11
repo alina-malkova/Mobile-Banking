@@ -1,0 +1,10 @@
+item,value,model
+BIC,13900.569,K=1
+BIC,13687.054,K=2
+BIC,13660.886,K=3
+BIC,13697.707,K=4
+CF_SE_pct,-6.1719751,K=1
+CF_SE_pct,-9.5078669,K=2
+CF_SE_pct,-6.1227975,K=3
+optimal_K,3,selected
+baseline_se,.11404566,all
