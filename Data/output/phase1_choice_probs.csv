@@ -1,0 +1,10 @@
+choice,prob,cond_se_rate,choice_label
+1,.023268599,.083208136,Unbanked × Wage
+2,.002475875,,Unbanked × SE
+3,.0040107295,,Unbanked × NotWork
+4,.082334876,.071941115,Mobile × Wage
+5,.006622287,,Mobile × SE
+6,.0030943253,,Mobile × NotWork
+7,.75790697,.099478014,Branch × Wage
+8,.087360926,,Branch × SE
+9,.032925431,,Branch × NotWork
