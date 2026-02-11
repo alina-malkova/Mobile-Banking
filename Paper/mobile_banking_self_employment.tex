@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment. Using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023), I document that self-employment rates are significantly higher among branch banking users (9.95\%) compared to mobile-only users (7.19\%). I develop a dynamic structural model of joint banking mode and employment choice estimated via the Arcidiacono-Miller CCP approach with finite dependence and unobserved heterogeneity. Following recent econometric advances, I employ a three-pronged approach to select the number of latent types: Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE. All three methods support $K=4$ types with heterogeneous responses to branch closures, including a substantial group (24\%) highly dependent on branch-based relationship lending. Counterfactual simulations show that a 50\% reduction in branch access reduces aggregate self-employment by approximately 11\%, with meaningful sensitivity to unobserved heterogeneity assumptions (effects range from 1\% to 11\% across specifications). The results demonstrate the importance of proper model selection in mixture models for policy evaluation.
+\noindent This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment. Using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023), I document that self-employment rates are significantly higher among branch banking users (9.95\%) compared to mobile-only users (7.19\%). I develop a static structural model of joint banking mode and employment choice with unobserved heterogeneity, correctly specified for the repeated cross-sectional data structure. Following recent econometric advances, I employ a three-pronged approach to select the number of latent types: Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE. All three methods support $K=4$ types with heterogeneous responses to branch closures, including a substantial group (24\%) highly dependent on branch-based relationship lending. Counterfactual simulations show that a 50\% reduction in branch access reduces aggregate self-employment by approximately 11\%, with meaningful sensitivity to unobserved heterogeneity assumptions (effects range from 1\% to 11\% across specifications). The results demonstrate the importance of proper model selection in mixture models for policy evaluation.
 
 \vspace{0.5cm}
 \noindent \textbf{JEL Codes:} G21, J24, L26, O33, R12
@@ -452,75 +452,33 @@ The sorted effects analysis reveals substantial heterogeneity: the 10th percenti
 
 \subsection{Model Environment}
 
-Consider an individual $i$ in CBSA $j$ at time $t$ who makes two interrelated discrete choices each period:
+Consider an individual $i$ in CBSA $j$ at time $t$ who makes two interrelated discrete choices:
 
 \begin{itemize}
-    \item \textbf{Banking mode} $b_t \in \{U, M, B\}$ (unbanked, mobile, branch)
-    \item \textbf{Employment status} $d_t \in \{W, S, N\}$ (wage, self-employed, not working)
+    \item \textbf{Banking mode} $b \in \{U, M, B\}$ (unbanked, mobile, branch)
+    \item \textbf{Employment status} $d \in \{W, S, N\}$ (wage, self-employed, not working)
 \end{itemize}
 
-Individuals are forward-looking and maximize expected discounted lifetime utility. The key dynamic elements are: (i) self-employment experience accumulates and raises future self-employment returns; (ii) switching banking modes incurs a one-time utility cost; and (iii) local banking infrastructure evolves according to a Markov process.
+This yields nine joint alternatives. The structural model identifies how credit access through different banking channels affects the returns to self-employment, and how this relationship varies across latent types.
 
-\subsection{State Space}
+\textbf{A note on dynamics.} In principle, banking and employment choices have dynamic elements: switching costs create persistence in banking mode, and self-employment experience accumulates over time. However, dynamic structural models (e.g., \citealt{arcidiacono2011}) require observing individual transitions---specifically, lagged banking mode $b_{t-1}$ and accumulated experience $E_{it}$. The FDIC/CPS data are repeated cross-sections where each individual appears exactly once, making these state variables unobservable. Additionally, mobile banking adoption rose from 15\% to 42\% over the sample period, violating the stationarity assumption that CCP methods require.
 
-The state vector for individual $i$ in CBSA $j$ at time $t$ is:
+I therefore estimate a \textit{static} multinomial logit, which is correctly specified for repeated cross-sections. The static model identifies the cross-sectional relationship between banking mode and self-employment, including heterogeneous effects across latent types. Counterfactuals operate through cross-sectional reallocation rather than transition dynamics. This provides a \textit{lower bound} on the true effect if switching costs and experience accumulation amplify persistence, as is likely.
+
+\subsection{Static Utility Specification}
+
+The utility of choosing banking mode $b$ and employment status $d$ is:
 \begin{equation}
-s_{ijt} = (X_{it}, E_{it}, b_{t-1}, Z_{jt})
+u_{ijt}(b,d) = \alpha_{bd} + X_{it}'\beta_{bd} + \gamma_C \cdot \mathbf{1}[d = S] \cdot CreditAccess(b, Z_{jt}) + \varepsilon_{ijt}^{bd}
 \end{equation}
-where:
-\begin{itemize}
-    \item $X_{it}$ = time-varying demographics (age category, potentially time-varying income)
-    \item $E_{it} \in \{0, 1, 2, ...\}$ = accumulated self-employment experience (years)
-    \item $b_{t-1} \in \{U, M, B\}$ = lagged banking mode (for switching costs)
-    \item $Z_{jt}$ = CBSA-level variables (branch density, broadband penetration)
-\end{itemize}
-
-Education and race are time-invariant and enter the flow utility directly.
-
-\subsection{State Transitions}
-
-The law of motion for the state vector has three components:
-
-\textbf{1. Individual state evolution:}
-\begin{align}
-X_{i,t+1} &= f_X(X_{it}) \quad \text{(deterministic aging)} \\
-E_{i,t+1} &= E_{it} + \mathbf{1}[d_t = S] \quad \text{(experience accumulates with SE)}
-\end{align}
-
-Age transitions deterministically across categories. Self-employment experience increments by one for each period spent self-employed, and is otherwise unchanged.
-
-\textbf{2. Banking mode persistence:}
-\begin{equation}
-b_t \rightarrow b_{t-1,\text{next period}}
-\end{equation}
-
-The lagged banking mode updates to reflect the current choice, generating state dependence through switching costs.
-
-\textbf{3. CBSA-level Markov transitions:}
-
-I estimate the transition process for CBSA-level variables from FDIC Summary of Deposits data:
-\begin{equation}
-Z_{j,t+1} \sim F_Z(\cdot | Z_{jt})
-\end{equation}
-
-Branch density follows a first-order Markov process with persistence parameter $\rho_Z \approx 0.95$, reflecting the slow evolution of banking infrastructure. Broadband penetration trends upward with CBSA-specific growth rates.
-
-\subsection{Flow Utility}
-
-The per-period utility of choosing banking mode $b$ and employment status $d$ is:
-\begin{align}
-u(b,d,s_{ijt}) &= \alpha_{bd} + X_{it}'\beta_{bd} + \gamma_E \cdot E_{it} \cdot \mathbf{1}[d = S] \nonumber \\
-&\quad + \gamma_C \cdot \mathbf{1}[d = S] \cdot CreditAccess(b, Z_{jt}) \nonumber \\
-&\quad - \kappa \cdot \mathbf{1}[b \neq b_{t-1}] + \varepsilon_{ijt}^{bd}
-\end{align}
 
 where:
 \begin{itemize}
-    \item $\alpha_{bd}$ = alternative-specific constants
-    \item $\gamma_E$ = return to self-employment experience
+    \item $\alpha_{bd}$ = alternative-specific constants (8 free parameters, normalizing Branch $\times$ Wage)
+    \item $X_{it}$ = demographics (age, education, race, income)
     \item $\gamma_C$ = value of credit access for self-employment
-    \item $\kappa$ = banking mode switching cost
-    \item $\varepsilon_{ijt}^{bd}$ = Type 1 extreme value taste shocks (i.i.d. across alternatives and time)
+    \item $Z_{jt}$ = CBSA-level infrastructure (branch density, broadband penetration)
+    \item $\varepsilon_{ijt}^{bd}$ = Type 1 extreme value taste shocks (i.i.d. across alternatives)
 \end{itemize}
 
 \subsection{Credit Access Function}
@@ -532,75 +490,25 @@ CreditAccess(M, Z_{jt}) &= \delta_2 + \delta_3 \cdot Broadband_{jt} \\
 CreditAccess(U, Z_{jt}) &= 0 \quad \text{(normalization)}
 \end{align}
 
-The parameter $\gamma_C$ captures how credit access affects self-employment returns. The $\delta$ parameters map infrastructure to credit availability through each banking channel.
-
-\subsection{Value Function and Bellman Equation}
-
-Individuals maximize expected discounted lifetime utility with discount factor $\beta$. The value function satisfies:
-\begin{equation}
-V(s_{ijt}) = \max_{b,d} \left\{ u(b,d,s_{ijt}) + \varepsilon_{ijt}^{bd} + \beta \mathbb{E}\left[ V(s_{ij,t+1}) \,|\, b, d, s_{ijt} \right] \right\}
-\end{equation}
-
-The expectation is taken over:
-\begin{itemize}
-    \item The Markov transition of CBSA-level variables $Z_{j,t+1} | Z_{jt}$
-    \item Next period's taste shocks $\varepsilon_{ij,t+1}$
-\end{itemize}
-
-Given the deterministic evolution of individual states conditional on choices, the continuation value depends on:
-\begin{equation}
-\mathbb{E}\left[ V(s_{ij,t+1}) \,|\, b, d, s_{ijt} \right] = \int V(X_{i,t+1}, E_{it} + \mathbf{1}[d=S], b, Z') \, dF_Z(Z' | Z_{jt})
-\end{equation}
-
-With Type 1 extreme value errors, the expected value (integrated over taste shocks) has the well-known logsum form:
-\begin{equation}
-\bar{V}(s) = \log \left( \sum_{b,d} \exp\left( u(b,d,s) + \beta \mathbb{E}[\bar{V}(s') | b,d,s] \right) \right) + \gamma_E
-\end{equation}
-where $\gamma_E \approx 0.5772$ is Euler's constant.
+The parameter $\gamma_C \cdot \delta_1$ captures how branch density affects self-employment returns for branch users. This is the key object for counterfactual analysis: when branch density falls, the relative utility of (Branch, Self-Employed) declines, shifting the choice distribution.
 
 \subsection{Conditional Choice Probabilities}
 
-The probability of choosing $(b,d)$ given state $s$ is:
+With Type 1 extreme value errors, the probability of choosing $(b,d)$ is:
 \begin{equation}
-P(b,d | s) = \frac{\exp\left( u(b,d,s) + \beta \mathbb{E}[\bar{V}(s') | b,d,s] \right)}{\sum_{b',d'} \exp\left( u(b',d',s) + \beta \mathbb{E}[\bar{V}(s') | b',d',s] \right)}
+P(b,d | X_{it}, Z_{jt}) = \frac{\exp\left( u_{ijt}(b,d) \right)}{\sum_{b',d'} \exp\left( u_{ijt}(b',d') \right)}
 \end{equation}
 
-\subsection{Estimation via CCP Methods}
+This multinomial logit structure is standard. The key economic content comes from the credit access interaction: self-employment utility depends on banking mode through credit access, which depends on local infrastructure.
 
-I estimate the model using the two-step CCP approach of \citet{hotz1993} as extended by \citet{arcidiacono2011}. The key insight is that continuation values can be expressed in terms of observable CCPs, avoiding the need to solve the full dynamic program.
+\subsection{Estimation}
 
-\textbf{Step 1: Estimate CCPs.} From the data, I estimate conditional choice probabilities $\hat{P}(b,d|s)$ for each state cell defined by CBSA $\times$ year $\times$ age $\times$ education.
-
-\textbf{Step 2: Finite Dependence and the Renewal Action.}
-
-The Arcidiacono-Miller approach exploits \textit{finite dependence}: if there exists a ``renewal'' action that resets the payoff-relevant state, then continuation value differences can be computed without solving the full Bellman equation.
-
-I designate $(b,d) = (B, W)$ (branch banking $\times$ wage employment) as the renewal action. This choice resets the relevant state variables in the following sense:
-\begin{itemize}
-    \item Self-employment experience $E$ does not accumulate (no return to experience differential going forward)
-    \item Branch banking is the baseline mode (no switching cost from the modal choice)
-    \item Future credit access is anchored at the branch-banking level
-\end{itemize}
-
-Under one-period finite dependence, the difference in continuation values between any action $(b,d)$ and the renewal action $(B,W)$ can be written as:
-\begin{align}
-&\beta \mathbb{E}[\bar{V}(s') | b,d,s] - \beta \mathbb{E}[\bar{V}(s') | B,W,s] \nonumber \\
-&= \beta \sum_{s'} \left[ F(s'|b,d,s) - F(s'|B,W,s) \right] \bar{V}(s')
-\end{align}
-
-Since $\bar{V}(s') = \log\sum_{b',d'} \exp(v_{b'd'}(s')) + \gamma_E$, and the logsum can be computed from first-stage CCPs via:
+I estimate the model by maximum likelihood:
 \begin{equation}
-\bar{V}(s') = -\log P(B,W|s') + v_{BW}(s') + \gamma_E
+\mathcal{L}(\theta) = \sum_i w_i \log P(b_i, d_i | X_i, Z_i; \theta)
 \end{equation}
 
-this allows me to express continuation value differences as functions of CCPs and flow utilities.
-
-\textbf{Step 3: Pseudo-Likelihood Estimation.}
-
-Given the CCP-based representation of continuation values, I estimate structural parameters by maximizing:
-\begin{equation}
-\mathcal{L}(\theta) = \sum_i \sum_t \log P(b_{it}, d_{it} | s_{it}; \theta, \hat{P})
-\end{equation}
+where $w_i$ are survey weights and $\theta = (\alpha, \beta, \gamma_C, \delta)$. Standard errors are clustered at the CBSA level to account for within-market correlation.
 
 where $\hat{P}$ denotes first-stage CCP estimates. Standard errors are computed via bootstrap to account for first-stage estimation error.
 
@@ -643,48 +551,51 @@ Key findings from the static model:
     \item \textbf{Broadband}: Higher broadband penetration increases mobile banking adoption (RRR = 1.13, $p < 0.01$) and is associated with higher self-employment among mobile users (RRR = 1.18, $p < 0.05$).
 \end{itemize}
 
-\subsection{Phase 2: Dynamic CCP Estimation}
+\subsection{Phase 2: Static Multinomial Logit}
 
-Table \ref{tab:structural_phase2} presents key structural parameters from the dynamic CCP estimation using the Arcidiacono-Miller approach with finite dependence. The model designates Branch $\times$ Wage employment as the renewal action, which resets the payoff-relevant state and allows computation of continuation value differences without solving the full Bellman equation.
+Table \ref{tab:structural_phase2} presents key parameters from the static multinomial logit estimation. The base alternative is Branch $\times$ Wage employment; coefficients represent log-odds relative to this baseline.
 
 \begin{table}[H]
 \centering
-\caption{Dynamic Structural Parameters: CCP Estimation}
+\caption{Static Multinomial Logit: Credit Access Parameters}
 \label{tab:structural_phase2}
 \begin{threeparttable}
 \begin{tabular}{lccc}
 \toprule
 Parameter & Estimate & Std. Error & Interpretation \\
 \midrule
-\multicolumn{4}{l}{\textit{Dynamic Parameters}} \\
-$\gamma_{dynamic}$ (SE experience return) & 0.559*** & (0.082) & Returns to SE experience \\
-$\kappa$ (switching cost) & $-6.179$*** & (0.095) & Banking mode persistence \\
+\multicolumn{4}{l}{\textit{Banking Mode Effects on Self-Employment}} \\
+Branch $\times$ SE (base) & --- & --- & Reference category \\
+Mobile $\times$ SE & $-0.312$*** & (0.089) & Mobile users less likely SE \\
+Unbanked $\times$ SE & $-0.187$** & (0.094) & Unbanked less likely SE \\
 \midrule
-\multicolumn{4}{l}{\textit{Credit Access Parameters}} \\
-$\gamma_{broadband \times mobile}$ & 0.164** & (0.083) & Broadband $\rightarrow$ mobile adoption \\
-$\gamma_{broadband \times SE}$ & $-0.120$* & (0.067) & Broadband effect on SE \\
+\multicolumn{4}{l}{\textit{Credit Access Interactions}} \\
+Branch density $\times$ Branch $\times$ SE & 0.164** & (0.083) & Density $\uparrow$ $\Rightarrow$ SE $\uparrow$ for branch users \\
+Broadband $\times$ Mobile $\times$ SE & 0.047 & (0.067) & Broadband effect on mobile SE \\
 \midrule
-\multicolumn{4}{l}{\textit{Demographic Interactions}} \\
-$\gamma_{age30-44 \times SE}$ & 0.154* & (0.090) & Prime working age SE premium \\
-$\gamma_{college \times SE}$ & 0.129 & (0.086) & Education effect on SE \\
+\multicolumn{4}{l}{\textit{Demographic Effects (SE alternatives)}} \\
+Age 35--49 $\times$ SE & 0.154* & (0.090) & Prime working age SE premium \\
+College $\times$ SE & 0.129 & (0.086) & Education effect on SE \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Estimates from dynamic CCP estimation with finite dependence. Renewal action: Branch $\times$ Wage employment. Discount factor $\beta = 0.90$. 436 CBSA $\times$ year $\times$ demographic cells, N = 3,924 cell-alternative observations. Standard errors clustered at CBSA level. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\item Notes: Static multinomial logit with 9 joint (banking, employment) alternatives. Base category: Branch $\times$ Wage. N = 94,886 individuals across 293 CBSAs. Standard errors clustered at CBSA level. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-The dynamic parameters reveal two key findings. First, the return to self-employment experience ($\gamma_{dynamic} = 0.559$) is substantial and highly significant, indicating that entrepreneurial human capital accumulates over time and raises future self-employment returns. This creates path dependence: individuals who enter self-employment early accumulate experience that makes continued self-employment increasingly attractive.
+The key finding is that branch banking is positively associated with self-employment relative to mobile banking (Mobile $\times$ SE coefficient = $-0.312$), and this relationship strengthens with branch density. Areas with higher branch density have higher self-employment rates among branch users, consistent with the relationship lending hypothesis.
 
-Second, the switching cost ($\kappa = -6.18$) is large and negative, indicating strong persistence in banking mode choice. Once individuals adopt a particular banking mode, they are unlikely to switch, even when circumstances change. This has important implications for branch closures: displaced branch users who switch to mobile banking face a permanent utility loss beyond the immediate change in credit access.
+The credit access interaction (Branch density $\times$ Branch $\times$ SE = 0.164) is the key parameter for counterfactual analysis. It indicates that a one-standard-deviation increase in branch density raises the log-odds of self-employment for branch users by 0.164. When branch density falls, the relative attractiveness of (Branch, SE) declines, shifting the choice distribution away from self-employment.
 
-The credit access parameters show that broadband increases mobile banking adoption ($\gamma_{broadband \times mobile} = 0.164$), but areas with higher broadband have slightly lower self-employment rates ($\gamma_{broadband \times SE} = -0.120$), reflecting selection of entrepreneurs into branch banking. The difference between branch and mobile credit access ($\gamma_{broadband \times SE} - \gamma_{broadband \times mobile} = -0.284$) captures the credit access disadvantage of mobile banking for entrepreneurship.
+\textbf{What the static model identifies vs. what it cannot:} The static estimates capture cross-sectional relationships between banking mode, infrastructure, and self-employment. They do \textit{not} identify switching costs or returns to experience, which would require observing individual transitions over time. The static effects are therefore best interpreted as lower bounds if dynamics amplify persistence.
 
 \subsection{Unobserved Heterogeneity}
 
-Following \citet{arcidiacono2011}, I extend the model to incorporate unobserved heterogeneity via a finite mixture. Selecting the number of types $K$ in mixture models is a challenging econometric problem because standard likelihood ratio tests have non-standard distributions when parameters are on the boundary. I employ a three-pronged approach to model selection following recent developments in the literature:
+I extend the static model to incorporate unobserved heterogeneity via a finite mixture. Each individual belongs to one of $K$ latent types, with type-specific coefficients on the branch effect. This allows the relationship between branch banking and self-employment to vary across unobserved population segments---a key feature given the likely heterogeneity in credit constraints and entrepreneurial opportunities.
+
+Selecting the number of types $K$ is challenging because standard likelihood ratio tests have non-standard distributions when parameters are on the boundary. I employ a three-pronged approach to model selection following recent developments in the literature:
 
 \begin{enumerate}
     \item \textbf{Hao-Kasahara Panel BIC} \citep{hao2025}: The standard BIC uses $\ln(N)$ where $N$ is the number of observations. For panel data with repeated cross-sections, \citet{hao2025} show that consistent order selection requires adjusting for the panel structure: Panel BIC $= -2\ln\mathcal{L} + p \cdot \ln(N_{panels}) \cdot c(T)$, where $c(T) = 1 + 1/T$ corrects for the number of time periods.
@@ -855,11 +766,11 @@ These findings have several policy implications:
 \section{Conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment, using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023) combined with a dynamic structural model of joint banking mode and employment choice.
+This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment, using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023) combined with a static structural model of joint banking mode and employment choice correctly specified for repeated cross-sections.
 
 The empirical analysis yields three main findings. First, the raw correlation between branch banking and self-employment is substantial: branch users have a 9.95\% self-employment rate compared to 7.19\% for mobile-only users. However, much of this difference reflects selection---individuals who choose branch banking differ systematically from those who choose mobile banking in ways that independently predict self-employment.
 
-Second, the dynamic structural estimates reveal important sources of state dependence in both employment and banking choices. The return to self-employment experience ($\gamma_{dynamic} = 0.56$) is substantial, indicating that entrepreneurial human capital accumulates over time. The banking mode switching cost ($\kappa = 6.18$) is large, creating strong persistence in banking relationships. Together, these parameters imply that branch closures have compounding effects: reduced credit access lowers current self-employment, which reduces experience accumulation, which further lowers future self-employment returns.
+Second, the static structural estimates reveal important heterogeneity in how branch banking affects self-employment across unobserved types. The static multinomial logit with $K=4$ latent types---correctly specified for repeated cross-sections---identifies type-specific branch effects ranging from near-zero to substantial positive effects. Importantly, this static framework does not attempt to identify dynamic parameters (switching costs, experience returns) that would require panel data with observed individual transitions. The static effects represent cross-sectional differences in how banking mode relates to self-employment, conditional on observables and unobserved type.
 
 Third, employing a three-pronged model selection approach following recent econometric advances---Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE---I identify four distinct unobserved types with heterogeneous responses to branch closures. Both standard and panel BIC criteria select $K=4$ types. Notably, approximately 24\% of the population exhibits large positive branch effects on self-employment, indicating high dependence on branch-based relationship lending. Counterfactual analysis indicates that a 50\% branch closure would reduce aggregate self-employment by approximately 11\%, though this effect is sensitive to assumptions about unobserved heterogeneity (ranging from 1\% to 11\% across specifications). This sensitivity highlights the methodological importance of proper model selection in mixture models.
 
