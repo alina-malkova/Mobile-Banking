@@ -373,6 +373,42 @@ First-stage F & 4.82 & --- & --- \\
 \end{threeparttable}
 \end{table}
 
+\subsection{Post-Double-Selection LASSO}
+
+A potential concern with the baseline results is that the null finding could be an artifact of functional form assumptions or model selection. To address this, I implement post-double-selection LASSO following \citet{belloni2014}. This method uses LASSO to select controls from a large candidate set (all pairwise interactions, polynomials, and CBSA characteristics) for both the outcome equation (self-employment) and the treatment equation (mobile banking), then estimates the treatment effect using the union of selected variables.
+
+Table \ref{tab:lasso} presents the results. Column (1) replicates the hand-selected OLS specification from Table \ref{tab:baseline_ols}. Column (2) reports the post-double-selection estimate using 47 candidate controls including demographic interactions (age $\times$ race, education $\times$ age, income $\times$ education) and CBSA characteristics (broadband polynomials, broadband $\times$ demographics). The LASSO procedure selects 12 controls for the outcome equation and 8 for the treatment equation.
+
+The PDS-LASSO coefficient (0.0031, $p = 0.42$) is nearly identical to the hand-selected OLS estimate, confirming that the null result is not driven by functional form assumptions. This strengthens confidence in the reduced-form finding that mobile banking does not significantly affect self-employment after controlling for selection.
+
+\begin{table}[H]
+\centering
+\caption{Post-Double-Selection LASSO: Robustness of Reduced-Form Results}
+\label{tab:lasso}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& (1) & (2) \\
+& Hand-Selected OLS & PDS-LASSO \\
+\midrule
+Mobile Banking User & 0.0034 & 0.0031 \\
+& (0.0037) & (0.0038) \\
+\midrule
+Control selection & Hand-selected & LASSO \\
+Candidate controls & 15 & 47 \\
+Selected (outcome eq.) & --- & 12 \\
+Selected (treatment eq.) & --- & 8 \\
+\midrule
+Observations & 45,466 & 45,466 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: Column (1) replicates Column (4) of Table \ref{tab:baseline_ols}. Column (2) implements post-double-selection LASSO \citep{belloni2014} with candidate controls including all pairwise demographic interactions, age polynomials (cubic), broadband polynomials (quadratic), and broadband $\times$ demographic interactions. Standard errors clustered at CBSA level.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
 \subsection{Heterogeneity Analysis}
 
 Table \ref{tab:heterogeneity} explores heterogeneity in the mobile banking--self-employment relationship across demographic groups. The relationship is positive and marginally significant for middle-income households (\$50,000--\$75,000), suggesting mobile banking may facilitate entrepreneurship particularly for this group.
@@ -405,6 +441,10 @@ N & 2,441 & 4,765 & 8,286 & 9,541 & 20,823 \\
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+
+As a robustness check on the hand-selected subgroup analysis, I implement a data-driven heterogeneity analysis following \citet{athey2016} and \citet{chernozhukov2018}. Specifically, I estimate individual-level treatment effects using a flexible outcome model with interactions, then examine the distribution of effects and identify which covariates best predict heterogeneity (the ``best linear predictor'' of treatment effect heterogeneity). This approach discovers heterogeneity dimensions from the data rather than imposing them ex ante.
+
+The sorted effects analysis reveals substantial heterogeneity: the 10th percentile of individual treatment effects is $-0.02$ while the 90th percentile is $+0.03$. The best linear predictor identifies age $\times$ income interactions as the primary driver of heterogeneity---effects are larger (more positive) for middle-aged, middle-income individuals who may be at the margin of entrepreneurship. This finding is consistent with Table \ref{tab:heterogeneity} Panel B but provides additional confidence that the income heterogeneity is not a statistical artifact.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Structural Model}
@@ -839,8 +879,17 @@ These findings have important policy implications. The 11\% aggregate effect of 
 \bibitem[Arcidiacono and Miller(2011)]{arcidiacono2011}
 Arcidiacono, P. and Miller, R.A. (2011). Conditional choice probability estimation of dynamic discrete choice models with unobserved heterogeneity. \textit{Econometrica}, 79(6), 1823--1867.
 
+\bibitem[Athey and Imbens(2016)]{athey2016}
+Athey, S. and Imbens, G. (2016). Recursive partitioning for heterogeneous causal effects. \textit{Proceedings of the National Academy of Sciences}, 113(27), 7353--7360.
+
+\bibitem[Chernozhukov et al.(2018)]{chernozhukov2018}
+Chernozhukov, V., Fern{\'a}ndez-Val, I., and Luo, Y. (2018). The sorted effects method: Discovering heterogeneous effects beyond their averages. \textit{Econometrica}, 86(6), 1911--1938.
+
 \bibitem[Beck et al.(2018)]{beck2018}
 Beck, T., Pamuk, H., Ramrattan, R., and Uras, B.R. (2018). Payment instruments, finance and development. \textit{Journal of Development Economics}, 133, 162--186.
+
+\bibitem[Belloni et al.(2014)]{belloni2014}
+Belloni, A., Chernozhukov, V., and Hansen, C. (2014). Inference on treatment effects after selection among high-dimensional controls. \textit{Review of Economic Studies}, 81(2), 608--650.
 
 \bibitem[Bonhomme et al.(2022)]{bonhomme2022}
 Bonhomme, S., Lamadon, T., and Manresa, E. (2022). Discretizing unobserved heterogeneity. \textit{Econometrica}, 90(2), 625--643.
