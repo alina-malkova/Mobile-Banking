@@ -1,0 +1,4 @@
+parameter,estimate,std_err,interpretation
+bb_mobile,.1189,.048900001,Broadband increases mobile banking adoption
+bb_mobile_se,-.2472,.068599999,
+bb_branch_se,-.1133,.041200001,Broadband reduces Branch×SE (relative to base)

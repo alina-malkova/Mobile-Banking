@@ -1,0 +1,4 @@
+scenario,se_rate,se_change_pct
+Baseline,.1115,0
+50% Branch Closure,.1111,-.31999999
+Universal Broadband (+2SD),.1115,0
