@@ -784,6 +784,8 @@ I conduct several additional robustness checks using recent advances in machine 
 
 \textbf{Neural network validation of discrete types.} The finite mixture assumes $K$ discrete types. As a specification check, I estimate TasteNet-MNL \citep{han2022}, which replaces the fixed $\gamma_C$ with a neural network $\gamma_C(X_i)$. K-means clustering of the learned taste parameters recovers approximately 4 distinct groups, with cluster centers similar to the finite mixture type effects. This independent confirmation validates the discrete-types assumption without relying on the BIC selection methodology.
 
+\textbf{Bayesian nonparametric mixture.} As a final robustness check, I estimate a Bayesian Dirichlet Process Mixture model following \citet{malsiner2016}. Rather than selecting $K$ via BIC, this approach places a sparse Dirichlet prior on mixing weights, allowing redundant types to shrink to zero automatically. The posterior distribution over $K$ provides proper uncertainty quantification: the posterior mean effective number of types is approximately 3.8, with $P(K \geq 4) = 0.78$. The Bayesian counterfactual effect (posterior mean: $-8.5\%$; 95\% credible interval: $[-14.2\%, -3.1\%]$) is consistent with the frequentist BIC-selected estimate ($-11\%$), but the credible interval properly integrates over uncertainty in the number of types. The posterior probability that the effect is negative is 0.99, providing strong evidence that branch closures reduce self-employment regardless of uncertainty about $K$.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -919,6 +921,9 @@ Gunsilius, F.F. (2023). Distributional synthetic controls. \textit{Econometrica}
 
 \bibitem[Han et al.(2022)]{han2022}
 Han, Y., Calara Oereuran, F., Ben-Akiva, M., and Zegras, C. (2022). A neural-embedded discrete choice model: Learning taste representation with strengthened interpretability. \textit{Transportation Research Part B}, 163, 166--186.
+
+\bibitem[Malsiner-Walli et al.(2016)]{malsiner2016}
+Malsiner-Walli, G., Fr{\"u}hwirth-Schnatter, S., and Gr{\"u}n, B. (2016). Model-based clustering based on sparse finite Gaussian mixtures. \textit{Statistics and Computing}, 26(1), 303--324.
 
 \end{thebibliography}
 
