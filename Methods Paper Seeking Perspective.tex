@@ -73,7 +73,7 @@ Monte Carlo simulations with two complementary designs reveal the severity of th
 
 In the empirical application, a multinomial logit with $K=4$ latent types identifies four economically distinct population segments, and the counterfactual jumps from $-0.6\%$ ($K=1$) to $-10.8\%$ ($K=4$). The 18-fold difference arises because the homogeneous model averages opposite-signed type-specific effects, producing a near-zero aggregate that obscures substantial within-type heterogeneity.
 
-To discipline $K$ selection, I develop a three-pronged approach combining three recent advances: (i) Hao and Kasahara (2025) panel BIC, which adjusts the penalty for repeated cross-sections of the same markets; (ii) Bonhomme, Lamadon, and Manresa (2022) counterfactual stability, which selects the smallest $K$ at which the policy prediction stabilizes; and (iii) Budanova (2025) penalized MLE, approximated via overspecification and significance-based classification of active types. All three methods select $K=4$. However, the counterfactual sensitivity analysis demonstrates that even well-motivated selection methods leave substantial residual model uncertainty.
+To discipline $K$ selection, I develop a three-pronged approach combining three recent advances: (i) Hao and Kasahara (2025) panel BIC, which adjusts the penalty for repeated cross-sections of the same markets; (ii) Bonhomme, Lamadon, and Manresa (2022) counterfactual stability, which selects the smallest $K$ at which the policy prediction stabilizes; and (iii) Budanova (2025) penalized MLE, approximated via overspecification and significance-based classification of active types. The framework converges on $K=4$: while BIC marginally favors $K=5$ (by 31 points, compared to a 1,460-point gap from $K=3$ to $K=4$), the overspecification test identifies the fifth type as redundant, confirming four active types. However, the counterfactual sensitivity analysis demonstrates that even well-motivated selection methods leave substantial residual model uncertainty.
 
 Rather than reporting a single $K$-selected point estimate, I present three complementary summaries of the counterfactual:
 \begin{enumerate}
@@ -187,7 +187,7 @@ Figure~\ref{fig:three_prong} provides a visual summary of the three-pronged fram
 \label{fig:three_prong}
 \begin{minipage}{0.95\textwidth}
 \small
-\textit{Notes:} Visual summary of the three selection criteria applied to candidate values of $K$. Green shading indicates better performance. All three methods agree on $K=4$: BIC is minimized, counterfactual stability is achieved, and OSCE identifies four active types.
+\textit{Notes:} Visual summary of the three selection criteria applied to candidate values of $K$. Green shading indicates better performance. The framework converges on $K=4$: BIC nearly ties $K=4$ and $K=5$ (negligible 31-point margin), OSCE identifies four active types (fifth is redundant), and counterfactual stability is achieved at $K=4$--$5$.
 \end{minipage}
 \end{figure}
 
@@ -433,8 +433,8 @@ Table~\ref{tab:model_selection} presents the three-pronged selection results.
 \multicolumn{7}{l}{\textit{Panel A: Information Criteria}} \\
 Log-likelihood & $-$123,451 & $-$123,256 & $-$122,401 & $\mathbf{-121{,}652}$ & $-$121,618 & $-$121,609 \\
 Parameters & 14 & 17 & 20 & 23 & 26 & 29 \\
-Standard BIC & 247,062 & 246,701 & 245,031 & $\mathbf{243{,}571}$ & 243,540 & 243,560 \\
-Panel BIC (HK) & 247,130 & 246,783 & 245,127 & $\mathbf{243{,}681}$ & 243,664 & 243,698 \\
+Standard BIC & 247,062 & 246,701 & 245,031 & 243,571 & $\mathbf{243{,}540}$ & 243,560 \\
+Panel BIC (HK) & 247,130 & 246,783 & 245,127 & 243,681 & $\mathbf{243{,}664}$ & 243,698 \\
 [4pt]
 \multicolumn{7}{l}{\textit{Panel B: Counterfactual Stability (50\% Branch Closure)}} \\
 $\Delta$ SE rate & $-0.6\%$ & $-2.5\%$ & $-7.3\%$ & $-9.7\%$ & $-10.1\%$ & $-10.0\%$ \\
@@ -448,14 +448,14 @@ Redundant types & & & & 1 & & \\
 \end{tabular}
 \begin{tablenotes}
 \small
-\item \textit{Notes:} Panel~A: Bold indicates BIC-preferred model. Standard BIC uses $\ln(N)$; Panel BIC follows \citet{hao2025} with $N_{panels} = 299$ CBSAs and $c(T) = 1.167$. Both select $K=4$. Panel~B: Counterfactual for 50\% branch closure. The \citet{bonhomme2022} criterion selects the smallest $K$ where the change drops below a practical threshold ($\sim 2$~pp). The $K=3 \to 4$ change (2.4~pp) is at the margin; $K=4 \to 5$ (0.4~pp) clearly satisfies stability. Panel~C: Overspecified $K=5$ identifies 4 types with statistically distinct branch effects; one type's coefficient is insignificant.
+\item \textit{Notes:} Panel~A: Bold indicates BIC-minimizing model. Standard BIC uses $\ln(N)$; Panel BIC follows \citet{hao2025} with $N_{panels} = 299$ CBSAs and $c(T) = 1.167$. Both BIC variants marginally favor $K=5$ over $K=4$ (by 31 and 17 points, respectively---negligible relative to the 1,460-point improvement from $K=3$ to $K=4$). Panel~B: Counterfactual for 50\% branch closure. The \citet{bonhomme2022} criterion selects the smallest $K$ where the change drops below a practical threshold ($\sim 2$~pp). The $K=3 \to 4$ change (2.4~pp) is at the margin; $K=4 \to 5$ (0.4~pp) clearly satisfies stability. Panel~C: Overspecified $K=5$ identifies only 4 types with statistically distinct branch effects; the fifth type's coefficient is insignificant, breaking the near-tie in favor of $K=4$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-All three methods point toward $K=4$. Both BIC variants select $K=4$ decisively (improvement of 1,460 BIC points from $K=3$; only 31 from $K=4$ to $K=5$). The OSCE analysis identifies exactly 4 active types. The counterfactual stability check is borderline at $K=4$ (2.4~pp change) but clearly satisfied at $K=5$ (0.4~pp). This borderline result is itself informative: it signals that the jump from $K=3$ to $K=4$ adds economically meaningful heterogeneity, but the stability criterion does not sharply distinguish $K=3$ from $K=4$.\footnote{An alternative CCP-based specification using multinomial log-ratios on collapsed cells selects $K=3$ via standard BIC. The different selection arises because the much smaller effective sample (436 cells vs.\ 94,886 individuals) increases the relative BIC penalty per parameter. The panel BIC, which uses the number of geographic clusters rather than total observations, selects $K=4$ regardless. This sensitivity of standard BIC to the aggregation level reinforces the preference for the Hao-Kasahara panel BIC and motivates the three-pronged framework.}
+The three criteria converge on $K=4$, though through complementary rather than unanimous channels. Both BIC variants marginally favor $K=5$ (by 31 and 17 points, respectively), but this improvement is negligible relative to the 1,460-point gain from $K=3$ to $K=4$. The OSCE analysis breaks the near-tie: the overspecified $K=5$ model identifies exactly 4 active types, with the fifth type's coefficient statistically insignificant ($t = 1.50$). The counterfactual stability check is borderline at $K=4$ (2.4~pp change) but clearly satisfied at $K=5$ (0.4~pp), consistent with $K=4$ adding the last economically meaningful source of heterogeneity. This pattern---BIC nearly tied, OSCE identifying a redundant type, stability just achieved---is itself informative: it signals that the jump from $K=3$ to $K=4$ adds economically meaningful heterogeneity, while the further move to $K=5$ adds only statistical noise.\footnote{An alternative CCP-based specification using multinomial log-ratios on collapsed cells selects $K=3$ via standard BIC. The different selection arises because the much smaller effective sample (436 cells vs.\ 94,886 individuals) increases the relative BIC penalty per parameter. The panel BIC, which uses the number of geographic clusters rather than total observations, selects $K=4$ regardless. This sensitivity of standard BIC to the aggregation level reinforces the preference for the Hao-Kasahara panel BIC and motivates the three-pronged framework.}
 
-Figure~\ref{fig:bic_selection} visualizes the model selection results. Panel~A shows the monotonic improvement in log-likelihood as $K$ increases, while Panel~B shows that both standard and panel BIC are minimized at $K=4$.
+Figure~\ref{fig:bic_selection} visualizes the model selection results. Panel~A shows the monotonic improvement in log-likelihood as $K$ increases, while Panel~B shows that both BIC variants flatten sharply after $K=4$, with the minimum technically at $K=5$.
 
 \begin{figure}[H]
 \centering
@@ -464,7 +464,7 @@ Figure~\ref{fig:bic_selection} visualizes the model selection results. Panel~A s
 \label{fig:bic_selection}
 \begin{minipage}{0.95\textwidth}
 \small
-\textit{Notes:} Panel~A: Log-likelihood improves monotonically with $K$ but flattens after $K=4$. Panel~B: Both standard BIC and panel BIC \citep{hao2025} select $K=4$. The panel BIC applies a correction for the repeated cross-section structure.
+\textit{Notes:} Panel~A: Log-likelihood improves monotonically with $K$ but flattens after $K=4$. Panel~B: Both BIC variants are minimized at $K=5$, but the $K=4$-to-$K=5$ improvement (31 standard, 17 panel BIC points) is negligible compared to the $K=3$-to-$K=4$ gain (1,460 points). The panel BIC applies a correction for the repeated cross-section structure.
 \end{minipage}
 \end{figure}
 
@@ -483,7 +483,7 @@ Figure~\ref{fig:stability} shows the counterfactual stability analysis. The marg
 
 \subsection{Type-Specific Effects}
 
-Table~\ref{tab:type_effects} presents the estimated type-specific branch effects for the BIC-selected $K=4$ model.
+Table~\ref{tab:type_effects} presents the estimated type-specific branch effects for the selected $K=4$ model.
 
 \begin{table}[H]
 \centering
@@ -547,7 +547,7 @@ Type 5 & 24.3\% & 0.093 & (0.016) & 5.81 & Active \\
 \end{tabular}
 \begin{tablenotes}
 \small
-\item \textit{Notes:} ``Active'' types have $|t| > 1.5$; ``Redundant'' types have effects indistinguishable from zero and would be penalized toward zero under OSCE \citep{budanova2025}. The 4 active types map directly to the BIC-selected $K=4$ specification.
+\item \textit{Notes:} ``Active'' types have $|t| > 1.5$; ``Redundant'' types have effects indistinguishable from zero and would be penalized toward zero under OSCE \citep{budanova2025}. The 4 active types map directly to the selected $K=4$ specification.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -572,7 +572,7 @@ Baseline & 10.56\% & --- & --- & --- \\
 \quad $K=1$ (homogeneous) & 10.50\% & $-0.06$ & $-0.6\%$ & --- \\
 \quad $K=2$ & 10.30\% & $-0.26$ & $-2.5\%$ & --- \\
 \quad $K=3$ & 9.79\% & $-0.77$ & $-7.3\%$ & --- \\
-\quad $K=4$ (BIC-selected) & 9.42\% & $-1.14$ & $-10.8\%$ & [$-14.1$, $-7.4$] \\
+\quad $K=4$ (selected) & 9.42\% & $-1.14$ & $-10.8\%$ & [$-14.1$, $-7.4$] \\
 \quad $K=5$ & 9.38\% & $-1.18$ & $-11.2\%$ & [$-14.6$, $-7.8$] \\
 [6pt]
 \multicolumn{5}{l}{\textit{Panel B: Alternative Heterogeneity Specifications}} \\
@@ -604,7 +604,7 @@ Figure~\ref{fig:counterfactual_sensitivity} is the paper's centerpiece---a visua
 \label{fig:counterfactual_sensitivity}
 \begin{minipage}{0.9\textwidth}
 \small
-\textit{Notes:} Counterfactual effect of 50\% branch closure on self-employment, by number of latent types $K$. The effect ranges from $-0.6\%$ ($K=1$, consistent with the reduced-form null) to $-11.2\%$ ($K=5$)---a 19-fold difference arising entirely from assumptions about unobserved heterogeneity. The BIC-selected $K=4$ produces a 10.8\% effect. Error bars show 95\% confidence intervals where available.
+\textit{Notes:} Counterfactual effect of 50\% branch closure on self-employment, by number of latent types $K$. The effect ranges from $-0.6\%$ ($K=1$, consistent with the reduced-form null) to $-11.2\%$ ($K=5$)---a 19-fold difference arising entirely from assumptions about unobserved heterogeneity. The selected $K=4$ produces a $-10.8\%$ effect. Error bars show 95\% confidence intervals where available.
 \end{minipage}
 \end{figure}
 
@@ -760,7 +760,7 @@ The Bayesian DPM results are stable across independent subsamples. Running the m
 
 This paper demonstrates that finite mixture model selection has first-order consequences for counterfactual policy analysis, generating predictions that differ by an order of magnitude. Using the relationship between bank branch access and self-employment, I show that counterfactual effects range from $-0.6\%$ ($K=1$) to $-10.8\%$ ($K=4$), with this variation dwarfing all other sources of specification uncertainty by an order of magnitude.
 
-The three-pronged selection framework---combining information criteria, counterfactual stability, and penalized estimation---provides a principled toolkit for $K$ selection. All three methods agree on $K=4$ in this application, yet the resulting structural prediction conflicts with a robust reduced-form null, creating irreducible model uncertainty that no selection method can resolve without exogenous variation.
+The three-pronged selection framework---combining information criteria, counterfactual stability, and penalized estimation---provides a principled toolkit for $K$ selection. The framework converges on $K=4$ in this application (BIC marginally favors $K=5$, but the overspecification test identifies the fifth type as redundant), yet the resulting structural prediction conflicts with a robust reduced-form null, creating irreducible model uncertainty that no selection method can resolve without exogenous variation.
 
 I conclude with three concrete recommendations for applied researchers using finite mixture models:
 
