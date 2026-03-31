@@ -25,7 +25,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -60,9 +60,10 @@ replace educ_cat = 2 if hs_diploma == 1
 replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
-gen metro = (metro_status == 1)
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
+capture confirm var metro
+if _rc != 0 gen metro = (metro_status == 1)
 
 * Instrument
 * pct_broadband is our instrument for mobile banking
@@ -190,12 +191,21 @@ if _rc != 0 {
 else {
     di "Using mtefe package for MTE estimation"
 
-    * mtefe estimation
-    mtefe se (mobile = pct_broadband) age age2 i.educ_cat female married metro ///
-        i.year [pw=hsupwgtk], polynomial(2) mte
+    * mtefe estimation (female/married not in dataset, use available controls)
+    mtefe se (mobile = pct_broadband) age age2 i.educ_cat metro ///
+        i.year [pw=hsupwgtk], polynomial(2)
+
+    * Extract MTE coefficients from mtefe for downstream use
+    * After mtefe, coefficients are stored in e(b) from the second stage
+    matrix mte_b = e(b)
+    local mte_const = mte_b[1, colnumb(mte_b, "_cons")]
+    capture local mte_linear = mte_b[1, colnumb(mte_b, "pscore")]
+    if _rc != 0 local mte_linear = 0
+    capture local mte_quad = mte_b[1, colnumb(mte_b, "c.pscore#c.pscore")]
+    if _rc != 0 local mte_quad = 0
 
     * Plot MTE curve
-    mtefe, mteplot
+    capture mtefe, mteplot
 }
 
 /*------------------------------------------------------------------------------

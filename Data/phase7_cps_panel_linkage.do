@@ -28,7 +28,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -226,7 +226,7 @@ di "Sample for transition analysis: " _N " observations"
 
 * Persistence regression (among previously SE)
 di _n "Model 1: SE Persistence (among SE_{t-1} = 1)"
-logit se branch mobile pct_broadband age i.educ i.year [pw=hsupwgtk] ///
+logit se branch mobile pct_broadband age i.peducgrp i.year [pw=hsupwgtk] ///
     if se_prev == 1, vce(cluster cbsa)
 
 local b_branch_persist = _b[branch]
@@ -242,7 +242,7 @@ di "  Marginal effect on persistence: " %7.4f `me_branch_persist'
 
 * Entry regression (among not previously SE)
 di _n "Model 2: SE Entry (among SE_{t-1} = 0)"
-logit se branch mobile pct_broadband age i.educ i.year [pw=hsupwgtk] ///
+logit se branch mobile pct_broadband age i.peducgrp i.year [pw=hsupwgtk] ///
     if se_prev == 0, vce(cluster cbsa)
 
 local b_branch_entry = _b[branch]
@@ -275,14 +275,14 @@ di "============================================================"
 
 * Model without lagged SE
 di _n "Model A: Cross-sectional (no lagged SE)"
-quietly logit se branch mobile pct_broadband age i.educ i.year [pw=hsupwgtk], ///
+quietly logit se branch mobile pct_broadband age i.peducgrp i.year [pw=hsupwgtk], ///
     vce(cluster cbsa)
 local b_branch_xsec = _b[branch]
 local se_branch_xsec = _se[branch]
 
 * Model with lagged SE
 di "Model B: With lagged SE control"
-logit se branch mobile se_prev pct_broadband age i.educ i.year [pw=hsupwgtk], ///
+logit se branch mobile se_prev pct_broadband age i.peducgrp i.year [pw=hsupwgtk], ///
     vce(cluster cbsa)
 local b_branch_panel = _b[branch]
 local se_branch_panel = _se[branch]
@@ -323,13 +323,14 @@ di "============================================================"
 
 * First stage: model initial SE status
 di "First stage: P(SE_{t-1} | pre-sample X)"
-probit se_prev pct_broadband age i.educ i.year female married [pw=hsupwgtk], ///
+* Note: female and married not available in dataset; use available demographics
+probit se_prev pct_broadband age i.peducgrp i.year [pw=hsupwgtk], ///
     vce(cluster cbsa)
 predict se_prev_hat, pr
 
 * Second stage: include predicted initial condition
 di _n "Second stage: P(SE_t | Banking, SE_{t-1}, X, SE_prev_hat)"
-logit se branch mobile se_prev se_prev_hat pct_broadband age i.educ i.year ///
+logit se branch mobile se_prev se_prev_hat pct_broadband age i.peducgrp i.year ///
     [pw=hsupwgtk], vce(cluster cbsa)
 
 local b_branch_ic = _b[branch]

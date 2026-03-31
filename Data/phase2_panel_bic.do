@@ -13,7 +13,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -140,7 +140,7 @@ forvalues K = 1/4 {
 
     if `K' == 1 {
         * Homogeneous model (LPM)
-        reg se i.age_cat i.educ_cat branch mobile ///
+        reg se i.age_cat i.educ_cat female married has_children branch mobile ///
             dynamic_se switch_cost i.year [aw=hsupwgtk], vce(cluster cbsa)
 
         local ll = e(ll)
@@ -179,7 +179,7 @@ forvalues K = 1/4 {
             local dyn_vars "`dyn_vars' dyn_`k'"
         }
 
-        reg se i.age_cat i.educ_cat mobile ///
+        reg se i.age_cat i.educ_cat female married has_children mobile ///
             `br_vars' `dyn_vars' switch_cost i.year [aw=hsupwgtk], vce(cluster cbsa)
 
         local ll = e(ll)
@@ -248,7 +248,7 @@ forvalues K = 1/4 {
     preserve
 
     if `K' == 1 {
-        quietly reg se i.age_cat i.educ_cat branch mobile ///
+        quietly reg se i.age_cat i.educ_cat female married has_children branch mobile ///
             dynamic_se switch_cost i.year [aw=hsupwgtk], vce(cluster cbsa)
 
         local b_branch = _b[branch]
@@ -290,7 +290,7 @@ forvalues K = 1/4 {
             local dyn_vars "`dyn_vars' dyn_`k'"
         }
 
-        quietly reg se i.age_cat i.educ_cat mobile ///
+        quietly reg se i.age_cat i.educ_cat female married has_children mobile ///
             `br_vars' `dyn_vars' switch_cost i.year [aw=hsupwgtk], vce(cluster cbsa)
 
         * Compute weighted counterfactual
@@ -369,7 +369,7 @@ forvalues k = 1/`K_max' {
     local dyn_vars "`dyn_vars' dyn_`k'"
 }
 
-quietly reg se i.age_cat i.educ_cat mobile ///
+quietly reg se i.age_cat i.educ_cat female married has_children mobile ///
     `br_vars' `dyn_vars' switch_cost i.year [aw=hsupwgtk], vce(cluster cbsa)
 
 di "Overspecified model (K=5) - Type-specific branch effects:"

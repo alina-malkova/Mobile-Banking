@@ -17,7 +17,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -41,6 +41,9 @@ keep if cbsa > 0 & cbsa != .
 keep if banking_mode != .
 
 * Core variables
+foreach v in se branch mobile unbanked {
+    capture drop `v'
+}
 gen se = (self_employed == 1)
 gen branch = (banking_mode == 3)
 gen mobile = (banking_mode == 2)

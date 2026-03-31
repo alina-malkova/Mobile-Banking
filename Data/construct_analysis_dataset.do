@@ -16,7 +16,7 @@ set more off
 set maxvar 10000
 
 * Set paths
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global fdic "$datadir/FDIC_Survey/hhmultiyear"
 global sod "$datadir/SOD"
 global acs "$datadir/ACS"

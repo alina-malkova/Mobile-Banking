@@ -23,7 +23,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -61,9 +61,10 @@ replace educ_cat = 2 if hs_diploma == 1
 replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
-gen metro = (metro_status == 1)
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
+capture confirm var metro
+if _rc != 0 gen metro = (metro_status == 1)
 
 * Interactions for flexible specification
 gen age_female = age * female
@@ -104,16 +105,10 @@ di _n "============================================================"
 di "MODEL 2: DOUBLE MACHINE LEARNING"
 di "============================================================"
 
-capture which ddml
-if _rc != 0 {
-    di "Note: ddml package not installed."
-    di "Installing via ssc..."
-    capture ssc install ddml
-    capture which ddml
-}
+* Use manual DML implementation (ddml E[] syntax has changed across versions)
+local use_manual_dml = 1
 
-capture which ddml
-if _rc != 0 {
+if `use_manual_dml' == 1 {
     di "ddml not available. Implementing manual cross-fitted DML."
 
     /*--------------------------------------------------------------------------
@@ -246,11 +241,9 @@ local b_mobile_aipw = r(mean)
 * Bootstrap standard error
 capture program drop aipw_boot
 program define aipw_boot, rclass
-    preserve
-    bsample
+    * Let bootstrap handle resampling; just compute statistic on current data
     quietly summarize aipw_te [aw=hsupwgtk]
     return scalar ate = r(mean)
-    restore
 end
 
 bootstrap ate=r(ate), reps(100) seed(20260211): aipw_boot

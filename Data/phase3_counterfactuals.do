@@ -17,7 +17,7 @@ clear all
 set more off
 set matsize 5000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -181,10 +181,10 @@ foreach closure in 25 50 75 {
     scalar unbanked_`closure' = r(mean)
 
     di "Results after `closure'% branch closure:"
-    di "  SE rate:        " %6.4f se_`closure' " (change: " %+6.4f (se_`closure' - baseline_se) ")"
-    di "  Mobile rate:    " %6.4f mobile_`closure' " (change: " %+6.4f (mobile_`closure' - baseline_mobile) ")"
-    di "  Branch rate:    " %6.4f branch_`closure' " (change: " %+6.4f (branch_`closure' - baseline_branch) ")"
-    di "  Unbanked rate:  " %6.4f unbanked_`closure' " (change: " %+6.4f (unbanked_`closure' - baseline_unbanked) ")"
+    di "  SE rate:        " %6.4f se_`closure' " (change: " %6.4f (se_`closure' - baseline_se) ")"
+    di "  Mobile rate:    " %6.4f mobile_`closure' " (change: " %6.4f (mobile_`closure' - baseline_mobile) ")"
+    di "  Branch rate:    " %6.4f branch_`closure' " (change: " %6.4f (branch_`closure' - baseline_branch) ")"
+    di "  Unbanked rate:  " %6.4f unbanked_`closure' " (change: " %6.4f (unbanked_`closure' - baseline_unbanked) ")"
 
     restore
 }
@@ -257,8 +257,8 @@ foreach subsidy in 10 25 50 {
     scalar mobile_ms_`subsidy' = r(mean)
 
     di "Results after `subsidy'% mobile subsidy:"
-    di "  SE rate:     " %6.4f se_ms_`subsidy' " (change: " %+6.4f (se_ms_`subsidy' - baseline_se) ")"
-    di "  Mobile rate: " %6.4f mobile_ms_`subsidy' " (change: " %+6.4f (mobile_ms_`subsidy' - baseline_mobile) ")"
+    di "  SE rate:     " %6.4f se_ms_`subsidy' " (change: " %6.4f (se_ms_`subsidy' - baseline_se) ")"
+    di "  Mobile rate: " %6.4f mobile_ms_`subsidy' " (change: " %6.4f (mobile_ms_`subsidy' - baseline_mobile) ")"
 
     restore
 }
@@ -322,8 +322,8 @@ foreach bb_increase in 1 2 {
     scalar mobile_bb_`bb_increase' = r(mean)
 
     di "Results after +`bb_increase' SD broadband:"
-    di "  SE rate:     " %6.4f se_bb_`bb_increase' " (change: " %+6.4f (se_bb_`bb_increase' - baseline_se) ")"
-    di "  Mobile rate: " %6.4f mobile_bb_`bb_increase' " (change: " %+6.4f (mobile_bb_`bb_increase' - baseline_mobile) ")"
+    di "  SE rate:     " %6.4f se_bb_`bb_increase' " (change: " %6.4f (se_bb_`bb_increase' - baseline_se) ")"
+    di "  Mobile rate: " %6.4f mobile_bb_`bb_increase' " (change: " %6.4f (mobile_bb_`bb_increase' - baseline_mobile) ")"
 
     restore
 }
@@ -369,8 +369,8 @@ sum mobile_bb_univ [aw=n]
 scalar mobile_bb_universal = r(mean)
 
 di "Results after universal broadband:"
-di "  SE rate:     " %6.4f se_bb_universal " (change: " %+6.4f (se_bb_universal - baseline_se) ")"
-di "  Mobile rate: " %6.4f mobile_bb_universal " (change: " %+6.4f (mobile_bb_universal - baseline_mobile) ")"
+di "  SE rate:     " %6.4f se_bb_universal " (change: " %6.4f (se_bb_universal - baseline_se) ")"
+di "  Mobile rate: " %6.4f mobile_bb_universal " (change: " %6.4f (mobile_bb_universal - baseline_mobile) ")"
 
 restore
 
@@ -445,15 +445,15 @@ sum unbanked_combined [aw=n]
 scalar unbanked_combined_50bb = r(mean)
 
 di "Results (50% closure + universal broadband):"
-di "  SE rate:       " %6.4f se_combined_50bb " (change: " %+6.4f (se_combined_50bb - baseline_se) ")"
-di "  Mobile rate:   " %6.4f mobile_combined_50bb " (change: " %+6.4f (mobile_combined_50bb - baseline_mobile) ")"
-di "  Unbanked rate: " %6.4f unbanked_combined_50bb " (change: " %+6.4f (unbanked_combined_50bb - baseline_unbanked) ")"
+di "  SE rate:       " %6.4f se_combined_50bb " (change: " %6.4f (se_combined_50bb - baseline_se) ")"
+di "  Mobile rate:   " %6.4f mobile_combined_50bb " (change: " %6.4f (mobile_combined_50bb - baseline_mobile) ")"
+di "  Unbanked rate: " %6.4f unbanked_combined_50bb " (change: " %6.4f (unbanked_combined_50bb - baseline_unbanked) ")"
 
 * Compare to branch closure alone
 di _n "Comparison:"
 di "  50% closure alone:      SE = " %6.4f se_50
 di "  50% closure + broadband: SE = " %6.4f se_combined_50bb
-di "  Broadband mitigation:    " %+6.4f (se_combined_50bb - se_50)
+di "  Broadband mitigation:    " %6.4f (se_combined_50bb - se_50)
 
 restore
 
@@ -496,10 +496,10 @@ forvalues educ = 1/4 {
 }
 
 di "Education     Baseline SE    After 50% Closure    Change"
-di "Less than HS  " %8.4f `base_e1' "       " %8.4f `cf_e1' "          " %+8.4f `change_e1'
-di "High School   " %8.4f `base_e2' "       " %8.4f `cf_e2' "          " %+8.4f `change_e2'
-di "Some College  " %8.4f `base_e3' "       " %8.4f `cf_e3' "          " %+8.4f `change_e3'
-di "College+      " %8.4f `base_e4' "       " %8.4f `cf_e4' "          " %+8.4f `change_e4'
+di "Less than HS  " %8.4f `base_e1' "       " %8.4f `cf_e1' "          " %8.4f `change_e1'
+di "High School   " %8.4f `base_e2' "       " %8.4f `cf_e2' "          " %8.4f `change_e2'
+di "Some College  " %8.4f `base_e3' "       " %8.4f `cf_e3' "          " %8.4f `change_e3'
+di "College+      " %8.4f `base_e4' "       " %8.4f `cf_e4' "          " %8.4f `change_e4'
 
 * By age
 di _n "--- Effects by Age Group ---"
@@ -530,9 +530,9 @@ forvalues age = 1/3 {
 }
 
 di "Age Group     Baseline SE    After 50% Closure    Change"
-di "18-29         " %8.4f `base_a1' "       " %8.4f `cf_a1' "          " %+8.4f `change_a1'
-di "30-44         " %8.4f `base_a2' "       " %8.4f `cf_a2' "          " %+8.4f `change_a2'
-di "45-64         " %8.4f `base_a3' "       " %8.4f `cf_a3' "          " %+8.4f `change_a3'
+di "18-29         " %8.4f `base_a1' "       " %8.4f `cf_a1' "          " %8.4f `change_a1'
+di "30-44         " %8.4f `base_a2' "       " %8.4f `cf_a2' "          " %8.4f `change_a2'
+di "45-64         " %8.4f `base_a3' "       " %8.4f `cf_a3' "          " %8.4f `change_a3'
 
 /*******************************************************************************
 * 7. Summary Table
@@ -547,22 +547,22 @@ di "--------------------------------------------------------------------"
 di "Baseline                                " %6.4f baseline_se "      --        --"
 di ""
 di "BRANCH CLOSURES:"
-di "  25% closure                           " %6.4f se_25 "   " %+7.4f (se_25 - baseline_se) "   " %+5.2f 100*(se_25 - baseline_se)/baseline_se "%"
-di "  50% closure                           " %6.4f se_50 "   " %+7.4f (se_50 - baseline_se) "   " %+5.2f 100*(se_50 - baseline_se)/baseline_se "%"
-di "  75% closure                           " %6.4f se_75 "   " %+7.4f (se_75 - baseline_se) "   " %+5.2f 100*(se_75 - baseline_se)/baseline_se "%"
+di "  25% closure                           " %6.4f se_25 "   " %7.4f (se_25 - baseline_se) "   " %5.2f 100*(se_25 - baseline_se)/baseline_se "%"
+di "  50% closure                           " %6.4f se_50 "   " %7.4f (se_50 - baseline_se) "   " %5.2f 100*(se_50 - baseline_se)/baseline_se "%"
+di "  75% closure                           " %6.4f se_75 "   " %7.4f (se_75 - baseline_se) "   " %5.2f 100*(se_75 - baseline_se)/baseline_se "%"
 di ""
 di "MOBILE SUBSIDIES:"
-di "  10% increase                          " %6.4f se_ms_10 "   " %+7.4f (se_ms_10 - baseline_se) "   " %+5.2f 100*(se_ms_10 - baseline_se)/baseline_se "%"
-di "  25% increase                          " %6.4f se_ms_25 "   " %+7.4f (se_ms_25 - baseline_se) "   " %+5.2f 100*(se_ms_25 - baseline_se)/baseline_se "%"
-di "  50% increase                          " %6.4f se_ms_50 "   " %+7.4f (se_ms_50 - baseline_se) "   " %+5.2f 100*(se_ms_50 - baseline_se)/baseline_se "%"
+di "  10% increase                          " %6.4f se_ms_10 "   " %7.4f (se_ms_10 - baseline_se) "   " %5.2f 100*(se_ms_10 - baseline_se)/baseline_se "%"
+di "  25% increase                          " %6.4f se_ms_25 "   " %7.4f (se_ms_25 - baseline_se) "   " %5.2f 100*(se_ms_25 - baseline_se)/baseline_se "%"
+di "  50% increase                          " %6.4f se_ms_50 "   " %7.4f (se_ms_50 - baseline_se) "   " %5.2f 100*(se_ms_50 - baseline_se)/baseline_se "%"
 di ""
 di "BROADBAND INVESTMENT:"
-di "  +1 SD                                 " %6.4f se_bb_1 "   " %+7.4f (se_bb_1 - baseline_se) "   " %+5.2f 100*(se_bb_1 - baseline_se)/baseline_se "%"
-di "  +2 SD                                 " %6.4f se_bb_2 "   " %+7.4f (se_bb_2 - baseline_se) "   " %+5.2f 100*(se_bb_2 - baseline_se)/baseline_se "%"
-di "  Universal (95th pctile)               " %6.4f se_bb_universal "   " %+7.4f (se_bb_universal - baseline_se) "   " %+5.2f 100*(se_bb_universal - baseline_se)/baseline_se "%"
+di "  +1 SD                                 " %6.4f se_bb_1 "   " %7.4f (se_bb_1 - baseline_se) "   " %5.2f 100*(se_bb_1 - baseline_se)/baseline_se "%"
+di "  +2 SD                                 " %6.4f se_bb_2 "   " %7.4f (se_bb_2 - baseline_se) "   " %5.2f 100*(se_bb_2 - baseline_se)/baseline_se "%"
+di "  Universal (95th pctile)               " %6.4f se_bb_universal "   " %7.4f (se_bb_universal - baseline_se) "   " %5.2f 100*(se_bb_universal - baseline_se)/baseline_se "%"
 di ""
 di "COMBINED POLICY:"
-di "  50% closure + universal broadband     " %6.4f se_combined_50bb "   " %+7.4f (se_combined_50bb - baseline_se) "   " %+5.2f 100*(se_combined_50bb - baseline_se)/baseline_se "%"
+di "  50% closure + universal broadband     " %6.4f se_combined_50bb "   " %7.4f (se_combined_50bb - baseline_se) "   " %5.2f 100*(se_combined_50bb - baseline_se)/baseline_se "%"
 di "--------------------------------------------------------------------"
 
 /*******************************************************************************

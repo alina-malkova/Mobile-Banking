@@ -5,7 +5,7 @@
 clear all
 set more off
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 use "$datadir/analysis_dataset_with_se.dta", clear
@@ -47,6 +47,7 @@ collapse (mean) prob_unbanked_wage=choice_unbanked_wage ///
                 prob_branch_se=choice_branch_se ///
                 prob_branch_notwork=choice_branch_notwork ///
                 pct_broadband ///
+                female married has_children ///
          (count) n=choice_branch_wage [aw=weight], ///
          by(cbsa year age_cat peducgrp)
 
@@ -58,6 +59,9 @@ gen prob_sum = prob_unbanked_wage + prob_unbanked_se + prob_unbanked_notwork + /
                prob_mobile_wage + prob_mobile_se + prob_mobile_notwork + ///
                prob_branch_wage + prob_branch_se + prob_branch_notwork
 summarize prob_sum
+
+* Drop verification variable before saving
+drop prob_sum
 
 * Save CCPs
 save "$output/ccps_for_structural.dta", replace

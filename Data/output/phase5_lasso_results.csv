@@ -1,0 +1,7 @@
+method,coefficient,std_error,pvalue
+OLS_no_controls,-.033688113,.0038124088,
+OLS_demographics,-.023036577,.0038172479,
+OLS_full_controls,-.025197612,.0038829625,
+PDS_LASSO,-.025502158,.0039042791,6.4962924e-11
+n_controls_outcome,1,,
+n_controls_treatment,1,,

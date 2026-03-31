@@ -20,10 +20,10 @@ data {
 
   array[N] int<lower=1,upper=J> y;   // Observed choices
   matrix[N, P] X;                    // Covariates
-  vector[N] branch;                  // Branch banking indicator
-  vector[N] mobile;                  // Mobile banking indicator
-  vector[N] branch_density;          // CBSA branch density
-  vector[N] weights;                 // Survey weights
+  array[N] int<lower=0,upper=1> branch;   // Branch banking indicator
+  array[N] int<lower=0,upper=1> mobile;   // Mobile banking indicator
+  vector[N] branch_density;               // CBSA branch density
+  vector<lower=0>[N] weights;             // Survey weights (normalized)
 }
 
 parameters {
@@ -173,7 +173,7 @@ generated quantities {
         // Counterfactual: reduce branch density by 50% for branch users
         // Simplified: reduce gamma_branch effect
         real p_se_cf_k = p_se_k;
-        if (branch[i] > 0.5) {
+        if (branch[i] == 1) {
           // Approximate counterfactual effect
           p_se_cf_k = p_se_k * exp(-0.5 * gamma_branch[k] * branch_density[i]);
         }

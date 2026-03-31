@@ -4,7 +4,7 @@
 
 clear all
 
-global output "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data/output"
+global output "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data/output"
 
 * Counterfactual results
 clear

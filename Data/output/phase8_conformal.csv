@@ -1,0 +1,7 @@
+parameter,value
+effect_point,4.849453
+ci_lower_95,-3.5000744
+ci_upper_95,6.8562098
+ci_lower_90,-2.4305868
+ci_upper_90,6.3726277
+bootstrap_sd,2.6452475

@@ -17,7 +17,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -51,8 +51,8 @@ replace educ_cat = 2 if hs_diploma == 1
 replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
 
 di "Sample: " _N " observations"
 

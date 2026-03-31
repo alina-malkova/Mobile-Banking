@@ -6,7 +6,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -80,7 +80,7 @@ forvalues j = 1/9 {
 * Collapse to cell level
 collapse (mean) p1=choice1 p2=choice2 p3=choice3 p4=choice4 p5=choice5 ///
          p6=choice6 p7=choice7 p8=choice8 p9=choice9 ///
-         bb_std ///
+         bb_std female married has_children ///
          (count) n=joint_choice ///
          [aw=hsupwgtk], by(cbsa year age_cat educ)
 
@@ -183,7 +183,7 @@ gen switch_cost = (is_mobile + is_unbanked)
 di _n "=== Dynamic Structural Estimation ==="
 
 reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se ///
+    age2_se age3_se educ4_se female married has_children ///
     bb_mobile bb_se ///
     dynamic_se switch_cost ///
     [aw=n], vce(cluster cbsa)

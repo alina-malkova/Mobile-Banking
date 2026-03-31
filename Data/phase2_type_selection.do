@@ -12,7 +12,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -118,7 +118,7 @@ collapse (mean) p1=choice1 p2=choice2 p3=choice3 p4=choice4 p5=choice5 ///
          tau2_1=type2_1 tau2_2=type2_2 ///
          tau3_1=type3_1 tau3_2=type3_2 tau3_3=type3_3 ///
          tau4_1=type4_1 tau4_2=type4_2 tau4_3=type4_3 tau4_4=type4_4 ///
-         bb_std ///
+         bb_std female married has_children ///
          (count) n=joint_choice ///
          [aw=hsupwgtk], by(cbsa year age_cat educ)
 
@@ -195,7 +195,7 @@ di "K = 1 (HOMOGENEOUS MODEL)"
 di "============================================================"
 
 quietly reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se bb_mobile bb_se dynamic_se switch_cost ///
+    age2_se age3_se educ4_se female married has_children bb_mobile bb_se dynamic_se switch_cost ///
     [aw=n], vce(cluster cbsa)
 
 local ll_1 = e(ll)
@@ -250,7 +250,7 @@ gen bbse_k2_1 = bb_se * tau2_1
 gen bbse_k2_2 = bb_se * tau2_2
 
 quietly reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se bb_mobile ///
+    age2_se age3_se educ4_se female married has_children bb_mobile ///
     dyn_k2_1 dyn_k2_2 sw_k2_1 sw_k2_2 bbse_k2_1 bbse_k2_2 ///
     [aw=n], vce(cluster cbsa)
 
@@ -311,7 +311,7 @@ gen bbse_k3_2 = bb_se * tau3_2
 gen bbse_k3_3 = bb_se * tau3_3
 
 quietly reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se bb_mobile ///
+    age2_se age3_se educ4_se female married has_children bb_mobile ///
     dyn_k3_1 dyn_k3_2 dyn_k3_3 sw_k3_1 sw_k3_2 sw_k3_3 bbse_k3_1 bbse_k3_2 bbse_k3_3 ///
     [aw=n], vce(cluster cbsa)
 
@@ -380,7 +380,7 @@ gen bbse_k4_3 = bb_se * tau4_3
 gen bbse_k4_4 = bb_se * tau4_4
 
 quietly reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se bb_mobile ///
+    age2_se age3_se educ4_se female married has_children bb_mobile ///
     dyn_k4_1 dyn_k4_2 dyn_k4_3 dyn_k4_4 ///
     sw_k4_1 sw_k4_2 sw_k4_3 sw_k4_4 ///
     bbse_k4_1 bbse_k4_2 bbse_k4_3 bbse_k4_4 ///

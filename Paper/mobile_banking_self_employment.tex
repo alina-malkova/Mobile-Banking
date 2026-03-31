@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent This paper uses the relationship between bank branch access and self-employment to demonstrate that model selection in finite mixture models has first-order consequences for policy counterfactuals. Using FDIC survey data (2013--2023), I document that self-employment rates are substantially higher among branch banking users (12.6\%) compared to mobile-only users (8.7\%). Reduced-form methods (OLS, IV, double machine learning) yield null effects after conditioning on observables, suggesting this gap reflects selection rather than a causal credit channel. However, a structural model with latent types---selected via Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE---identifies substantial within-type effects that the reduced form pools away. This creates a central tension: the structural model predicts that 50\% branch closure reduces self-employment by 11\%, while the homogeneous model predicts 0.6\%. Rather than adjudicating between these, I report bounds under model uncertainty: the effect lies between 0.6\% and 11\%, with the wide range reflecting genuine uncertainty about unobserved heterogeneity. The methodological contribution is to show that mixture model selection---often treated as a technical detail---can swing policy predictions by an order of magnitude, making transparent sensitivity analysis essential for credible policy evaluation.
+\noindent This paper uses the relationship between bank branch access and self-employment to demonstrate that model selection in finite mixture models has first-order consequences for policy counterfactuals. Using FDIC survey data (2013--2023), I document that self-employment rates are substantially higher among branch banking users (12.6\%) compared to mobile-only users (8.7\%). Reduced-form methods (OLS, IV, double machine learning) yield null effects after conditioning on observables, suggesting this gap reflects selection rather than a causal credit channel. However, a structural model with latent types---selected via Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE---identifies substantial within-type effects that the reduced form pools away. This creates a central tension: the structural model predicts that 50\% branch closure reduces self-employment by 10.8\%, while the homogeneous model predicts 0.6\%. Rather than adjudicating between these, I report bounds under model uncertainty: the effect lies between 0.6\% and 10.8\%, with the wide range reflecting genuine uncertainty about unobserved heterogeneity. The methodological contribution is to show that mixture model selection---often treated as a technical detail---can swing policy predictions by an order of magnitude, making transparent sensitivity analysis essential for credible policy evaluation.
 
 \vspace{0.5cm}
 \noindent \textbf{JEL Codes:} G21, J24, L26, C25, C38
@@ -53,21 +53,21 @@ The substantive question is whether mobile banking can substitute for traditiona
 
 Using FDIC survey data (2013--2023), I document a striking descriptive pattern: self-employment rates are 12.6\% among branch banking users versus 8.7\% among mobile-only users. However, \textit{all reduced-form methods yield null effects after conditioning on observables}. OLS with demographic controls, post-double-selection LASSO, and double/debiased machine learning produce coefficients near zero and statistically insignificant. This suggests the raw correlation reflects selection---older, wealthier individuals both prefer branch banking and have higher self-employment rates---rather than a causal credit channel.
 
-A structural model of joint banking mode and employment choice tells a different story. Extending the multinomial logit to incorporate latent types, I find substantial heterogeneity in branch effects: some types show near-zero or negative effects, while others (approximately 32\% of the population) exhibit large positive effects consistent with dependence on relationship lending. When I simulate branch closures, the counterfactual predictions depend dramatically on $K$: the homogeneous model ($K=1$) predicts a 0.6\% decline in self-employment from 50\% branch closure, while the BIC-selected four-type model predicts 11\%---a tenfold difference.
+A structural model of joint banking mode and employment choice tells a different story. Extending the multinomial logit to incorporate latent types, I find substantial heterogeneity in branch effects: some types show near-zero or negative effects, while others (approximately 31\% of the population) exhibit large positive effects consistent with dependence on relationship lending. When I simulate branch closures, the counterfactual predictions depend dramatically on $K$: the homogeneous model ($K=1$) predicts a 0.6\% decline in self-employment from 50\% branch closure, while the BIC-selected four-type model predicts 10.8\%---an order-of-magnitude difference.
 
-\textbf{The central tension.} How should we interpret the disconnect between the reduced-form null and the structural finding? The structural interpretation is that within-type variation reveals credit access effects that the reduced form pools away: Types 3 and 4 (67\% of the population) have positive branch effects, but this is masked by Types 1 and 2 (33\%) with zero or negative effects, yielding a near-zero average that the reduced form recovers. The skeptical interpretation is that the structural result is an artifact of functional form: if branch banking and self-employment are jointly driven by age, wealth, and cohort effects with no causal credit channel, a sufficiently flexible mixture model will ``discover'' types that happen to separate high-SE from low-SE individuals, even absent any true treatment effect.
+\textbf{The central tension.} How should we interpret the disconnect between the reduced-form null and the structural finding? The structural interpretation is that within-type variation reveals credit access effects that the reduced form pools away: Types 3 and 4 (64\% of the population) have positive branch effects, but this is masked by Types 1 and 2 (36\%) with negative effects, yielding a near-zero average that the reduced form recovers. The skeptical interpretation is that the structural result is an artifact of functional form: if branch banking and self-employment are jointly driven by age, wealth, and cohort effects with no causal credit channel, a sufficiently flexible mixture model will ``discover'' types that happen to separate high-SE from low-SE individuals, even absent any true treatment effect.
 
 I do not resolve this tension---doing so would require exogenous variation in branch access that the data do not provide. Instead, I report bounds under model uncertainty:
 \begin{equation*}
-\Delta SE \in [-11\%, -0.6\%]
+\Delta SE \in [-10.8\%, -0.6\%]
 \end{equation*}
-This range is valid regardless of the true $K$, and its width reflects genuine uncertainty about unobserved heterogeneity. The lower bound (0.6\%) corresponds to the skeptical view where heterogeneity is spurious; the upper bound (11\%) corresponds to the structural view where heterogeneity reflects real credit dependence.
+This range is valid regardless of the true $K$, and its width reflects genuine uncertainty about unobserved heterogeneity. The lower bound (0.6\%) corresponds to the skeptical view where heterogeneity is spurious; the upper bound (10.8\%) corresponds to the structural view where heterogeneity reflects real credit dependence.
 
 \textbf{Methodological contribution.} The primary contribution is methodological: demonstrating that mixture model selection---often treated as a technical detail relegated to footnotes---can swing policy predictions by an order of magnitude. I employ a three-pronged approach to $K$ selection: Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE. All three select $K=4$, but the counterfactual sensitivity analysis shows that even well-motivated selection methods leave substantial model uncertainty. This has implications beyond the present application: any policy evaluation using mixture models should report sensitivity to $K$, and bounds may be more credible than point estimates when selection methods disagree or when reduced-form evidence conflicts with structural findings.
 
-\textbf{Substantive contribution.} On the mobile banking question specifically, the paper provides the first systematic evidence on self-employment. The honest answer is that the data are consistent with effects ranging from negligible to substantial. Policymakers evaluating branch closure impacts should recognize this uncertainty: the effect could be as small as 0.6\% (if the reduced-form null is correct) or as large as 11\% (if the structural heterogeneity is real). The Bayesian posterior, which integrates over uncertainty in $K$, yields an intermediate estimate of 8.5\% with a 95\% credible interval of [3.1\%, 14.2\%] and posterior probability 0.99 that the effect is negative.
+\textbf{Substantive contribution.} On the mobile banking question specifically, the paper provides the first systematic evidence on self-employment. The honest answer is that the data are consistent with effects ranging from negligible to substantial. Policymakers evaluating branch closure impacts should recognize this uncertainty: the effect could be as small as 0.6\% (if the reduced-form null is correct) or as large as 10.8\% (if the structural heterogeneity is real). The Bayesian posterior, which integrates over uncertainty in $K$, yields an intermediate estimate of 8.5\% with a 95\% credible interval of [3.1\%, 14.2\%] and posterior probability 0.99 that the effect is negative.
 
-The paper proceeds as follows. Section 2 provides institutional background. Section 3 describes the data and sample construction. Section 4 presents descriptive analysis. Section 5 reports reduced-form evidence, documenting the null finding. Section 6 develops the structural model. Section 7 presents structural results and counterfactual analysis, directly confronting the tension with the reduced form. Section 8 concludes. Appendices provide detailed methodology for robustness analyses.
+The paper proceeds as follows. Section 2 provides institutional background. Section 3 describes the data and sample construction. Section 4 presents descriptive analysis. Section 5 reports reduced-form evidence, documenting the null finding. Section 6 develops the structural model. Section 7 presents structural results. Section 8 develops counterfactual analysis, directly confronting the tension with the reduced form. Section 9 concludes. Appendices provide detailed methodology for robustness analyses.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background and Institutional Context}
@@ -268,10 +268,7 @@ Figure \ref{fig:trends} visualizes these trends, showing the dramatic shift from
 \centering
 \caption{Banking Mode Trends, 2013--2023}
 \label{fig:trends}
-\fbox{\parbox{0.9\textwidth}{\centering\vspace{2cm}
-\textit{[Figure: Line plot showing Branch users declining from 78\% to 58\%,\\
-Mobile users rising from 19\% to 42\%, Unbanked declining from 7\% to 4.5\%]}
-\vspace{2cm}}}
+\includegraphics[width=0.9\textwidth]{../Data/output/figures/fig2_se_gap_event_study.pdf}
 \begin{minipage}{0.9\textwidth}
 \small\textit{Notes:} Sample restricted to working-age adults (18--64) in the labor force. Statistics weighted using survey weights. Mobile banking adoption more than doubled while branch usage declined by 20 percentage points.
 \end{minipage}
@@ -358,11 +355,11 @@ Table \ref{tab:baseline_ols} presents the results. Column (1) shows the raw corr
 \toprule
 & (1) & (2) & (3) & (4) \\
 \midrule
-Mobile Banking User & $-0.0124^{***}$ & 0.0051 & 0.0036 & 0.0034 \\
+Mobile Banking User & $-0.0124^{***}$ & 0.0049 & 0.0031 & 0.0030 \\
 & (0.0037) & (0.0035) & (0.0037) & (0.0037) \\
 \\
-Age & & $0.0054^{***}$ & $0.0053^{***}$ & $0.0054^{***}$ \\
-& & (0.0012) & (0.0012) & (0.0012) \\
+Age & & $0.0033^{**}$ & $0.0030^{**}$ & $0.0031^{**}$ \\
+& & (0.0013) & (0.0013) & (0.0013) \\
 \\
 \midrule
 Demographics & No & Yes & Yes & Yes \\
@@ -371,12 +368,12 @@ Year FE & No & No & Yes & Yes \\
 CBSA Controls & No & No & No & Yes \\
 \midrule
 Observations & 45,944 & 45,944 & 45,944 & 45,466 \\
-R-squared & 0.000 & 0.019 & 0.030 & 0.029 \\
+R-squared & 0.000 & 0.025 & 0.036 & 0.036 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Dependent variable is an indicator for self-employment. Demographic controls include age, age squared, education, race/ethnicity, and family income categories. CBSA controls include broadband penetration and unemployment rate. Standard errors clustered at CBSA level in parentheses. Survey weights applied. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\item Notes: Dependent variable is an indicator for self-employment. Demographic controls include age, age squared, sex, marital status, presence of children, education, race/ethnicity, and family income categories. CBSA controls include broadband penetration and unemployment rate. Standard errors clustered at CBSA level in parentheses. Survey weights applied. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -385,7 +382,7 @@ R-squared & 0.000 & 0.019 & 0.030 & 0.029 \\
 
 I attempted IV estimation using CBSA-level broadband penetration as an instrument for mobile banking adoption. Table \ref{tab:iv_results} reports the results, but \textit{this analysis should be interpreted with extreme caution} for two reasons.
 
-First, the instrument is weak. The first-stage F-statistic of 4.82 is well below the \citet{stock2002} threshold of 10 for reliable inference, and below even more conservative thresholds for bias. Weak instrument bias pushes 2SLS toward OLS, so the large positive IV coefficient (0.344) likely reflects this bias rather than a true causal effect.
+First, the instrument is weak. The first-stage F-statistic of 4.82 is well below the \citet{stock2002} threshold of 10 for reliable inference, and below even more conservative thresholds for bias. Weak instrument bias pushes 2SLS toward OLS, so the large positive IV coefficient (0.366) likely reflects this bias rather than a true causal effect.
 
 Second, the exclusion restriction is implausible. Broadband penetration affects self-employment through many channels beyond mobile banking: e-commerce opportunities, remote work feasibility, digital marketing, access to online business services, and fintech lending platforms. Conditional on demographics, it is difficult to argue that broadband affects self-employment \textit{only} through mobile banking adoption.
 
@@ -401,11 +398,11 @@ I report these results for completeness, but the IV analysis does not rescue the
 & First Stage & Reduced Form & IV \\
 & (Mobile Banking) & (Self-Employment) & (Self-Employment) \\
 \midrule
-Broadband Penetration & $0.0051^{**}$ & $0.0018^{*}$ & \\
+Broadband Penetration & $0.0052^{**}$ & $0.0019^{*}$ & \\
 & (0.0023) & (0.0010) & \\
 \\
-Mobile Banking & & & 0.344 \\
-& & & (0.283) \\
+Mobile Banking & & & 0.366 \\
+& & & (0.276) \\
 \midrule
 State FE & Yes & Yes & Yes \\
 Year FE & Yes & Yes & Yes \\
@@ -497,6 +494,40 @@ As a robustness check on the hand-selected subgroup analysis, I implement a data
 
 The sorted effects analysis reveals substantial heterogeneity: the 10th percentile of individual treatment effects is $-0.02$ while the 90th percentile is $+0.03$. The best linear predictor identifies age $\times$ income interactions as the primary driver of heterogeneity---effects are larger (more positive) for middle-aged, middle-income individuals who may be at the margin of entrepreneurship. This finding is consistent with Table \ref{tab:heterogeneity} Panel B but provides additional confidence that the income heterogeneity is not a statistical artifact.
 
+\subsection{Gender and Marital Status Heterogeneity}
+
+Table~\ref{tab:het_gender} examines whether the mobile banking--self-employment relationship varies by gender and marital status. Columns (1)--(2) present split-sample regressions by gender; Columns (3)--(4) split by marital status; Column (5) estimates an interaction model on the pooled sample.
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity by Gender and Marital Status}
+\label{tab:het_gender}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+& (1) & (2) & (3) & (4) & (5) \\
+& Female & Male & Married & Unmarried & Interactions \\
+\midrule
+Mobile Banking User & 0.0009 & $-0.0033$ & 0.0020 & $-0.0066$ & $-0.0146^{*}$ \\
+& (0.0045) & (0.0071) & (0.0058) & (0.0055) & (0.0075) \\[4pt]
+Mobile $\times$ Female & & & & & $0.0253^{***}$ \\
+& & & & & (0.0072) \\[4pt]
+Mobile $\times$ Married & & & & & 0.0020 \\
+& & & & & (0.0059) \\
+\midrule
+Observations & 23,128 & 28,404 & 28,215 & 23,317 & 51,535 \\
+$R^2$ & 0.022 & 0.037 & 0.028 & 0.036 & 0.034 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Notes: All specifications include demographic controls, CBSA and year fixed effects. Column (5) includes the interaction terms mobile $\times$ female and mobile $\times$ married, with a joint $F$-test of 6.21 ($p = 0.002$). Standard errors clustered at CBSA level. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The key finding is a significant gender interaction: the mobile $\times$ female coefficient is 0.0253 ($p < 0.01$), indicating that mobile banking is associated with 2.5 percentage points higher self-employment for women relative to men. This is economically meaningful given the female self-employment rate of 7.7\%. One interpretation is that mobile banking reduces gender-specific barriers to entrepreneurship---such as time constraints from caregiving or discomfort with male-dominated branch environments---though the cross-sectional design cannot establish causality. The marital status interaction is small and insignificant (0.002, $p = 0.73$).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Structural Model}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -512,7 +543,7 @@ Consider an individual $i$ in CBSA $j$ at time $t$ who makes two interrelated di
 
 This yields nine joint alternatives. The structural model identifies how credit access through different banking channels affects the returns to self-employment, and how this relationship varies across latent types.
 
-\textbf{A note on dynamics.} In principle, banking and employment choices have dynamic elements: switching costs create persistence in banking mode, and self-employment experience accumulates over time. However, dynamic structural models (e.g., \citealt{arcidiacono2011}) require observing individual transitions---specifically, lagged banking mode $b_{t-1}$ and accumulated experience $E_{it}$. The FDIC/CPS data are repeated cross-sections where each individual appears exactly once, making these state variables unobservable. Additionally, mobile banking adoption rose from 15\% to 42\% over the sample period, violating the stationarity assumption that CCP methods require.
+\textbf{A note on dynamics.} In principle, banking and employment choices have dynamic elements: switching costs create persistence in banking mode, and self-employment experience accumulates over time. However, dynamic structural models (e.g., Arcidiacono and Miller, 2011) require observing individual transitions---specifically, lagged banking mode $b_{t-1}$ and accumulated experience $E_{it}$. The FDIC/CPS data are repeated cross-sections where each individual appears exactly once, making these state variables unobservable. Additionally, mobile banking adoption rose from 15\% to 42\% over the sample period, violating the stationarity assumption that CCP methods require.
 
 I therefore estimate a \textit{static} multinomial logit, which is correctly specified for repeated cross-sections. The static model identifies the cross-sectional relationship between banking mode and self-employment, including heterogeneous effects across latent types. Counterfactuals operate through cross-sectional reallocation rather than transition dynamics. This provides a \textit{lower bound} on the true effect if switching costs and experience accumulation amplify persistence, as is likely.
 
@@ -649,7 +680,7 @@ I extend the baseline model to incorporate unobserved heterogeneity via a finite
 Selecting the number of types $K$ is challenging because standard likelihood ratio tests have non-standard distributions when parameters are on the boundary. I employ a three-pronged approach to model selection following recent developments in the literature:
 
 \begin{enumerate}
-    \item \textbf{Hao-Kasahara Panel BIC} \citep{hao2025}: The standard BIC uses $\ln(N)$ where $N$ is the number of observations. \citet{hao2025} develop a panel BIC for settings where the same units are observed across periods: Panel BIC $= -2\ln\mathcal{L} + p \cdot \ln(N_{panels}) \cdot c(T)$, where $c(T) = 1 + 1/T$ corrects for the number of time periods. I adapt this to the repeated cross-section setting by treating CBSAs as the persistent units observed across $T=6$ survey waves, yielding $N_{panels} = 654$ CBSAs. This is an approximation: the original derivation assumes observing individual transitions over $T$ periods, whereas I observe independent cross-sections of the same markets. However, the fact that both standard BIC and the adapted panel BIC select $K=4$ suggests robustness to this adaptation.
+    \item \textbf{Hao-Kasahara Panel BIC} \citep{hao2025}: The standard BIC uses $\ln(N)$ where $N$ is the number of observations. \citet{hao2025} develop a panel BIC for settings where the same units are observed across periods: Panel BIC $= -2\ln\mathcal{L} + p \cdot \ln(N_{panels}) \cdot c(T)$, where $c(T) = 1 + 1/T$ corrects for the number of time periods. I adapt this to the repeated cross-section setting by treating CBSAs as the persistent units observed across $T=6$ survey waves, yielding $N_{panels} = 299$ CBSAs. This is an approximation: the original derivation assumes observing individual transitions over $T$ periods, whereas I observe independent cross-sections of the same markets. However, the fact that both standard BIC and the adapted panel BIC select $K=4$ suggests robustness to this adaptation.
 
     \item \textbf{Counterfactual Stability} \citep{bonhomme2022}: Rather than treating the number of types as a fundamental parameter, \citet{bonhomme2022} argue that discretization serves as an approximation device. The appropriate $K$ is the smallest value for which counterfactual predictions stabilize---i.e., adding another type does not meaningfully change estimates of interest.
 
@@ -668,35 +699,33 @@ Table \ref{tab:bic_selection} presents the model selection results using all thr
 & $K=1$ & $K=2$ & $K=3$ & $K=4$ \\
 \midrule
 \multicolumn{5}{l}{\textit{Panel A: Information Criteria}} \\
-Log-likelihood & 40,103 & 40,298 & 41,153 & \textbf{41,902} \\
-Parameters & 14 & 17 & 20 & 23 \\
-Standard BIC & $-80,045$ & $-80,400$ & $-82,077$ & $\mathbf{-83,541}$ \\
-Panel BIC (Hao-Kasahara) & $-80,112$ & $-80,482$ & $-82,173$ & $\mathbf{-83,652}$ \\
+Standard BIC & $-78,728$ & $-79,073$ & $-80,700$ & $\mathbf{-82,110}$ \\
+Panel BIC (Hao-Kasahara) & $-78,810$ & $-79,169$ & $-80,811$ & $\mathbf{-82,235}$ \\
 \midrule
 \multicolumn{5}{l}{\textit{Panel B: Counterfactual Effects (50\% closure)}} \\
-Effect on SE rate & $-0.6\%$ & $-3.0\%$ & $-8.8\%$ & $-11.0\%$ \\
-Change from $K-1$ & -- & $+2.4$ pp & $+5.9$ pp & $+2.2$ pp \\
+Effect on SE rate & $-0.6\%$ & $-2.5\%$ & $-7.3\%$ & $-9.7\%$ \\
+Change from $K-1$ & -- & $+1.9$ pp & $+4.8$ pp & $+2.4$ pp \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Notes: Panel BIC follows \citet{hao2025} with $N_{panels} = 654$ CBSAs and $c(T) = 1.167$ for $T=6$ survey waves. Bold indicates preferred model. Counterfactual effects computed as weighted average across types for 50\% branch closure scenario.
+\item Notes: Panel BIC follows \citet{hao2025} with $N_{panels} = 299$ CBSAs and $c(T) = 1.167$ for $T=6$ survey waves. Bold indicates preferred model. Counterfactual effects computed as weighted average across types for 50\% branch closure scenario.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-Both the standard BIC and Hao-Kasahara Panel BIC select $K=4$ types. The OSCE approximation with $K=5$ also identifies 4 active types (one type's branch effect is statistically insignificant). However, the counterfactual stability check reveals that effects have not fully stabilized: the change from $K=3$ to $K=4$ is 2.2 percentage points, marginally above the 2pp threshold suggested by \citet{bonhomme2022}. This suggests genuine heterogeneity in the population that BIC-based methods are detecting, while acknowledging some model uncertainty remains.
+Both the standard BIC and Hao-Kasahara Panel BIC select $K=4$ types. The OSCE approximation with $K=5$ also identifies 4 active types (one type's branch effect is statistically insignificant). However, the counterfactual stability check reveals that effects have not fully stabilized: the change from $K=3$ to $K=4$ is 2.4 percentage points, marginally above the 2pp threshold suggested by \citet{bonhomme2022}. This suggests genuine heterogeneity in the population that BIC-based methods are detecting, while acknowledging some model uncertainty remains.
 
 The four BIC-selected types are economically interpretable (shares re-estimated for $K=4$):
 
 \begin{itemize}
-    \item \textbf{Type 1 (12.7\%)}: No branch effect (coefficient near zero). These individuals' self-employment decisions are independent of banking mode---likely established entrepreneurs with diverse credit sources.
+    \item \textbf{Type 1 (12.1\%)}: Negative branch effect ($\beta = -0.037$). These individuals are less likely to be self-employed when using branch banking, likely reflecting selection of risk-averse individuals into traditional banking.
 
-    \item \textbf{Type 2 (20.3\%)}: Negative branch effect ($\beta = -0.030$, $t = -9.6$). Counterintuitively, these individuals are \textit{less} likely to be self-employed when using branch banking, suggesting selection of risk-averse individuals into traditional banking.
+    \item \textbf{Type 2 (24.1\%)}: Moderately negative branch effect ($\beta = -0.020$). Similar to Type~1 but with a weaker negative association, suggesting partial substitutability between banking modes.
 
-    \item \textbf{Type 3 (34.6\%)}: Moderate positive branch effect ($\beta = 0.026$, $t = 5.5$). Mainstream entrepreneurs who benefit from branch relationships but can partially substitute to mobile banking.
+    \item \textbf{Type 3 (33.0\%)}: Small positive branch effect ($\beta = 0.010$). Mainstream entrepreneurs who benefit modestly from branch relationships but can largely substitute to mobile banking.
 
-    \item \textbf{Type 4 (32.4\%)}: Large positive branch effect ($\beta = 0.138$, $t = 8.8$). Highly dependent on branch-based relationship lending for credit access supporting self-employment.
+    \item \textbf{Type 4 (30.8\%)}: Large positive branch effect ($\beta = 0.093$). Highly dependent on branch-based relationship lending for credit access supporting self-employment.
 \end{itemize}
 
 \textbf{What identifies the type-specific effects?} In a finite mixture MNL, type-specific parameters $\theta_k$ are identified from variation in the joint distribution of $(b,d)$ conditional on $(X,Z)$ that a single-type model cannot explain. The EM algorithm assigns individuals to types based on residual patterns after conditioning on observables. However, without panel data, I cannot validate the types against actual behavior over time---the types are latent constructs identified from cross-sectional choice patterns.
@@ -714,11 +743,11 @@ Table \ref{tab:unobs_het} presents the type-specific branch effects from the ove
 \toprule
 & Share & $\beta_{branch}$ & Std. Err. & $t$-stat & Status \\
 \midrule
-Type 1 & 9.5\% & 0.000 & -- & -- & Active$^a$ \\
-Type 2 & 15.2\% & $-0.030$ & 0.003 & $-9.61$ & Active \\
-Type 3 & 25.1\% & 0.000 & 0.002 & 0.05 & Shrink \\
-Type 4 & 25.9\% & 0.026 & 0.005 & 5.47 & Active \\
-Type 5 & 24.3\% & 0.138 & 0.016 & 8.80 & Active \\
+Type 1 & 9.5\% & $-0.037$ & (0.018) & $-2.06$ & Active \\
+Type 2 & 18.2\% & $-0.020$ & (0.003) & $-6.67$ & Active \\
+Type 3 & 22.1\% & 0.003 & (0.002) & 1.50 & Shrink \\
+Type 4 & 25.9\% & 0.010 & (0.005) & 2.00 & Active \\
+Type 5 & 24.3\% & 0.093 & (0.016) & 5.81 & Active \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
@@ -734,18 +763,13 @@ Figure \ref{fig:type_effects} visualizes the type-specific branch effects, highl
 \centering
 \caption{Type-Specific Branch Effects on Self-Employment}
 \label{fig:type_effects}
-\fbox{\parbox{0.9\textwidth}{\centering\vspace{2cm}
-\textit{[Figure: Bar chart with 4 bars showing type-specific $\beta_{branch}$:\\
-Type 1 (12.7\%): $\approx 0$; Type 2 (20.3\%): $-0.030$;\\
-Type 3 (34.6\%): $+0.026$; Type 4 (32.4\%): $+0.138$\\
-with 95\% confidence intervals. Horizontal line at 0 for reference.]}
-\vspace{2cm}}}
+\includegraphics[width=0.9\textwidth]{../Data/output/figures_methods/fig3_type_effects.pdf}
 \begin{minipage}{0.9\textwidth}
-\small\textit{Notes:} Type shares in parentheses. The weighted average effect is near zero (consistent with reduced-form null), but Type 4 (32\% of population) has a branch effect 40$\times$ larger than the average. Error bars show 95\% confidence intervals.
+\small\textit{Notes:} Type shares in parentheses. The weighted average effect is near zero (consistent with reduced-form null), but Type 4 (31\% of population) has a branch effect substantially larger than the average. Error bars show 95\% confidence intervals.
 \end{minipage}
 \end{figure}
 
-The weighted average counterfactual effect of 50\% branch closure is $-11.0\%$ under the BIC-selected $K=4$ model. This is larger than simpler specifications because it properly accounts for Type 4 individuals (32\% of the population) who are highly dependent on branch-based lending. The sensitivity of counterfactuals to $K$ (ranging from $-0.6\%$ to $-11.0\%$) highlights the importance of the model selection methodology: inappropriately pooling heterogeneous types can substantially bias policy predictions.
+The weighted average counterfactual effect of 50\% branch closure is $-10.8\%$ under the BIC-selected $K=4$ model. This is larger than simpler specifications because it properly accounts for Type 4 individuals (31\% of the population) who are highly dependent on branch-based lending. The sensitivity of counterfactuals to $K$ (ranging from $-0.6\%$ to $-10.8\%$) highlights the importance of the model selection methodology: inappropriately pooling heterogeneous types can substantially bias policy predictions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Counterfactual Analysis}
@@ -755,7 +779,7 @@ Using the estimated structural parameters, I simulate the effects of three polic
 
 \subsection{Branch Closure Scenarios}
 
-Table \ref{tab:counterfactual} presents counterfactual predictions from the structural model with unobserved heterogeneity. Counterfactuals are computed using the MNL choice probabilities, which properly captures substitution across all nine alternatives:
+Table \ref{tab:counterfactual} presents counterfactual predictions from the structural model with unobserved heterogeneity. Counterfactuals are computed using the MNL choice probabilities, which properly capture substitution across all nine alternatives:
 \begin{equation}
 SE_{cf} = \sum_{k=1}^{4} \pi_k \cdot \frac{1}{N} \sum_i P(d_i = S | X_i, Z_j'; \theta_k)
 \end{equation}
@@ -775,15 +799,15 @@ Scenario & SE Rate & Change & \% Change & 95\% CI \\
 \textbf{Baseline} & 10.56\% & -- & -- & -- \\
 \midrule
 \multicolumn{5}{l}{\textit{Branch Closure Scenarios (K=4 Type Model)}} \\
-\quad 25\% branch closure & 9.98\% & $-0.58$ pp & $-5.5\%$ & [$-3.2$, $-7.8$] \\
-\quad 50\% branch closure & 9.40\% & $-1.16$ pp & $-11.0\%$ & [$-6.4$, $-15.6$] \\
-\quad 75\% branch closure & 8.82\% & $-1.74$ pp & $-16.5\%$ & [$-9.6$, $-23.4$] \\
+\quad 25\% branch closure & 9.99\% & $-0.57$ pp & $-5.4\%$ & [$-7.1$, $-3.7$] \\
+\quad 50\% branch closure & 9.42\% & $-1.14$ pp & $-10.8\%$ & [$-14.1$, $-7.4$] \\
+\quad 75\% branch closure & 8.85\% & $-1.71$ pp & $-16.2\%$ & [$-21.2$, $-11.1$] \\
 \midrule
 \multicolumn{5}{l}{\textit{Sensitivity to Number of Types}} \\
 \quad $K=1$ (homogeneous) & 10.50\% & $-0.06$ pp & $-0.6\%$ & -- \\
-\quad $K=2$ types & 10.24\% & $-0.32$ pp & $-3.0\%$ & -- \\
-\quad $K=3$ types & 9.63\% & $-0.93$ pp & $-8.8\%$ & -- \\
-\quad $K=4$ types (selected) & 9.40\% & $-1.16$ pp & $-11.0\%$ & -- \\
+\quad $K=2$ types & 10.30\% & $-0.26$ pp & $-2.5\%$ & -- \\
+\quad $K=3$ types & 9.79\% & $-0.77$ pp & $-7.3\%$ & -- \\
+\quad $K=4$ types (selected) & 9.42\% & $-1.14$ pp & $-10.8\%$ & -- \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
@@ -799,22 +823,18 @@ Figure \ref{fig:sensitivity} visualizes the central methodological finding: coun
 \centering
 \caption{Counterfactual Sensitivity to Number of Types}
 \label{fig:sensitivity}
-\fbox{\parbox{0.9\textwidth}{\centering\vspace{2cm}
-\textit{[Figure: Bar chart or line plot showing counterfactual effect (50\% closure)\\
-as a function of $K$: $K=1$: $-0.6\%$; $K=2$: $-3.0\%$; $K=3$: $-8.8\%$; $K=4$: $-11.0\%$\\
-Shaded region showing bounds $[-11\%, -0.6\%]$. Bayesian posterior mean at $-8.5\%$.]}
-\vspace{2cm}}}
+\includegraphics[width=0.9\textwidth]{../Data/output/figures_methods/fig1_counterfactual_sensitivity.pdf}
 \begin{minipage}{0.9\textwidth}
-\small\textit{Notes:} Each bar shows the predicted effect of 50\% branch closure on self-employment under different assumptions about the number of latent types. The tenfold range ($-0.6\%$ to $-11\%$) reflects genuine model uncertainty. BIC and Hao-Kasahara criteria select $K=4$; Bayesian posterior integrates over $K$ uncertainty to yield $-8.5\%$.
+\small\textit{Notes:} Each bar shows the predicted effect of 50\% branch closure on self-employment under different assumptions about the number of latent types. The range ($-0.6\%$ to $-10.8\%$) reflects genuine model uncertainty. BIC and Hao-Kasahara criteria select $K=4$; Bayesian posterior integrates over $K$ uncertainty to yield $-8.5\%$.
 \end{minipage}
 \end{figure}
 
 \subsection{Key Findings}
 
 \begin{enumerate}
-    \item \textbf{Substantial heterogeneity in branch dependence}: The counterfactual effects vary dramatically with assumptions about unobserved heterogeneity. The homogeneous model ($K=1$) predicts a modest 0.6\% decline in self-employment from 50\% branch closure, while the BIC-selected four-type model predicts an 11.0\% decline. This tenfold difference arises because the homogeneous model averages over types with opposite-signed branch effects, masking the substantial negative impact on the high-dependence type (Type 4).
+    \item \textbf{Substantial heterogeneity in branch dependence}: The counterfactual effects vary dramatically with assumptions about unobserved heterogeneity. The homogeneous model ($K=1$) predicts a modest 0.6\% decline in self-employment from 50\% branch closure, while the BIC-selected four-type model predicts a 10.8\% decline. This order-of-magnitude difference arises because the homogeneous model averages over types with opposite-signed branch effects, masking the substantial negative impact on the high-dependence type (Type 4).
 
-    \item \textbf{Type 4 drives the aggregate effect}: Approximately 32\% of the population (Type 4) exhibits a large positive branch effect on self-employment ($\beta = 0.138$). These individuals---likely small business owners dependent on relationship lending---account for most of the aggregate counterfactual effect. Branch closures disproportionately harm this group.
+    \item \textbf{Type 4 drives the aggregate effect}: Approximately 31\% of the population (Type 4) exhibits a large positive branch effect on self-employment ($\beta = 0.093$). These individuals---likely small business owners dependent on relationship lending---account for most of the aggregate counterfactual effect. Branch closures disproportionately harm this group.
 
     \item \textbf{Mobile banking provides incomplete substitution}: Types 3 and 4 show positive branch effects on self-employment, indicating that branch banking provides credit access benefits that mobile banking cannot fully replicate. Even with widespread mobile banking availability, reducing branch access lowers self-employment among these credit-constrained types.
 \end{enumerate}
@@ -823,11 +843,11 @@ Shaded region showing bounds $[-11\%, -0.6\%]$. Bayesian posterior mean at $-8.5
 
 \textbf{Bounds under model uncertainty.} Rather than requiring the reader to accept $K=4$ as correct, I report bounds on the counterfactual effect that are valid regardless of $K$:
 \begin{equation}
-\Delta SE \in \left[\min_K \Delta SE(K), \max_K \Delta SE(K)\right] = [-11\%, -0.6\%]
+\Delta SE \in \left[\min_K \Delta SE(K), \max_K \Delta SE(K)\right] = [-10.8\%, -0.6\%]
 \end{equation}
-This follows the \citet{bonhomme2022} logic to its conclusion: the identified set for the aggregate effect of 50\% branch closure spans 0.6\% to 11\%, where the wide range reflects genuine model uncertainty about unobserved heterogeneity. This reframes the paper's contribution from ``the effect is 11\%'' (which can be challenged by questioning $K=4$) to ``the effect is between 1\% and 11\%'' (which is more robust and intellectually honest). The bounds could be sharpened by imposing economic restrictions---e.g., the branch effect cannot be negative for types that \textit{choose} branch banking conditional on being self-employed---but I report the unrestricted bounds for transparency.
+This follows the \citet{bonhomme2022} logic to its conclusion: the identified set for the aggregate effect of 50\% branch closure spans 0.6\% to 10.8\%, where the wide range reflects genuine model uncertainty about unobserved heterogeneity. This reframes the paper's contribution from ``the effect is 10.8\%'' (which can be challenged by questioning $K=4$) to ``the effect is between 0.6\% and 10.8\%'' (which is more robust and intellectually honest). The bounds could be sharpened by imposing economic restrictions---e.g., the branch effect cannot be negative for types that \textit{choose} branch banking conditional on being self-employed---but I report the unrestricted bounds for transparency.
 
-\textbf{Mixed logit robustness.} As an alternative to the finite mixture, I estimate a mixed logit with continuous random coefficients following \citet{train2009}: $\gamma_C \sim N(\bar{\gamma}, \sigma^2_\gamma)$. This directly estimates the mean and variance of heterogeneity in branch dependence without discretizing into $K$ types. The estimated $\hat{\sigma}_\gamma = 0.052$ is large and significant ($p < 0.01$), confirming the substantial heterogeneity that the finite mixture identifies. The implied coefficient of variation ($\hat{\sigma}_\gamma / \hat{\bar{\gamma}} = 1.2$) indicates that some individuals have near-zero branch effects while others have effects several times the mean---consistent with the four-type characterization. The combination of finite mixture (main results, interpretable types) and mixed logit (robustness, continuous heterogeneity) is compelling and validates the heterogeneity finding without relying solely on the type selection methodology.
+\textbf{Mixed logit robustness.} As an alternative to the finite mixture, I estimate a mixed logit with continuous random coefficients following \citet{train2009}: $\gamma_C \sim N(\bar{\gamma}, \sigma^2_\gamma)$. This directly estimates the mean and variance of heterogeneity in branch dependence without discretizing into $K$ types. The estimated $\hat{\sigma}_\gamma = 0.183$ is large and significant ($p < 0.01$), confirming the substantial heterogeneity that the finite mixture identifies. The implied coefficient of variation ($\hat{\sigma}_\gamma / \hat{\bar{\gamma}} = 1.2$) indicates that some individuals have near-zero branch effects while others have effects several times the mean---consistent with the four-type characterization. The combination of finite mixture (main results, interpretable types) and mixed logit (robustness, continuous heterogeneity) is compelling and validates the heterogeneity finding without relying solely on the type selection methodology.
 
 \subsection{Confronting the Reduced-Form vs.\ Structural Tension}
 
@@ -835,21 +855,21 @@ The central challenge for this paper is that the reduced-form evidence (Section 
 
 \textbf{What the reduced form shows.} OLS with demographic controls yields a branch coefficient of 0.003 ($p = 0.36$). PDS-LASSO, which selects from 47 candidate controls, yields 0.003. Double/debiased machine learning, which allows flexible functional forms in both outcome and propensity score models, yields 0.003. All three are small, statistically insignificant, and economically negligible. The reduced-form null is robust to functional form and control selection.
 
-\textbf{What the structural model claims.} The finite mixture identifies type-specific branch effects ranging from $-0.030$ (Type 2) to $+0.138$ (Type 4). The weighted average effect is near zero, which is why the reduced form finds nothing. But the \textit{within-type} effects are substantial: Type 4 individuals (32\% of the population) have branch effects 40 times larger than the reduced-form average. The structural model attributes this to genuine credit dependence; branch closures would substantially reduce self-employment for this group even though the average effect pools away.
+\textbf{What the structural model claims.} The finite mixture identifies type-specific branch effects ranging from $-0.037$ (Type 1) to $+0.093$ (Type 4). The weighted average effect is near zero, which is why the reduced form finds nothing. But the \textit{within-type} effects are substantial: Type 4 individuals (31\% of the population) have branch effects substantially larger than the reduced-form average. The structural model attributes this to genuine credit dependence; branch closures would substantially reduce self-employment for this group even though the average effect pools away.
 
 \textbf{Two interpretations.}
 
-\textit{Structural interpretation}: The reduced-form null reflects cancellation across types, not absence of effects. Types 1 and 2 (33\% of population) have zero or negative branch effects---they would be self-employed regardless of banking mode, or actively select into branches when \textit{not} self-employed. Types 3 and 4 (67\% of population) have positive branch effects---they depend on relationship lending for credit access. The reduced form averages these, finding near-zero. The structural model separates them, finding substantial effects for the credit-dependent majority. The 11\% counterfactual reflects the harm to Types 3 and 4.
+\textit{Structural interpretation}: The reduced-form null reflects cancellation across types, not absence of effects. Types 1 and 2 (36\% of population) have negative branch effects---they would be self-employed regardless of banking mode, or actively select into branches when \textit{not} self-employed. Types 3 and 4 (64\% of population) have positive branch effects---they depend on relationship lending for credit access. The reduced form averages these, finding near-zero. The structural model separates them, finding substantial effects for the credit-dependent majority. The 10.8\% counterfactual reflects the harm to Types 3 and 4.
 
-\textit{Skeptical interpretation}: The structural heterogeneity is an artifact of functional form. Branch banking and self-employment are jointly driven by age, wealth, and cohort effects. Older, wealthier individuals both prefer branches (habit, risk aversion) and have higher self-employment rates (accumulated capital, networks, experience). The structural model ``discovers'' types that happen to separate high-SE from low-SE individuals, but this reflects selection, not a causal credit channel. The 0.6\% counterfactual from the homogeneous model is correct; the additional 10.4 percentage points from heterogeneity is spurious.
+\textit{Skeptical interpretation}: The structural heterogeneity is an artifact of functional form. Branch banking and self-employment are jointly driven by age, wealth, and cohort effects. Older, wealthier individuals both prefer branches (habit, risk aversion) and have higher self-employment rates (accumulated capital, networks, experience). The structural model ``discovers'' types that happen to separate high-SE from low-SE individuals, but this reflects selection, not a causal credit channel. The 0.6\% counterfactual from the homogeneous model is correct; the additional 10.2 percentage points from heterogeneity is spurious.
 
 \textbf{What would resolve the tension?} Exogenous variation in branch access---branch closures driven by bank mergers unrelated to local economic conditions, or regression discontinuity designs at branch catchment boundaries---would allow reduced-form identification of within-type effects. The present data do not provide such variation. Absent it, I cannot definitively distinguish the structural from the skeptical interpretation.
 
-\textbf{The honest answer: bounds.} Rather than claiming the 11\% figure is correct, I report bounds:
+\textbf{The honest answer: bounds.} Rather than claiming the 10.8\% figure is correct, I report bounds:
 \begin{equation*}
-\Delta SE \in [-11\%, -0.6\%]
+\Delta SE \in [-10.8\%, -0.6\%]
 \end{equation*}
-The lower bound (0.6\%) corresponds to the skeptical view---heterogeneity is spurious, the reduced-form null is correct. The upper bound (11\%) corresponds to the structural view---heterogeneity is real, the reduced form masks substantial within-type effects. The truth lies somewhere in between, and the wide range reflects genuine uncertainty.
+The lower bound (0.6\%) corresponds to the skeptical view---heterogeneity is spurious, the reduced-form null is correct. The upper bound (10.8\%) corresponds to the structural view---heterogeneity is real, the reduced form masks substantial within-type effects. The truth lies somewhere in between, and the wide range reflects genuine uncertainty.
 
 The Bayesian DPM provides an intermediate estimate by integrating over $K$ uncertainty: posterior mean $-8.5\%$, 95\% credible interval $[-14.2\%, -3.1\%]$, $P(\text{effect} < 0) = 0.99$. Even the skeptical lower bound of 0.6\% implies \textit{some} negative effect of branch closures on self-employment.
 
@@ -889,7 +909,7 @@ I conduct several additional robustness checks using recent advances in machine 
 
 \textbf{Neural network validation of discrete types.} The finite mixture assumes $K$ discrete types. As a specification check, I estimate TasteNet-MNL \citep{han2022}, which replaces the fixed $\gamma_C$ with a neural network $\gamma_C(X_i)$. K-means clustering of the learned taste parameters recovers approximately 4 distinct groups, with cluster centers similar to the finite mixture type effects. This independent confirmation validates the discrete-types assumption without relying on the BIC selection methodology.
 
-\textbf{Bayesian nonparametric mixture.} As a final robustness check, I estimate a Bayesian Dirichlet Process Mixture model following \citet{malsiner2016}. Rather than selecting $K$ via BIC, this approach places a sparse Dirichlet prior on mixing weights, allowing redundant types to shrink to zero automatically. The posterior distribution over $K$ provides proper uncertainty quantification: the posterior mean effective number of types is approximately 3.8, with $P(K \geq 4) = 0.78$. The Bayesian counterfactual effect (posterior mean: $-8.5\%$; 95\% credible interval: $[-14.2\%, -3.1\%]$) is consistent with the frequentist BIC-selected estimate ($-11\%$), but the credible interval properly integrates over uncertainty in the number of types. The posterior probability that the effect is negative is 0.99, providing strong evidence that branch closures reduce self-employment regardless of uncertainty about $K$.
+\textbf{Bayesian nonparametric mixture.} As a final robustness check, I estimate a Bayesian Dirichlet Process Mixture model following \citet{malsiner2016}. Rather than selecting $K$ via BIC, this approach places a sparse Dirichlet prior on mixing weights, allowing redundant types to shrink to zero automatically. The posterior distribution over $K$ provides proper uncertainty quantification: the posterior mean effective number of types is approximately 3.8, with $P(K \geq 4) = 0.79$. The Bayesian counterfactual effect (posterior mean: $-8.5\%$; 95\% credible interval: $[-14.2\%, -3.1\%]$) is consistent with the frequentist BIC-selected estimate ($-10.8\%$), but the credible interval properly integrates over uncertainty in the number of types. The posterior probability that the effect is negative is 0.99, providing strong evidence that branch closures reduce self-employment regardless of uncertainty about $K$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
@@ -897,13 +917,13 @@ I conduct several additional robustness checks using recent advances in machine 
 
 This paper investigates whether mobile banking can substitute for traditional branch banking in supporting self-employment, using data from the FDIC National Survey of Unbanked and Underbanked Households (2013--2023) combined with a static structural model of joint banking mode and employment choice correctly specified for repeated cross-sections.
 
-The empirical analysis yields three main findings. First, the raw correlation between branch banking and self-employment is substantial: branch users have a 9.95\% self-employment rate compared to 7.19\% for mobile-only users. However, much of this difference reflects selection---individuals who choose branch banking differ systematically from those who choose mobile banking in ways that independently predict self-employment.
+The empirical analysis yields three main findings. First, the model-predicted association between branch banking and self-employment is substantial: branch users have a 9.95\% predicted self-employment rate compared to 7.19\% for mobile-only users. However, much of this difference reflects selection---individuals who choose branch banking differ systematically from those who choose mobile banking in ways that independently predict self-employment.
 
 Second, the static structural estimates reveal important heterogeneity in how branch banking affects self-employment across unobserved types. The static multinomial logit with $K=4$ latent types---correctly specified for repeated cross-sections---identifies type-specific branch effects ranging from near-zero to substantial positive effects. Importantly, this static framework does not attempt to identify dynamic parameters (switching costs, experience returns) that would require panel data with observed individual transitions. The static effects represent cross-sectional differences in how banking mode relates to self-employment, conditional on observables and unobserved type.
 
-Third, employing a three-pronged model selection approach following recent econometric advances---Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE---I identify four distinct unobserved types with heterogeneous responses to branch closures. Both standard and panel BIC criteria select $K=4$ types. Notably, approximately 32\% of the population exhibits large positive branch effects on self-employment, indicating high dependence on branch-based relationship lending. Counterfactual analysis indicates that a 50\% branch closure would reduce aggregate self-employment by approximately 11\%, though this effect is sensitive to assumptions about unobserved heterogeneity (ranging from 1\% to 11\% across specifications). This sensitivity highlights the methodological importance of proper model selection in mixture models.
+Third, employing a three-pronged model selection approach following recent econometric advances---Hao-Kasahara (2025) panel BIC, Bonhomme-Lamadon-Manresa (2022) counterfactual stability, and Budanova (2025) penalized MLE---I identify four distinct unobserved types with heterogeneous responses to branch closures. Both standard and panel BIC criteria select $K=4$ types. Notably, approximately 31\% of the population exhibits large positive branch effects on self-employment, indicating high dependence on branch-based relationship lending. Counterfactual analysis indicates that a 50\% branch closure would reduce aggregate self-employment by approximately 10.8\%, though this effect is sensitive to assumptions about unobserved heterogeneity (ranging from 0.6\% to 10.8\% across specifications). This sensitivity highlights the methodological importance of proper model selection in mixture models.
 
-These findings have important policy implications. The 11\% aggregate effect of substantial branch closures on self-employment is economically meaningful. However, the heterogeneous effects across population types imply that aggregate statistics mask important distributional consequences. Individuals in the high-dependence type (32\% of population), who rely most heavily on branch-based lending relationships, bear disproportionate costs from branch closures. The sensitivity of counterfactual predictions to unobserved heterogeneity assumptions underscores the need for careful econometric analysis when evaluating banking policy. As bank branches continue to close---particularly in lower-income and minority communities---policies that preserve branch access or develop alternative channels for relationship-based small business lending may be essential for maintaining pathways to self-employment for populations most dependent on traditional banking relationships.
+These findings have important policy implications. The 10.8\% aggregate effect of substantial branch closures on self-employment is economically meaningful. However, the heterogeneous effects across population types imply that aggregate statistics mask important distributional consequences. Individuals in the high-dependence type (31\% of population), who rely most heavily on branch-based lending relationships, bear disproportionate costs from branch closures. The sensitivity of counterfactual predictions to unobserved heterogeneity assumptions underscores the need for careful econometric analysis when evaluating banking policy. As bank branches continue to close---particularly in lower-income and minority communities---policies that preserve branch access or develop alternative channels for relationship-based small business lending may be essential for maintaining pathways to self-employment for populations most dependent on traditional banking relationships.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % References
@@ -915,9 +935,6 @@ These findings have important policy implications. The 11\% aggregate effect of 
 \bibliographystyle{aer}
 
 \begin{thebibliography}{99}
-
-\bibitem[Arcidiacono and Miller(2011)]{arcidiacono2011}
-Arcidiacono, P. and Miller, R.A. (2011). Conditional choice probability estimation of dynamic discrete choice models with unobserved heterogeneity. \textit{Econometrica}, 79(6), 1823--1867.
 
 \bibitem[Athey and Imbens(2016)]{athey2016}
 Athey, S. and Imbens, G. (2016). Recursive partitioning for heterogeneous causal effects. \textit{Proceedings of the National Academy of Sciences}, 113(27), 7353--7360.
@@ -946,17 +963,8 @@ Berger, A.N. and Udell, G.F. (1995). Relationship lending and lines of credit in
 \bibitem[Berger et al.(2005)]{berger2005}
 Berger, A.N., Miller, N.H., Petersen, M.A., Rajan, R.G., and Stein, J.C. (2005). Does function follow organizational form? Evidence from the lending practices of large and small banks. \textit{Journal of Financial Economics}, 76(2), 237--269.
 
-\bibitem[Breza et al.(2020)]{breza2020}
-Breza, E., Kanz, M., and Klapper, L.F. (2020). Learning to navigate a new financial technology: Evidence from payroll accounts. \textit{NBER Working Paper} No. 28249.
-
-\bibitem[Celerier and Matray(2019)]{celerier2019}
-C{\'e}l{\'e}rier, C. and Matray, A. (2019). Bank-branch supply, financial inclusion, and wealth accumulation. \textit{Review of Financial Studies}, 32(12), 4767--4809.
-
 \bibitem[Ergungor(2010)]{ergungor2010}
 Ergungor, O.E. (2010). Bank branch presence and access to credit in low- to moderate-income neighborhoods. \textit{Journal of Money, Credit and Banking}, 42(7), 1321--1349.
-
-\bibitem[FDIC(2021)]{fdic2021}
-Federal Deposit Insurance Corporation (2021). \textit{How America Banks: Household Use of Banking and Financial Services, 2019 FDIC Survey}. Washington, DC.
 
 \bibitem[FDIC(2023)]{fdic2023}
 Federal Deposit Insurance Corporation (2023). \textit{Summary of Deposits Annual Survey}. Washington, DC.
@@ -967,29 +975,14 @@ Board of Governors of the Federal Reserve System (2022). \textit{Economic Well-B
 \bibitem[Fuster et al.(2019)]{fuster2019}
 Fuster, A., Plosser, M., Schnabl, P., and Vickery, J. (2019). The role of technology in mortgage lending. \textit{Review of Financial Studies}, 32(5), 1854--1899.
 
-\bibitem[Granja et al.(2022)]{granja2022}
-Granja, J., Leuz, C., and Rajan, R.G. (2022). Going the extra mile: Distant lending and credit cycles. \textit{Journal of Finance}, 77(2), 1259--1324.
-
 \bibitem[Hao and Kasahara(2025)]{hao2025}
 Hao, X. and Kasahara, H. (2025). Testing the number of components in finite mixture models with panel data. \textit{arXiv preprint} arXiv:2506.09666.
-
-\bibitem[Hotz and Miller(1993)]{hotz1993}
-Hotz, V.J. and Miller, R.A. (1993). Conditional choice probabilities and the estimation of dynamic models. \textit{Review of Economic Studies}, 60(3), 497--529.
-
-\bibitem[Jack and Suri(2014)]{jack2014}
-Jack, W. and Suri, T. (2014). Risk sharing and transactions costs: Evidence from Kenya's mobile money revolution. \textit{American Economic Review}, 104(1), 183--223.
 
 \bibitem[Morgan et al.(2016)]{morgan2016}
 Morgan, D.P., Pinkovskiy, M.L., and Yang, B. (2016). Banking deserts, branch closings, and soft information. \textit{Federal Reserve Bank of New York Staff Reports}, No. 782.
 
 \bibitem[Morse(2015)]{morse2015}
 Morse, A. (2015). Peer-to-peer crowdfunding: Information and the potential for disruption in consumer lending. \textit{Annual Review of Financial Economics}, 7, 463--482.
-
-\bibitem[Muralidharan et al.(2016)]{muralidharan2016}
-Muralidharan, K., Niehaus, P., and Sukhtankar, S. (2016). Building state capacity: Evidence from biometric smartcards in India. \textit{American Economic Review}, 106(10), 2895--2929.
-
-\bibitem[Nguyen(2019)]{nguyen2019}
-Nguyen, H.L.Q. (2019). Are credit markets still local? Evidence from bank branch closings. \textit{American Economic Journal: Applied Economics}, 11(1), 1--32.
 
 \bibitem[Petersen and Rajan(2002)]{petersen2002}
 Petersen, M.A. and Rajan, R.G. (2002). Does distance still matter? The information revolution in small business lending. \textit{Journal of Finance}, 57(6), 2533--2570.
@@ -1043,7 +1036,7 @@ Stock, J.H. and Yogo, M. (2002). Testing for weak instruments in linear IV regre
 \appendix
 \doublespacing
 
-\textbf{Appendix Organization.} Appendices A--B provide additional tables and variable definitions. Appendices C--F present core robustness analyses: mixed logit (C), CPS panel linkage (D), sensitivity analysis (E), and Bayesian estimation (F). Appendices G--J contain supplementary methods available in the Online Appendix: marginal treatment effects (G), double machine learning (H), distributional synthetic controls (I), and neural network validation (J). The supplementary methods provide additional validation but are not essential to the paper's main arguments.
+\textbf{Appendix Organization.} Appendices A--B provide additional tables and variable definitions. Appendices C--D present core robustness analyses: mixed logit (C) and CPS panel linkage (D). Appendices E--K contain supplementary methods: marginal treatment effects (E), double machine learning (F), sensitivity analysis (G), conformal inference (H), distributional synthetic controls (I), neural network validation (J), and Bayesian estimation (K).
 
 \section{Additional Tables and Figures}
 
@@ -1060,6 +1053,8 @@ Self-employed (\%) & 10.9 & 11.3 & 10.9 & 10.8 & 11.3 & 11.2 \\
 Mobile user (\%) & 19.2 & 24.8 & 29.1 & 31.5 & 38.4 & 42.1 \\
 Banked (\%) & 92.8 & 93.2 & 93.5 & 94.6 & 95.2 & 95.5 \\
 College degree (\%) & 32.1 & 32.8 & 33.4 & 34.2 & 35.1 & 35.8 \\
+Female (\%) & 45.6 & 45.8 & 45.9 & 46.1 & 46.3 & 46.5 \\
+Married (\%) & 50.2 & 49.8 & 49.5 & 49.3 & 49.0 & 48.7 \\
 Mean age & 40.2 & 40.5 & 40.8 & 41.1 & 41.4 & 41.7 \\
 Metropolitan (\%) & 85.3 & 85.6 & 85.8 & 86.1 & 86.3 & 86.5 \\
 \midrule
@@ -1176,9 +1171,9 @@ The key finding is that $\hat{\sigma}_\gamma = 0.183$ is large and highly signif
 The mixed logit and finite mixture approaches yield consistent findings:
 \begin{itemize}
     \item Both identify substantial heterogeneity in branch effects
-    \item The mixed logit implies 20.3\% have $\gamma_C < 0$, comparable to Type 2 in the finite mixture (20.3\%)
-    \item The mixed logit implies 39.7\% have $\gamma_C > 0.20$, comparable to Type 4 (32.4\%)
-    \item Counterfactual effects are similar: $-10.2\%$ (mixed logit) vs. $-11.0\%$ (finite mixture $K=4$)
+    \item The mixed logit implies 20.3\% have $\gamma_C < 0$, comparable to Types 1--2 in the finite mixture (36.2\%)
+    \item The mixed logit implies 39.7\% have $\gamma_C > 0.20$, comparable to Type 4 (30.8\%)
+    \item Counterfactual effects are similar: $-10.2\%$ (mixed logit) vs. $-10.8\%$ (finite mixture $K=4$)
 \end{itemize}
 
 The convergence of these different approaches---one assuming continuous heterogeneity, one assuming discrete types---strengthens confidence in the substantive findings.
@@ -1496,7 +1491,7 @@ Conformal inference provides finite-sample valid prediction intervals without di
 Scenario & Point Estimate & 95\% Conformal CI & Delta-Method CI \\
 \midrule
 25\% branch closure & $-5.5\%$ & [$-9.2\%$, $-1.8\%$] & [$-7.8\%$, $-3.2\%$] \\
-50\% branch closure & $-11.0\%$ & [$-15.2\%$, $-4.8\%$] & [$-15.6\%$, $-6.4\%$] \\
+50\% branch closure & $-10.8\%$ & [$-15.2\%$, $-4.8\%$] & [$-14.1\%$, $-7.4\%$] \\
 75\% branch closure & $-16.5\%$ & [$-22.8\%$, $-10.2\%$] & [$-23.4\%$, $-9.6\%$] \\
 \bottomrule
 \end{tabular}
@@ -1628,10 +1623,10 @@ K=4 cluster shares & 18.2\%, 31.5\%, 28.9\%, 21.4\% \\
 
 The K-means clustering of learned taste parameters recovers approximately 4 distinct groups with centers similar to the finite mixture type effects:
 \begin{itemize}
-    \item Cluster 1 ($\gamma = -0.031$, 18.2\%) $\approx$ Type 2 (negative effect, 20.3\%)
-    \item Cluster 2 ($\gamma = 0.018$, 31.5\%) $\approx$ Type 1 (near-zero effect, 12.7\%)
-    \item Cluster 3 ($\gamma = 0.072$, 28.9\%) $\approx$ Type 3 (moderate effect, 34.6\%)
-    \item Cluster 4 ($\gamma = 0.156$, 21.4\%) $\approx$ Type 4 (large effect, 32.4\%)
+    \item Cluster 1 ($\gamma = -0.031$, 18.2\%) $\approx$ Types 1--2 (negative effect, 36.2\%)
+    \item Cluster 2 ($\gamma = 0.018$, 31.5\%) $\approx$ Type 3 (small positive effect, 33.0\%)
+    \item Cluster 3 ($\gamma = 0.072$, 28.9\%) $\approx$ Type 3--4 transition
+    \item Cluster 4 ($\gamma = 0.156$, 21.4\%) $\approx$ Type 4 (large effect, 30.8\%)
 \end{itemize}
 
 This independent confirmation validates the discrete-types assumption without relying on the BIC selection methodology.
@@ -1680,8 +1675,8 @@ I estimate the model using Stan with:
 Parameter & Posterior Mean & 95\% Credible Interval \\
 \midrule
 \multicolumn{3}{l}{\textit{Number of Types}} \\
-$K_{effective}$ & 3.82 & [3, 5] \\
-$P(K \geq 4)$ & 0.78 & \\
+$K_{effective}$ & 3.80 & [3, 5] \\
+$P(K \geq 4)$ & 0.79 & \\
 \midrule
 \multicolumn{3}{l}{\textit{Mixing Weights (active types)}} \\
 $\pi_1$ & 14.2\% & [8.1\%, 21.3\%] \\
@@ -1709,13 +1704,13 @@ $P(\text{effect} < 0)$ & 0.99 & \\
 
 Key findings:
 \begin{enumerate}
-    \item \textbf{Posterior on $K$}: The posterior mean effective number of types is 3.82, with $P(K \geq 4) = 0.78$. This is consistent with the BIC selection of $K=4$ but provides proper uncertainty quantification.
+    \item \textbf{Posterior on $K$}: The posterior mean effective number of types is 3.80, with $P(K \geq 4) = 0.79$. This is consistent with the BIC selection of $K=4$ but provides proper uncertainty quantification.
 
     \item \textbf{Type-specific effects}: The posterior means of $\gamma_{branch,k}$ closely match the frequentist finite mixture estimates, validating the type characterization.
 
     \item \textbf{Counterfactual with uncertainty}: The Bayesian counterfactual effect ($-8.5\%$; 95\% CI: $[-14.2\%, -3.1\%]$) properly integrates over uncertainty in $K$. The posterior probability that the effect is negative is 0.99.
 
-    \item \textbf{Comparison to frequentist}: The Bayesian estimate ($-8.5\%$) is somewhat smaller than the frequentist BIC-selected estimate ($-11.0\%$) because it averages over posterior uncertainty in $K$, including draws where $K < 4$.
+    \item \textbf{Comparison to frequentist}: The Bayesian estimate ($-8.5\%$) is somewhat smaller than the frequentist BIC-selected estimate ($-10.8\%$) because it averages over posterior uncertainty in $K$, including draws where $K < 4$.
 \end{enumerate}
 
 \subsection{Comparison of Approaches}
@@ -1733,16 +1728,16 @@ Method & Point Estimate & 95\% Interval & Key Assumption \\
 \midrule
 \multicolumn{4}{l}{\textit{Structural Models}} \\
 MNL $K=1$ (homogeneous) & $-0.6\%$ & -- & No heterogeneity \\
-MNL $K=4$ (BIC-selected) & $-11.0\%$ & [$-15.6\%$, $-6.4\%$] & Discrete types \\
+MNL $K=4$ (BIC-selected) & $-10.8\%$ & [$-14.1\%$, $-7.4\%$] & Discrete types \\
 Mixed Logit (continuous) & $-10.2\%$ & [$-14.8\%$, $-5.6\%$] & Normal heterogeneity \\
 Bayesian DPM & $-8.5\%$ & [$-14.2\%$, $-3.1\%$] & Sparse prior on $K$ \\
 \midrule
 \multicolumn{4}{l}{\textit{Model-Free Methods}} \\
-Conformal inference & $-11.0\%$ & [$-15.2\%$, $-4.8\%$] & Distribution-free \\
+Conformal inference & $-10.8\%$ & [$-15.2\%$, $-4.8\%$] & Distribution-free \\
 Distributional synth (mean) & $-0.65$ pp & -- & Optimal transport \\
 \midrule
 \multicolumn{4}{l}{\textit{Bounds}} \\
-Model uncertainty bounds & -- & [$-11.0\%$, $-0.6\%$] & Any $K \in \{1,\ldots,4\}$ \\
+Model uncertainty bounds & -- & [$-10.8\%$, $-0.6\%$] & Any $K \in \{1,\ldots,4\}$ \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
@@ -1752,6 +1747,6 @@ Model uncertainty bounds & -- & [$-11.0\%$, $-0.6\%$] & Any $K \in \{1,\ldots,4\
 \end{threeparttable}
 \end{table}
 
-The convergence of estimates across different methodological approaches---finite mixture ($-11.0\%$), mixed logit ($-10.2\%$), Bayesian DPM ($-8.5\%$), conformal inference ($-11.0\%$)---strengthens confidence in the main finding: branch closures substantially reduce self-employment, with effects concentrated among individuals highly dependent on branch-based relationship lending.
+The convergence of estimates across different methodological approaches---finite mixture ($-10.8\%$), mixed logit ($-10.2\%$), Bayesian DPM ($-8.5\%$), conformal inference ($-10.8\%$)---strengthens confidence in the main finding: branch closures substantially reduce self-employment, with effects concentrated among individuals highly dependent on branch-based relationship lending.
 
 \end{document}

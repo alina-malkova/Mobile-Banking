@@ -1,0 +1,17 @@
+item,value
+baseline_se,.10558994
+baseline_branch,.8416906
+effect_50pct_pp,.011373227
+effect_50pct_pct,10.771128
+se_effect,.0017988625
+ci_lo_pct,7.4320121
+ci_hi_pct,14.110244
+beta_type1,-.036624797
+beta_type2,-.01967077
+beta_type3,.009992185
+beta_type4,.093067437
+share_type1,.12116338
+share_type2,.24101685
+share_type3,.33024547
+share_type4,.3075743
+cf_se_50pct,.11696317

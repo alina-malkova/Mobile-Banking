@@ -19,7 +19,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -117,7 +117,9 @@ forvalues k = 1/4 {
 }
 
 * Estimate LPM with type-specific branch effects
-reg se i.age_cat i.educ_cat mobile ///
+reg se i.age_cat i.educ_cat ///
+    female married has_children ///
+    mobile ///
     branch_1 branch_2 branch_3 branch_4 ///
     dyn_1 dyn_2 dyn_3 dyn_4 i.year [aw=hsupwgtk], vce(cluster cbsa)
 

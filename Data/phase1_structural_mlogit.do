@@ -15,7 +15,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -92,16 +92,13 @@ gen race_hispanic = (praceeth == 3 | hispanic == 1) if praceeth != .
 gen race_other = (praceeth == 4 | other_race == 1) if praceeth != .
 
 * Income categories
+* hhincome is categorical (1=<15k, 2=15-30k, 3=30-50k, 4=50-75k, 5=75k+)
 capture drop inc_cat inc_30_50 inc_50_75 inc_75plus
-gen inc_cat = .
-replace inc_cat = 1 if hhincome < 30000
-replace inc_cat = 2 if hhincome >= 30000 & hhincome < 50000
-replace inc_cat = 3 if hhincome >= 50000 & hhincome < 75000
-replace inc_cat = 4 if hhincome >= 75000 & hhincome != .
+gen inc_cat = hhincome if hhincome >= 1 & hhincome <= 5
 
-gen inc_30_50 = (inc_cat == 2)
-gen inc_50_75 = (inc_cat == 3)
-gen inc_75plus = (inc_cat == 4)
+gen inc_30_50 = (hhincome == 3)
+gen inc_50_75 = (hhincome == 4)
+gen inc_75plus = (hhincome == 5)
 
 * Standardize broadband for easier interpretation
 capture drop broadband_std
@@ -131,6 +128,7 @@ di _n "=== Model 1: Base Multinomial Logit ==="
 mlogit joint_choice i.age_cat educ_hs educ_somecoll educ_college ///
     race_black race_hispanic ///
     inc_30_50 inc_50_75 inc_75plus ///
+    female married has_children ///
     broadband_std ///
     yr_2 yr_3 yr_4 yr_5 yr_6 ///
     [pw=weight], base(7) vce(cluster cbsa)
@@ -205,14 +203,16 @@ di _n "=== Testing Credit Access Channel ==="
 mlogit joint_choice i.age_cat educ_hs educ_somecoll educ_college ///
     race_black race_hispanic ///
     inc_30_50 inc_50_75 inc_75plus ///
+    female married has_children ///
     c.broadband_std##i.age_cat ///
     yr_2 yr_3 yr_4 yr_5 yr_6 ///
     [pw=weight], base(7) vce(cluster cbsa)
 
 estimates store mlogit_interact
 
-* LR test for interaction significance
-lrtest mlogit_base mlogit_interact
+* Wald test for interaction significance (LR test invalid with clustered VCE)
+estimates restore mlogit_interact
+test 2.age_cat#c.broadband_std 3.age_cat#c.broadband_std
 
 /*******************************************************************************
 * 9. Extract Structural Parameters
@@ -288,13 +288,13 @@ preserve
 
 * Keep necessary variables
 keep joint_choice age_cat educ_* race_* inc_* broadband_std yr_* weight cbsa year ///
-    pct_broadband
+    pct_broadband female married has_children
 
 * Create individual ID
 gen id = _n
 
-* Reshape to long
-reshape long, i(id) j(alt)
+* Reshape to long (will fail — no stub variables, use expand approach below)
+capture reshape long, i(id) j(alt)
 
 * The reshape didn't work as expected - need different approach
 * For conditional logit, manually expand

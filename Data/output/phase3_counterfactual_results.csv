@@ -1,11 +1,13 @@
-scenario,se_rate,se_change,pct_change
-Baseline,.11150502,0,0
-25% Branch Closure,.10715479,-.004350224,-3.9013705
-50% Branch Closure,.10274795,-.0087570678,-7.853519
-75% Branch Closure,.098283164,-.013221856,-11.857633
-10% Mobile Subsidy,.11193424,.00042922515,.38493797
-25% Mobile Subsidy,.11276402,.001259004,1.1291007
-+1 SD Broadband,.10017159,-.011333436,-10.164059
-+2 SD Broadband,.089775354,-.02172967,-19.487617
-50% Closure + 2SD BB,.076436892,-.035068128,-31.44982
-,,,
+scenario,se_rate,se_change,se_pct_change,mobile_rate,policy_type
+Baseline,.11150502,0,0,.095846854,Baseline
+25% Branch Closure,.10715479,-.004350224,-3.9013705,,Branch Closure
+50% Branch Closure,.10274795,-.0087570678,-7.8535185,,Branch Closure
+75% Branch Closure,.098283164,-.013221855,-11.857633,,Branch Closure
+10% Mobile Subsidy,.11230031,.00079528242,.71322566,,Mobile Subsidy
+25% Mobile Subsidy,.11215588,.00065085985,.58370453,,Mobile Subsidy
+50% Mobile Subsidy,.11199786,.00049283693,.44198632,,Mobile Subsidy
++1 SD Broadband,.10017159,-.011333436,-10.164059,,Broadband
++2 SD Broadband,.089775354,-.02172967,-19.487617,,Broadband
+Universal Broadband,.095421202,-.016083816,-14.424297,,Broadband
+50% Closure + Universal BB,.083203606,-.02830142,-25.381296,.48246884,Combined
+,,,,,

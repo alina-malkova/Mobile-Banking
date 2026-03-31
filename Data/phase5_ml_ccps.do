@@ -22,7 +22,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -79,11 +79,12 @@ replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
 * Additional state variables for ML
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
-gen metro = (metro_status == 1)
-gen has_kids = (num_children > 0) if num_children != .
-replace has_kids = 0 if has_kids == .
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
+capture confirm var metro
+if _rc != 0 gen metro = (metro_status == 1)
+gen has_kids = (has_children == 1) if has_children != .  /* from raw CPS PRNMCHLD */
+/* has_kids already set to 0 */
 
 * Income terciles
 xtile inc_tercile = hhincome, nq(3)

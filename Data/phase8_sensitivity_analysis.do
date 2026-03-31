@@ -18,7 +18,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -52,8 +52,8 @@ replace educ_cat = 2 if hs_diploma == 1
 replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
 
 di "Sample: " _N " observations"
 
@@ -121,6 +121,9 @@ local r2_max = min(1, 1.3 * `r2_full')
 * where delta = (R_max - R_full) / (R_full - R_short)
 
 local delta_denom = `r2_full' - `r2_short'
+local delta_zero = 0
+local b_adjusted = .
+local delta = .
 if `delta_denom' > 0.001 {
     local delta = (`r2_max' - `r2_full') / `delta_denom'
     local b_adjusted = `b_full' - `delta' * (`b_full' - `b_short')

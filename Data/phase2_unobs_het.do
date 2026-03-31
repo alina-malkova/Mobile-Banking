@@ -9,7 +9,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -105,7 +105,7 @@ forvalues k = 1/3 {
 collapse (mean) p1=choice1 p2=choice2 p3=choice3 p4=choice4 p5=choice5 ///
          p6=choice6 p7=choice7 p8=choice8 p9=choice9 ///
          tau1_init=type1 tau2_init=type2 tau3_init=type3 ///
-         bb_std ///
+         bb_std female married has_children ///
          (count) n=joint_choice ///
          [aw=hsupwgtk], by(cbsa year age_cat educ)
 
@@ -219,7 +219,7 @@ gen se_t3 = is_se * tau3
 di _n "=== Pooled Model with Type-Specific Parameters ==="
 
 reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
-    age2_se age3_se educ4_se ///
+    age2_se age3_se educ4_se female married has_children ///
     dyn_t1 dyn_t2 dyn_t3 ///
     sw_t1 sw_t2 sw_t3 ///
     bbse_t1 bbse_t2 bbse_t3 ///

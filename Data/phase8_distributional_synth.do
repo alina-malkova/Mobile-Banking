@@ -18,7 +18,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -106,7 +106,7 @@ foreach p in 10 25 50 75 90 {
     local q_high = r(r1) * 100
 
     local diff = `q_low' - `q_high'
-    di "   " %2.0f `p' "th  |   " %5.2f `q_low' "%    |    " %5.2f `q_high' "%    |  " %+5.2f `diff' "%"
+    di "   " %2.0f `p' "th  |   " %5.2f `q_low' "%    |    " %5.2f `q_high' "%    |  " %5.2f `diff' "%"
 }
 
 restore
@@ -157,7 +157,7 @@ forvalues t = 0/1 {
 
     di "  Control (high density): mean = " %5.2f `control_mean' "%, sd = " %5.2f `control_sd' "%"
     di "  Treated (low density):  mean = " %5.2f `treated_mean' "%, sd = " %5.2f `treated_sd' "%"
-    di "  Difference in means: " %+5.2f (`treated_mean' - `control_mean') "%"
+    di "  Difference in means: " %5.2f (`treated_mean' - `control_mean') "%"
 }
 
 restore
@@ -185,7 +185,7 @@ local K = 20
 local W1 = 0
 
 forvalues k = 1/`K' {
-    local p = `k' / `K' * 100
+    local p = min(`k' / `K' * 100, 99)
 
     _pctile se if density_tercile == 1, p(`p')
     local q_treated = r(r1)
@@ -281,13 +281,13 @@ forvalues d = 1/3 {
 
     local change_`d' = `late_`d'' - `early_`d''
 
-    di "`label' | " %6.2f `early_`d'' "%      | " %6.2f `late_`d'' "%     | " %+5.2f `change_`d'' "%"
+    di "`label' | " %6.2f `early_`d'' "%      | " %6.2f `late_`d'' "%     | " %5.2f `change_`d'' "%"
 }
 
 * DiD estimate
 local did = (`late_1' - `early_1') - (`late_3' - `early_3')
 di ""
-di "DiD Estimate (Low - High density change): " %+5.2f `did' "%"
+di "DiD Estimate (Low - High density change): " %5.2f `did' "%"
 
 restore
 

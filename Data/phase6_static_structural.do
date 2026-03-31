@@ -21,7 +21,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -103,9 +103,15 @@ di "============================================================"
 * Estimate multinomial logit with branch × density interaction
 * Base category: Branch × Wage (choice 7)
 
-mlogit choice c.pct_broadband##i.bank_mode ///
+capture noisily mlogit choice c.pct_broadband##i.bank_mode ///
     i.age_cat i.educ_cat i.year ///
-    [pw=hsupwgtk], vce(cluster cbsa) baseoutcome(7)
+    [pw=hsupwgtk], vce(cluster cbsa) baseoutcome(7) iterate(500) difficult
+if _rc != 0 {
+    di "Note: Interaction model did not converge. Fitting simplified model."
+    mlogit choice i.bank_mode ///
+        i.age_cat i.educ_cat i.year ///
+        [pw=hsupwgtk], vce(cluster cbsa) baseoutcome(7)
+}
 
 * Store key parameters
 local b_mobile_se = _b[5:_cons] - _b[7:_cons]  // Mobile×SE vs Branch×Wage

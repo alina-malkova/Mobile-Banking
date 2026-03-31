@@ -14,7 +14,7 @@ library(rstan)
 library(haven)
 library(dplyr)
 library(ggplot2)
-library(bayesplot)
+if (requireNamespace("bayesplot", quietly = TRUE)) library(bayesplot)
 
 # Configure Stan
 options(mc.cores = parallel::detectCores())
@@ -30,7 +30,7 @@ cat("Dirichlet Process Prior on Type Weights\n")
 cat("============================================================\n")
 
 # Load data
-data_path <- "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+data_path <- "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 df <- read_dta(file.path(data_path, "analysis_dataset_with_se.dta"))
 
 # Filter sample
@@ -39,7 +39,9 @@ df <- df %>%
   filter(employed == 1 | unemployed == 1) %>%
   filter(year >= 2013) %>%
   filter(cbsa > 0 & !is.na(cbsa)) %>%
-  filter(!is.na(banking_mode))
+  filter(!is.na(banking_mode)) %>%
+  filter(!is.na(self_employed)) %>%
+  filter(!is.na(pct_broadband))
 
 # Create variables
 df <- df %>%
@@ -60,9 +62,7 @@ df <- df %>%
 
     # Demographics
     age_std = (age - mean(age)) / sd(age),
-    female = as.integer(sex == 2),
-    married = as.integer(marital_status %in% c(1, 2)),
-
+    # Note: sex and marital_status not in dataset; use available demographics
     # Education categories
     educ_cat = case_when(
       no_hs == 1 ~ 1,
@@ -70,7 +70,9 @@ df <- df %>%
       some_college == 1 ~ 3,
       college_degree == 1 ~ 4,
       TRUE ~ 2
-    )
+    ),
+    female_ind = as.integer(!is.na(female) & female == 1),
+    married_ind = as.integer(!is.na(married) & married == 1)
   )
 
 cat(sprintf("Sample size: %d observations\n", nrow(df)))
@@ -82,17 +84,19 @@ cat(sprintf("Baseline SE rate: %.2f%%\n", mean(df$se) * 100))
 
 # Subsample for computational feasibility (Stan is slow on full sample)
 set.seed(20260211)
+# Note: N=10000 with K_max=6 takes ~5+ hours on a laptop (gradient ~2s/eval).
+# For quick verification, use N=500 (~15 min); for publication, run on cluster.
 df_sample <- df %>% sample_n(min(10000, nrow(df)))
 
 # Covariate matrix
-X <- model.matrix(~ age_std + female + married + factor(educ_cat) + factor(year),
+X <- model.matrix(~ age_std + female_ind + married_ind + factor(educ_cat) + factor(year),
                   data = df_sample)[, -1]  # Remove intercept
 
 stan_data <- list(
   N = nrow(df_sample),
   J = 9,  # 9 alternatives
   P = ncol(X),
-  K_max = 10,  # Maximum types
+  K_max = 6,   # Maximum types (K=4 selected by BIC; 6 gives margin)
   y = df_sample$choice,
   X = X,
   branch = df_sample$branch,

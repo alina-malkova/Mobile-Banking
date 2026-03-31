@@ -28,7 +28,7 @@ if _rc ssc install ivreg2, replace
 capture which ranktest
 if _rc ssc install ranktest, replace
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 capture mkdir "$output"
 
@@ -143,6 +143,7 @@ eststo m1
 reg self_employed mobile_user ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight], cluster(cbsa)
 eststo m2
 
@@ -150,6 +151,7 @@ eststo m2
 reghdfe self_employed mobile_user ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight], absorb(cbsa year) cluster(cbsa)
 eststo m3
 
@@ -157,6 +159,7 @@ eststo m3
 reghdfe self_employed mobile_user ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     pct_broadband unemployment_rate ///
     [pw=weight], absorb(cbsa year) cluster(cbsa)
 eststo m4
@@ -185,6 +188,7 @@ di "=============================================="
 mlogit banking_mode ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     metro pct_broadband ///
     [pw=weight] if banking_mode != ., baseoutcome(3) cluster(cbsa)
 eststo mlogit1
@@ -239,6 +243,7 @@ di "=============================================="
 reghdfe mobile_user pct_broadband ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight], absorb(cbsa year) cluster(cbsa)
 eststo fs1
 predict mobile_hat, xb
@@ -249,20 +254,28 @@ local fs_F = r(F)
 di "First-stage F-statistic: " `fs_F'
 
 * Second stage: Self-employment on instrumented mobile banking
-ivreghdfe self_employed ///
-    (mobile_user = pct_broadband) ///
-    age c.age#c.age ///
-    i.praceeth3 i.peducgrp i.hhincome ///
-    [pw=weight], absorb(cbsa year) cluster(cbsa) first
-eststo iv1
+* Note: ivreghdfe with CBSA FE causes collinearity (broadband varies at CBSA level)
+* See phase0_continuation.do for the state FE IV approach that works
+capture noisily {
+    ivreghdfe self_employed ///
+        (mobile_user = pct_broadband) ///
+        age c.age#c.age ///
+        i.praceeth3 i.peducgrp i.hhincome ///
+        female married has_children ///
+        [pw=weight], absorb(cbsa year) cluster(cbsa) first
+    eststo iv1
 
-* Export IV results
-esttab fs1 iv1 using "$output/table4_iv_results.csv", replace ///
-    keep(mobile_user pct_broadband age) ///
-    se star(* 0.10 ** 0.05 *** 0.01) ///
-    stats(N r2 widstat, labels("Observations" "R-squared" "First-stage F")) ///
-    title("IV Regression: Broadband as Instrument for Mobile Banking") ///
-    mtitles("First Stage" "Second Stage (IV)")
+    * Export IV results
+    esttab fs1 iv1 using "$output/table4_iv_results.csv", replace ///
+        keep(mobile_user pct_broadband age) ///
+        se star(* 0.10 ** 0.05 *** 0.01) ///
+        stats(N r2 widstat, labels("Observations" "R-squared" "First-stage F")) ///
+        title("IV Regression: Broadband as Instrument for Mobile Banking") ///
+        mtitles("First Stage" "Second Stage (IV)")
+}
+if _rc != 0 {
+    di "Note: IV with CBSA FE failed (collinearity). See phase0_continuation.do for state FE IV."
+}
 
 ********************************************************************************
 * PART 7: HETEROGENEITY ANALYSIS

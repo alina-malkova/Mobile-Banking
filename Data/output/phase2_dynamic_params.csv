@@ -1,7 +1,7 @@
 parameter,value
-gamma_dynamic,.55937392
-kappa_switch,-6.1789851
-gamma_bb_mobile,.16449822
-gamma_bb_se,-.12004175
+gamma_dynamic,.65746993
+kappa_switch,-6.1773458
+gamma_bb_mobile,.16099551
+gamma_bb_se,-.1147451
 baseline_se,.11404566
-cf_se_dynamic,.092035703
+cf_se_dynamic,.091191977

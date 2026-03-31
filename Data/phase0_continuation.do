@@ -6,7 +6,7 @@
 clear all
 set more off
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 log using "$output/phase0_continuation.log", replace
@@ -34,6 +34,7 @@ di "=============================================="
 reghdfe mobile_user pct_broadband ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight], absorb(statefips year) cluster(statefips)
 eststo fs_state
 
@@ -46,6 +47,7 @@ di "First-stage F-statistic: " fs_F
 reghdfe self_employed pct_broadband ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight], absorb(statefips year) cluster(statefips)
 eststo rf_state
 
@@ -54,6 +56,7 @@ ivregress 2sls self_employed ///
     (mobile_user = pct_broadband) ///
     age c.age#c.age ///
     i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     i.statefips i.year ///
     [pw=weight], cluster(statefips) first
 eststo iv_state
@@ -79,6 +82,7 @@ eststo clear
 foreach race in 1 2 6 {
     qui reghdfe self_employed mobile_user ///
         age c.age#c.age i.peducgrp i.hhincome ///
+        female married has_children ///
         [pw=weight] if praceeth3 == `race', absorb(cbsa year) cluster(cbsa)
     eststo het_race`race'
 }
@@ -93,6 +97,7 @@ eststo clear
 forvalues edu = 1/4 {
     qui reghdfe self_employed mobile_user ///
         age c.age#c.age i.praceeth3 i.hhincome ///
+        female married has_children ///
         [pw=weight] if peducgrp == `edu', absorb(cbsa year) cluster(cbsa)
     eststo het_edu`edu'
 }
@@ -107,6 +112,7 @@ eststo clear
 forvalues inc = 1/5 {
     qui reghdfe self_employed mobile_user ///
         age c.age#c.age i.praceeth3 i.peducgrp ///
+        female married has_children ///
         [pw=weight] if hhincome == `inc', absorb(cbsa year) cluster(cbsa)
     eststo het_inc`inc'
 }
@@ -120,11 +126,13 @@ esttab het_inc* using "$output/table5_het_income.csv", replace ///
 eststo clear
 qui reghdfe self_employed mobile_user ///
     age c.age#c.age i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight] if metro == 1, absorb(cbsa year) cluster(cbsa)
 eststo het_metro
 
 qui reghdfe self_employed mobile_user ///
     age c.age#c.age i.praceeth3 i.peducgrp i.hhincome ///
+    female married has_children ///
     [pw=weight] if rural == 1, absorb(statefips year) cluster(statefips)
 eststo het_rural
 
@@ -193,18 +201,23 @@ replace joint_choice = 9 if banking_mode == 3 & employed == 0
 preserve
 keep if joint_choice != .
 
+* Generate indicator variables for collapse
+forvalues j = 1/9 {
+    gen jc`j' = (joint_choice == `j')
+}
+
 * Compute CCPs within cells
-collapse (mean) prob_unbanked_wage = (joint_choice==1) ///
-                prob_unbanked_se = (joint_choice==2) ///
-                prob_unbanked_notwork = (joint_choice==3) ///
-                prob_mobile_wage = (joint_choice==4) ///
-                prob_mobile_se = (joint_choice==5) ///
-                prob_mobile_notwork = (joint_choice==6) ///
-                prob_branch_wage = (joint_choice==7) ///
-                prob_branch_se = (joint_choice==8) ///
-                prob_branch_notwork = (joint_choice==9) ///
+collapse (mean) prob_unbanked_wage=jc1 ///
+                prob_unbanked_se=jc2 ///
+                prob_unbanked_notwork=jc3 ///
+                prob_mobile_wage=jc4 ///
+                prob_mobile_se=jc5 ///
+                prob_mobile_notwork=jc6 ///
+                prob_branch_wage=jc7 ///
+                prob_branch_se=jc8 ///
+                prob_branch_notwork=jc9 ///
                 pct_broadband ///
-         (count) n=joint_choice [aw=weight], ///
+         (count) n=jc1 [aw=weight], ///
          by(cbsa year age_cat peducgrp)
 
 * Keep cells with sufficient observations

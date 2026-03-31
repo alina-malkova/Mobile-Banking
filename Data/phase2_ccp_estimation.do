@@ -16,7 +16,7 @@ clear all
 set more off
 set matsize 11000
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -47,7 +47,7 @@ egen psum = rowtotal(p1-p9)
 forvalues j = 1/9 {
     replace p`j' = p`j' / psum
 }
-drop psum prob_sum
+drop psum
 
 * Small constant for log stability
 scalar epsilon = 0.001
@@ -281,6 +281,7 @@ reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
     age2_x_mobile age3_x_mobile ///
     age2_x_unbanked age3_x_unbanked ///
     educ4_x_se educ4_x_mobile educ4_x_unbanked ///
+    female married has_children ///
     bb_x_mobile bb_x_mobile_se bb_x_branch_se ///
     t_x_mobile ///
     [aw=n], vce(cluster cbsa)
@@ -394,6 +395,7 @@ reg y a1 a2 a3 a4 a5 a6 a8 a9 ///
     age2_x_mobile age3_x_mobile ///
     age2_x_unbanked age3_x_unbanked ///
     educ4_x_se educ4_x_mobile educ4_x_unbanked ///
+    female married has_children ///
     bb_x_mobile bb_x_mobile_se bb_x_branch_se ///
     t_x_mobile ///
     [aw=n], vce(cluster cbsa)
@@ -451,7 +453,7 @@ egen psum = rowtotal(p1-p9)
 forvalues j = 1/9 {
     replace p`j' = p`j' / psum
 }
-drop psum prob_sum
+drop psum
 
 * Current totals
 egen total_se = rowtotal(p2 p5 p8)
@@ -598,8 +600,10 @@ di "------------------------------------------------------------"
 di "Scenario                            SE Rate    Change"
 di "------------------------------------------------------------"
 di "Baseline (observed)                 " %6.4f baseline_se "     --"
-di "50% Branch closure                  " %6.4f cf1_se "   " %+6.4f (cf1_se - baseline_se)
-di "Universal broadband (+2 SD)         " %6.4f cf2_se "   " %+6.4f (cf2_se - baseline_se)
+local ch1 = cf1_se - baseline_se
+di "50% Branch closure                  " %6.4f cf1_se "   " %6.4f `ch1'
+local ch2 = cf2_se - baseline_se
+di "Universal broadband (+2 SD)         " %6.4f cf2_se "   " %6.4f `ch2'
 di "------------------------------------------------------------"
 
 di _n "INTERPRETATION:"

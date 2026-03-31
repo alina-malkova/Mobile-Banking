@@ -15,7 +15,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -62,12 +62,8 @@ tab educ_cat, gen(educ_)
 tab age_cat, gen(age_grp_)
 
 * Income categories
-gen inc_cat = .
-replace inc_cat = 1 if hhincome < 15000
-replace inc_cat = 2 if hhincome >= 15000 & hhincome < 30000
-replace inc_cat = 3 if hhincome >= 30000 & hhincome < 50000
-replace inc_cat = 4 if hhincome >= 50000 & hhincome < 75000
-replace inc_cat = 5 if hhincome >= 75000 & hhincome != .
+* hhincome is categorical (1-5), use directly
+gen inc_cat = hhincome if hhincome >= 1 & hhincome <= 5
 tab inc_cat, gen(inc_)
 
 * Race indicators (already have black, hispanic, white)
@@ -77,16 +73,18 @@ gen race_white = (white == 1)
 gen race_asian = (asian == 1)
 
 * Gender
-gen female = (sex == 2)
+* female now in dataset (extracted from raw CPS PESEX)
 
 * Metropolitan status
-gen metro = (metro_status == 1)
+capture confirm var metro
+if _rc != 0 gen metro = (metro_status == 1)
 
 * Marital status
-gen married = (marital_status == 1 | marital_status == 2)
+* married now in dataset (extracted from raw CPS PEMARITL)
 
 * Has children
-gen has_children = (num_children > 0) if num_children != .
+* has_children now in dataset (extracted from raw CPS PRNMCHLD)
+gen has_kids = (has_children == 1) if has_children != .
 
 * CBSA-level variables (already merged)
 * pct_broadband, unemployment_rate
@@ -192,12 +190,12 @@ local b_ols1 = _b[mobile]
 local se_ols1 = _se[mobile]
 
 * Column 2: Demographic controls
-reg se mobile age age2 i.educ_cat i.race i.inc_cat female married [pw=hsupwgtk], vce(cluster cbsa)
+reg se mobile age age2 i.educ_cat i.praceeth3 i.inc_cat female married [pw=hsupwgtk], vce(cluster cbsa)
 local b_ols2 = _b[mobile]
 local se_ols2 = _se[mobile]
 
 * Column 3: Add geography
-reg se mobile age age2 i.educ_cat i.race i.inc_cat female married ///
+reg se mobile age age2 i.educ_cat i.praceeth3 i.inc_cat female married ///
     pct_broadband metro i.year [pw=hsupwgtk], vce(cluster cbsa)
 local b_ols3 = _b[mobile]
 local se_ols3 = _se[mobile]
@@ -283,14 +281,25 @@ di "ROBUSTNESS: CROSS-VALIDATED LASSO"
 di "============================================================"
 
 * LASSO with cross-validation for penalty selection
-lasso linear se mobile `lasso_controls' if touse [pw=hsupwgtk], ///
-    selection(cv, folds(5)) rseed(20260211)
+* Note: built-in lasso linear does not support pweights; use cvlasso from lassopack
+capture which cvlasso
+if _rc == 0 {
+    * Note: cvlasso does not support pweights; run unweighted
+    cvlasso se mobile `lasso_controls' if touse, ///
+        nfolds(5) seed(20260211)
+    local lambda_cv = e(lopt)
+    di "CV-selected lambda: " %8.4f `lambda_cv'
 
-local lambda_cv = e(lambda_cvmin)
-di "CV-selected lambda: " %8.4f `lambda_cv'
-
-* Get selected variables
-lassocoef, display(coef, postselection)
+    * Get selected variables
+    cvlasso, postresults lopt
+}
+else {
+    * Fallback: built-in lasso without weights
+    lasso linear se mobile `lasso_controls' if touse, ///
+        selection(cv, folds(5)) rseed(20260211)
+    local lambda_cv = e(lambda_cvmin)
+    di "CV-selected lambda: " %8.4f `lambda_cv'
+}
 
 /*------------------------------------------------------------------------------
 6. Comparison Table

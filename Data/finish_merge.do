@@ -5,7 +5,7 @@
 clear all
 set more off
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global acs "$datadir/ACS"
 
 log using "$datadir/finish_merge.log", replace

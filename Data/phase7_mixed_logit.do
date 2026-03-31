@@ -24,7 +24,7 @@ set more off
 set matsize 11000
 set seed 20260211
 
-global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/Mobile banking USA/Data"
+global datadir "/Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data"
 global output "$datadir/output"
 
 capture log close
@@ -63,8 +63,8 @@ replace educ_cat = 2 if hs_diploma == 1
 replace educ_cat = 3 if some_college == 1
 replace educ_cat = 4 if college_degree == 1
 
-gen female = (sex == 2)
-gen married = (marital_status == 1 | marital_status == 2)
+* female now in dataset (extracted from raw CPS PESEX)
+* married now in dataset (extracted from raw CPS PEMARITL)
 
 di "Sample: " _N " observations"
 
@@ -143,7 +143,11 @@ if _rc != 0 {
 
     local b_branch_re = _b[se:branch]
     local se_branch_re = _se[se:branch]
-    local sigma_cbsa = exp(_b[var(M1[cbsa]):_cons]/2)
+    * Extract CBSA-level variance from gsem
+    * In gsem, variance is stored in the log scale at _b[/var(M1[cbsa])]
+    matrix b = e(b)
+    local ncols = colsof(b)
+    local sigma_cbsa = sqrt(b[1, `ncols'])  // Variance is the last element
 
     di _n "Random Effects Logit Results (CBSA random intercept):"
     di "  Branch coefficient: " %8.4f `b_branch_re' " (se = " %6.4f `se_branch_re' ")"
@@ -156,8 +160,9 @@ else {
     * mixlogit requires case/alternative structure
 
     * For binary outcome, use melogit with random slope
+    * Note: melogit does not support pweights; run unweighted with clustered VCE
     melogit se branch mobile c.pct_broadband i.age_cat i.educ_cat female married ///
-        i.year [pw=hsupwgtk] || cbsa: branch, covariance(unstructured) ///
+        i.year || cbsa: branch, covariance(unstructured) ///
         intpoints(7)
 
     local b_branch_mixed = _b[se:branch]
