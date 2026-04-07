@@ -1,0 +1,176 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+============================================================
+MIXED LOGIT: NORMAL vs LOGNORMAL RANDOM COEFFICIENTS
+Comment 10 — Distributional Assumption Robustness
+============================================================
+
+Loading analysis dataset...
+Sample size: 93809 observations
+Baseline SE rate: 10.97%
+Choice variable range: 1 to 9
+Choice distribution:
+
+    1     2     3     4     5     7     8     9 
+26635  3353     8  5773   496 51095  6440     9 
+
+Halton draws generated: R = 100
+  Mean of standard normal draws: -0.0418 (should be ~0)
+  SD of standard normal draws:   0.9706 (should be ~1)
+
+mlogit package not available. Using manual simulated MLE.
+
+Estimation sample: N = 5000
+Alternative mapping:
+  j=1: Unbanked x Wage (branch_se=0)
+  j=2: Unbanked x SelfEmp (branch_se=0)
+  j=3: Unbanked x Other (branch_se=0)
+  j=4: Mobile x Wage (branch_se=0)
+  j=5: Mobile x SelfEmp (branch_se=0)
+  j=6: Mobile x Other (branch_se=0)
+  j=7: Branch x Wage (branch_se=0)
+  j=8: Branch x SelfEmp (branch_se=1)
+  j=9: Branch x Other (branch_se=0)
+
+============================================================
+SPECIFICATION A: NORMAL Random Coefficient
+  gamma_i ~ N(mu, sigma^2)
+  Using 100 Halton draws
+============================================================
+Number of parameters: 14
+Optimizing (this may take a few minutes)...
+initial  value 10993.092193 
+iter  10 value 4397.252018
+iter  20 value 4191.756585
+iter  30 value 4191.710190
+iter  30 value 4191.710160
+final  value 4191.710160 
+converged
+
+Normal specification results (SML):
+  mu (mean gamma):    0.2793
+  sigma (SD gamma):   0.0053
+  Log-likelihood:     -4191.71
+  BIC:                8502.66
+  Convergence code:   0
+  Estimation time:    2785.1 seconds
+
+============================================================
+SPECIFICATION B: LOGNORMAL Random Coefficient
+  gamma_i ~ LogN(mu, sigma^2)
+  Using 100 Halton draws
+============================================================
+initial  value 4191.732502 
+iter  10 value 4191.715826
+final  value 4191.710463 
+converged
+
+LogNormal specification results (SML):
+  mu (location):      -1.2482
+  sigma (scale):      0.0996
+  E[gamma]:           0.2884
+  SD[gamma]:          0.0288
+  Log-likelihood:     -4191.71
+  BIC:                8502.66
+  Convergence code:   0
+  Estimation time:    2017.4 seconds
+
+============================================================
+COUNTERFACTUAL: 50% Branch Closure Effect on SE Rate
+============================================================
+
+Computing counterfactual (Normal)...
+
+Normal Counterfactual Results:
+  Baseline SE rate:   9.68%
+  CF SE rate:         8.67%
+  Effect:             -1.00 pp
+  95% CI:            [-1.53, -0.57] pp
+
+Computing counterfactual (LogNormal)...
+
+LogNormal Counterfactual Results:
+  Baseline SE rate:   9.68%
+  CF SE rate:         8.65%
+  Effect:             -1.03 pp
+  95% CI:            [-10.67, -0.00] pp
+
+============================================================
+COMPARISON: NORMAL vs LOGNORMAL RANDOM COEFFICIENTS
+============================================================
+
+                                    Normal        LogNormal
+--------------------------------------------------------- 
+mu (location param)                 0.2793          -1.2482
+sigma (scale param)                 0.0053           0.0996
+E[gamma]                            0.2793           0.2884
+SD[gamma]                           0.0053           0.0288
+Log-likelihood                    -4191.71         -4191.71
+BIC                                8502.66          8502.66
+CF Effect (pp)                       -1.00            -1.03
+CF 95% CI                   [-1.53, -0.57]  [-10.67, -0.00]
+
+Difference in CF effects: 0.03 pp
+CONCLUSION: Counterfactual effects are SIMILAR across distributional
+  assumptions. Results are robust to Normal vs LogNormal specification.
+
+Comparison with Finite Mixture (K=4): CF = -10.8%
+  Normal mixed logit CF:    -1.00%
+  LogNormal mixed logit CF: -1.03%
+  Bayesian DPM CF:          -8.5%
+
+============================================================
+SAVING RESULTS
+============================================================
+Results saved to:
+  /Users/amalkova/Library/CloudStorage/OneDrive-FloridaInstituteofTechnology/_Research/Mobile_Money_Banking/Mobile banking USA/Data/output/phase7_mixed_logit_comparison.csv
+
+============================================================
+TECHNICAL NOTES
+============================================================
+
+1. HALTON DRAWS DOCUMENTATION:
+   This script uses 100 Halton draws (base 2) as claimed in the paper.
+   The existing Stata code (phase7_mixed_logit.do) used only 50 pseudo-
+   random draws in its simulation loop. Halton sequences provide better
+   coverage of the unit interval than pseudo-random draws, yielding more
+   accurate simulation of the mixed logit integral. With 500 Halton draws,
+   the simulation error is typically < 0.1% of the true integral value.
+
+2. DISTRIBUTIONAL COMPARISON:
+   Normal:    gamma_r = mu + sigma * Phi^{-1}(h_r)
+     - Allows negative values (some individuals have gamma < 0)
+     - Symmetric heterogeneity around the mean
+
+   LogNormal: gamma_r = exp(mu + sigma * Phi^{-1}(h_r))
+     - Ensures gamma > 0 (all individuals have positive effect)
+     - Right-skewed heterogeneity distribution
+     - E[gamma] = exp(mu + sigma^2/2)
+     - SD[gamma] = sqrt((exp(sigma^2) - 1) * exp(2*mu + sigma^2))
+
+3. MODEL SELECTION:
+   BIC comparison provides a formal criterion for choosing between
+   Normal and LogNormal. If BIC values are close (within ~10 units),
+   neither distribution is strongly preferred, and both counterfactuals
+   should be reported.
+
+4. RELATIONSHIP TO FINITE MIXTURE:
+   The mixed logit and K=4 finite mixture are alternative approaches to
+   capturing heterogeneity. The finite mixture estimates ~4 discrete types;
+   the mixed logit estimates a continuous distribution. If both yield
+   similar counterfactual magnitudes, the results are robust to how
+   heterogeneity is modeled.
+
+============================================================
+PHASE 7 EXTENSION COMPLETE
+============================================================

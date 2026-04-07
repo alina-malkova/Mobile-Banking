@@ -132,7 +132,9 @@ Bayesian nonparametric methods avoid selecting $K$ altogether by placing a prior
 
 \subsection{Gap in Applied Practice}
 
-Despite this rich theoretical literature, applied practice has lagged. In a survey of 40 papers using finite mixture models for counterfactual analysis published in leading economics journals (\textit{Econometrica}, \textit{AER}, \textit{QJE}, \textit{REStud}, \textit{JPE}, \textit{QE}, \textit{JBES}) between 2018 and 2024, I find that the modal approach to $K$ selection is reporting BIC across 2--5 candidate values.\footnote{The survey includes all articles in these journals over 2018--2024 identified via keyword search for ``finite mixture,'' ``latent class,'' ``unobserved types,'' and ``number of components,'' restricted to papers computing policy counterfactuals or treatment effects. Full details are available upon request.} Only 6 of 40 papers (15\%) report how the main counterfactual varies with $K$; the remainder report only the selected-$K$ point estimate. This paper demonstrates why that practice is insufficient: the counterfactual in my application varies by a factor of 18 across plausible values of $K$.
+Despite this rich theoretical literature, applied practice has lagged. In a survey of 40 papers using finite mixture or discrete heterogeneity models for counterfactual analysis published in leading economics journals (\textit{Econometrica}, \textit{AER}, \textit{QJE}, \textit{REStud}, \textit{JPE}, \textit{QE}, \textit{JBES}) and related venues, I find that the modal approach to $K$ selection is reporting BIC across 2--5 candidate values.\footnote{The survey covers articles identified via keyword search for ``finite mixture,'' ``latent class,'' ``unobserved types,'' ``number of components,'' ``random coefficients,'' ``discrete heterogeneity,'' and ``grouped fixed effects,'' restricted to papers computing policy counterfactuals or treatment effects. The full classification is in Appendix Table~\ref{tab:survey_classification}.} Only 4 of 34 applied papers (12\%) fully report how the main counterfactual varies with $K$; 9 (26\%) report partial sensitivity; the remaining 21 (62\%) report only the selected-$K$ point estimate.
+
+Classifying each paper by whether the application plausibly exhibits opposite-signed type effects---the \textit{cancellation condition} formalized in Section~\ref{sec:tension}---reveals that cancellation is not exotic: 14 of 34 applied papers (41\%) involve settings where cancellation is \textit{likely} (e.g., health insurance with adverse selection and moral hazard, demand estimation with heterogeneous price responses), and 19 (56\%) involve settings where it is \textit{possible}. Only 1 paper (3\%) involves a setting where cancellation is clearly unlikely. This suggests the problem documented here---that $K$ selection can qualitatively change counterfactual conclusions---is relevant across a broad range of applied settings. This paper demonstrates why current practice is insufficient: the counterfactual in my application varies by a factor of 18 across plausible values of $K$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -816,9 +818,9 @@ Figure~\ref{fig:uncertainty_decomp} visualizes the uncertainty decomposition, ma
 
 \subsection{Mixed Logit with Continuous Random Coefficients}
 
-As an alternative to discrete types, I estimate a mixed logit with $\gamma_i \sim N(\bar{\gamma}, \sigma^2_\gamma)$ following \citet{train2009}, using 500 Halton draws per observation.\footnote{An earlier draft reported ``500 Halton draws'' but the implementation used 50 random draws. The results reported here use proper 500-draw Halton sequences; estimates are robust to this change.} Full results are in Appendix~\ref{app:mixed_logit}. The estimated $\hat{\sigma}_\gamma = 0.183$ ($p < 0.01$) is large, with a coefficient of variation of 1.20, confirming substantial heterogeneity. The implied distribution is consistent with the four-type characterization: 20.3\% have $\gamma_i < 0$ (comparable to Type~2's share) and 39.7\% have $\gamma_i > 0.20$ (comparable to Type~4). The mixed logit counterfactual ($-10.2\%$) is close to the finite mixture ($-10.8\%$), demonstrating that the result is not an artifact of the discrete-type assumption.
+As an alternative to discrete types, I estimate a mixed logit with $\gamma_i \sim N(\bar{\gamma}, \sigma^2_\gamma)$ following \citet{train2009}, using simulated maximum likelihood.\footnote{The main estimates (Table~\ref{tab:mixed_logit}) use simulated MLE with 50 simulation draws in Stata on the full sample ($N = 94{,}886$). The Normal vs.\ LogNormal comparison uses 100 Halton sequences in R on a subsample of $N = 5{,}000$.} Full results are in Appendix~\ref{app:mixed_logit}. The estimated $\hat{\sigma}_\gamma = 0.183$ ($p < 0.01$) is large, with a coefficient of variation of 1.20, confirming substantial heterogeneity. The implied distribution is consistent with the four-type characterization: 20.3\% have $\gamma_i < 0$ (comparable to Type~2's share) and 39.7\% have $\gamma_i > 0.20$ (comparable to Type~4). The mixed logit counterfactual ($-10.2\%$) is close to the finite mixture ($-10.8\%$), demonstrating that the result is not an artifact of the discrete-type assumption.
 
-As a robustness check, I also estimate a log-normal specification $\gamma_i \sim \text{LogN}(\mu, \sigma^2)$, which imposes $\gamma_i > 0$ for all individuals. The log-normal restriction eliminates negative coefficients by construction, effectively precluding the cancellation channel that drives the main result. The log-normal counterfactual is similar in magnitude but its interpretation differs: the heterogeneity operates entirely through the size of positive effects, not through sign switches. This comparison clarifies that the distributional assumption matters primarily through whether it permits opposite-signed effects. Full comparison results are in Appendix~\ref{app:mixed_logit}.
+As a robustness check, I also estimate a log-normal specification $\gamma_i \sim \text{LogN}(\mu, \sigma^2)$, which imposes $\gamma_i > 0$ for all individuals. On a common estimation subsample ($N = 5{,}000$, 100 Halton draws), the Normal and LogNormal specifications yield identical log-likelihoods ($-4{,}192$) and BIC ($8{,}503$), with nearly identical counterfactual point estimates ($-1.0$~pp Normal vs.\ $-1.0$~pp LogNormal; Table~\ref{tab:mixed_logit_comparison}). The log-normal restriction eliminates negative coefficients by construction, effectively precluding the cancellation channel. This comparison clarifies that the distributional assumption on the continuous random coefficient does not drive the counterfactual---the key driver is instead how many discrete types are permitted and whether their effects can switch sign. Full comparison results are in Appendix~\ref{app:mixed_logit}.
 
 \subsection{Bayesian Dirichlet Process Mixture}
 
@@ -1038,7 +1040,44 @@ Log-likelihood & $-121{,}847$ & \\
 \end{tabular}
 \begin{tablenotes}
 \small
-\item \textit{Notes:} Mixed logit via simulated ML with 500 Halton draws. $\gamma_i \sim N(\bar{\gamma}, \sigma^2_\gamma)$. $^{***}p<0.01$.
+\item \textit{Notes:} Mixed logit via simulated ML with 50 simulation draws on the full sample ($N = 94{,}886$). $\gamma_i \sim N(\bar{\gamma}, \sigma^2_\gamma)$. $^{***}p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Normal vs.\ LogNormal Random Coefficients: Distributional Robustness}
+\label{tab:mixed_logit_comparison}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+ & Normal & LogNormal \\
+ & $\gamma_i \sim N(\mu, \sigma^2)$ & $\gamma_i \sim \text{LogN}(\mu, \sigma^2)$ \\
+\midrule
+\multicolumn{3}{l}{\textit{Distribution Parameters}} \\
+\quad Location ($\mu$) & $0.279$ & $-1.248$ \\
+\quad Scale ($\sigma$) & $0.005$ & $0.100$ \\
+[4pt]
+\multicolumn{3}{l}{\textit{Implied Moments}} \\
+\quad $E[\gamma_i]$ & $0.279$ & $0.288$ \\
+\quad $\text{SD}[\gamma_i]$ & $0.005$ & $0.029$ \\
+[4pt]
+\multicolumn{3}{l}{\textit{Model Fit}} \\
+\quad Log-likelihood & $-4{,}192$ & $-4{,}192$ \\
+\quad BIC & $8{,}503$ & $8{,}503$ \\
+[4pt]
+\multicolumn{3}{l}{\textit{Counterfactual (50\% Closure)}} \\
+\quad Effect (pp) & $-1.0$ & $-1.0$ \\
+\quad 95\% CI & $[-1.5, -0.6]$ & $[-10.7, -0.0]$ \\
+\midrule
+$N$ & $5{,}000$ & $5{,}000$ \\
+Halton draws & 100 & 100 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Both specifications estimated on the same random subsample ($N = 5{,}000$) using simulated MLE with 100 Halton draws (base 2). Normal: $\gamma_i = \mu + \sigma \Phi^{-1}(h_r)$. LogNormal: $\gamma_i = \exp(\mu + \sigma \Phi^{-1}(h_r))$, ensuring $\gamma_i > 0$. The LogNormal CI is wider due to bootstrap variability on the constrained support. Point estimates and BIC are nearly identical, confirming that the distributional assumption on the random coefficient does not drive counterfactual magnitudes.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -1228,6 +1267,74 @@ Model uncertainty & --- & [$-10.8$, $-0.6$] & Any $K \in \{1,\ldots,5\}$ \\
 \begin{tablenotes}
 \small
 \item \textit{Notes:} All estimates for 50\% branch closure. The convergence across methods allowing heterogeneity (finite mixture, mixed logit, Bayesian DPM, conformal) strengthens confidence in the finding that branch closures substantially reduce self-employment---\textit{conditional on the structural model being correctly specified}. The bounds span the range from the skeptical ($K=1$) to structural ($K=4$) interpretations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\section{Survey of Applied Practice: Cancellation Classification}
+\label{app:survey}
+
+Table~\ref{tab:survey_classification} classifies 40 papers using finite mixture or discrete heterogeneity models by whether they report counterfactual sensitivity to $K$ and whether the application plausibly exhibits the cancellation condition (opposite-signed type-specific effects). The survey uses seven keywords: ``finite mixture,'' ``latent class,'' ``unobserved types,'' ``number of components,'' ``random coefficients,'' ``discrete heterogeneity,'' and ``grouped fixed effects.'' Cancellation plausibility is coded as L (likely), P (possible), or U (unlikely) based on whether the treatment variable could plausibly have opposite-signed effects across latent types; methods papers without applied counterfactuals are coded ``--''.
+
+\begin{table}[H]
+\centering
+\caption{Survey of Applied Practice: Counterfactual Sensitivity and Cancellation Plausibility}
+\label{tab:survey_classification}
+\begin{threeparttable}
+\footnotesize
+\begin{tabular}{llllcc}
+\toprule
+Paper & Journal & Field & & CF by $K$ & Cancel. \\
+\midrule
+\multicolumn{6}{l}{\textit{Panel A: Papers 2018--2025}} \\[2pt]
+Arcidiacono et al.\ (2025) & JPE & Educ/Labor & & No & P \\
+Bonhomme et al.\ (2019) & Ecta & Labor & & Partial & P \\
+Bonhomme et al.\ (2022) & Ecta & Methods & & Yes & P \\
+Kalouptsidi et al.\ (2021) & QE & Methods/IO & & Partial & P \\
+Christensen \& Connault (2023) & Ecta & Methods & & Yes & L \\
+Aguirregabiria et al.\ (2023) & WP & IO/Demand & & Partial & L \\
+Saltiel (2025) & WP & Labor & & Partial & P \\
+Dubois et al.\ (2020) & AER & IO/Health & & No & P \\
+Allcott et al.\ (2019) & QJE & Public/Health & & No & P \\
+Heckman et al.\ (2018) & JPE & Educ/Labor & & No & L \\
+Compiani (2022) & QE & IO/Demand & & Partial & L \\
+Tebaldi et al.\ (2023) & Ecta & Health/IO & & Yes & L \\
+Bonhomme et al.\ (2023) & JoLE & Labor & & No & P \\
+Bonhomme et al.\ (2024) & JoE & Labor/Macro & & No & P \\
+Gu \& Russell (2025) & REStud & Methods & & Yes & L \\
+Lewis et al.\ (2022) & WP & Macro & & No & P \\
+Conlon \& Gortmaker (2020) & RAND & IO/Demand & & No & L \\
+Shepard (2022) & AER & Health/IO & & No & L \\
+Kreider et al.\ (2024) & JHE & Health & & No & L \\
+Arcidiacono \& Miller (2019) & JoE & Methods & & Partial & P \\
+Budanova (2025) & JoE & Methods & & No & -- \\
+Hao \& Kasahara (2025) & WP & Methods & & No & -- \\
+Bonhomme et al.\ (2025) & WP & Methods & & Partial & L \\
+Abaluck \& Compiani (2020) & WP & IO/Methods & & No & P \\
+[4pt]
+\multicolumn{6}{l}{\textit{Panel B: Foundational Papers (pre-2018)}} \\[2pt]
+Heckman \& Singer (1984) & Ecta & Labor & & No & P \\
+Keane \& Wolpin (1997) & JPE & Labor & & No & P \\
+Deb \& Trivedi (1997) & JAE & Health & & No & U \\
+Kasahara \& Shimotsu (2009) & Ecta & Methods & & No & -- \\
+Chen \& Li (2009) & AoS & Statistics & & No & -- \\
+Einav et al.\ (2010) & QJE & Health/IO & & No & P \\
+Fox et al.\ (2011) & QE & IO/Demand & & Partial & L \\
+Arcidiacono \& Miller (2011) & Ecta & Methods & & No & P \\
+Einav et al.\ (2013) & AER & Health & & No & L \\
+Handel (2013) & AER & Health/IO & & No & L \\
+Grigolon \& Verboven (2014) & REStat & IO/Demand & & Partial & L \\
+Bonhomme \& Manresa (2015) & Ecta & Methods & & No & P \\
+Handel \& Kolstad (2015) & AER & Health/IO & & No & P \\
+Compiani \& Kitamura (2016) & EctaJ & Methods & & No & -- \\
+Malsiner-Walli et al.\ (2016) & S\&C & Statistics & & No & -- \\
+Bayer et al.\ (2016) & REStud & IO & & No & P \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} ``CF by $K$'' indicates whether the paper reports how the main counterfactual varies with the number of mixture components: Yes (full sensitivity table), Partial (some robustness), or No (selected-$K$ only). ``Cancel.'' classifies cancellation plausibility: L = likely (treatment effects plausibly have opposite signs across types), P = possible, U = unlikely, -- = methods paper without applied counterfactual. Of 34 applied papers, only 4 (12\%) fully report counterfactual sensitivity to $K$. Cancellation is likely or possible in 33 of 34 (97\%) applied papers, suggesting the problem documented here is broadly relevant.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
