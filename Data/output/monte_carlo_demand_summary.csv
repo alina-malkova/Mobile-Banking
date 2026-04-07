@@ -1,0 +1,13 @@
+"metric","value"
+"N",10000
+"R",100
+"K_true",3
+"K_recovery_rate_pct",6
+"weighted_gamma_true",0.023
+"cf_pp_K1",0.7038
+"cf_pp_K2",-0.223819959980001
+"cf_pp_K3",0.108642098728662
+"cf_pp_K4",0.0609874604446691
+"cf_pp_K5",0.0405528103501973
+"cf_range_mean_pp",1.68133148852795
+"cf_range_median_pp",0.464034316483039

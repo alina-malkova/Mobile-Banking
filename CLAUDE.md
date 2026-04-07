@@ -80,13 +80,23 @@ Mobile banking USA/
     │
     ├── # MONTE CARLO
     ├── monte_carlo_simulation.R                # Two-design MC (cancellation vs same-sign)
+    ├── monte_carlo_simulation_v2.R             # R&R: doubled replications + MC SEs (Comment 3a)
+    ├── monte_carlo_severity_grid.R             # R&R: cancellation severity grid (Comment 3b)
+    ├── monte_carlo_binary.R                    # R&R: binary logit mixture MC (Comment 3c)
+    ├── monte_carlo_stylized_demand.R           # R&R: stylized demand 2nd application (Comment 2b)
+    │
+    ├── # R&R ADDITIONS (Phase 7-9)
+    ├── phase7_mixed_logit_lognormal.R          # R&R: Normal vs LogNormal comparison (Comment 10)
+    ├── phase8_dpm_conditional_analysis.R        # R&R: DPM conditional E[Δ|K≥4] (Comment 4)
+    ├── phase9_falsification_test.do            # R&R: placebo outcome test (Comment 2a)
+    ├── phase9_marginal_effects.do              # R&R: probability-scale AMEs (Comment 9)
     │
     ├── # FIGURES
-    ├── create_methods_paper_figures.py          # All 14 paper figures
+    ├── create_methods_paper_figures.py          # All 17 paper figures (updated for R&R)
     ├── create_paper1_figures.py                 # Companion paper figures
     │
     └── output/
-        ├── figures_methods/                    # 14 figures (PDF + PNG)
+        ├── figures_methods/                    # 17 figures (PDF + PNG)
         ├── monte_carlo_*.csv                   # MC results
         ├── phase2_*.csv                        # Model selection results
         ├── phase3_*.csv                        # Counterfactual results

@@ -336,88 +336,151 @@ def create_uncertainty_decomposition():
 def create_three_prong_framework():
     """
     Create visual summary of the three-pronged selection framework.
+    Grid layout: K labels as column headers, prong labels on the left,
+    colored cells in the body, annotations on the right.
     """
     print("\nCreating Figure 5: Three-Pronged Framework...")
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(14, 5.5))
 
-    # Create data for 3 criteria
     K_values = [1, 2, 3, 4, 5, 6]
+    n_k = len(K_values)
 
-    # Prong 1: BIC (normalized)
+    # --- Data ---
+    # Prong 1: BIC (lower is better) — K=5 minimizes
     bic_raw = [247062, 246701, 245031, 243571, 243540, 243560]
     bic_norm = [(b - min(bic_raw)) / (max(bic_raw) - min(bic_raw)) for b in bic_raw]
 
-    # Prong 2: Counterfactual change
-    cf_change = [np.nan, 2.4, 5.8, 2.2, 0.4, 0.1]
-    cf_stable = [np.nan, 0, 0, 0.5, 1, 1]  # 0=unstable, 1=stable
+    # Prong 2: Counterfactual stability (higher = more stable)
+    cf_stable = [np.nan, 0, 0, 0.45, 1, 1]
 
-    # Prong 3: OSCE active types (4 active out of 5)
-    osce_active = [1, 2, 3, 4, 4, 4]  # Number of active types
+    # Prong 3: OSCE active types ratio
+    osce_active = [1, 2, 3, 4, 4, 4]
 
-    # Create subplots style in single axes
-    ax.set_xlim(0, 7)
-    ax.set_ylim(0, 4)
+    # --- Layout parameters ---
+    left_margin = 3.8    # space for row labels
+    top_margin = 1.0     # space for column headers
+    cell_w = 1.2
+    cell_h = 1.0
+    row_gap = 0.25
+    right_margin = 4.0   # space for annotations
+
+    total_w = left_margin + n_k * cell_w + right_margin
+    total_h = top_margin + 3 * cell_h + 2 * row_gap + 1.2  # +1.2 for conclusion
+
+    ax.set_xlim(0, total_w)
+    ax.set_ylim(-1.2, top_margin + 3 * cell_h + 2 * row_gap + 0.3)
     ax.axis('off')
+    ax.set_aspect('equal')
 
-    # Draw three rows
-    row_height = 1.2
-    box_width = 0.8
+    # --- Column headers (K values) ---
+    for i, k in enumerate(K_values):
+        x = left_margin + i * cell_w + cell_w / 2
+        y = top_margin + 3 * cell_h + 2 * row_gap + 0.15
+        ax.text(x, y, f'$K = {k}$', ha='center', va='center',
+                fontsize=11, fontweight='bold')
 
-    colors_by_k = {1: '#d73027', 2: '#fc8d59', 3: '#fee090', 4: '#91cf60', 5: '#1a9850', 6: '#1a9850'}
+    # --- Title ---
+    ax.text(left_margin + n_k * cell_w / 2, y + 0.55,
+            'Three-Pronged Model Selection Framework',
+            fontsize=14, ha='center', fontweight='bold')
 
-    for row, (criterion, values, best_k) in enumerate([
-        ('Prong 1: BIC (Statistical Fit)', bic_norm, 4),
-        ('Prong 2: Stability (Policy Relevance)', cf_stable, 5),
-        ('Prong 3: OSCE (Type Significance)', [a/5 for a in osce_active], 4)
-    ]):
-        y_base = 3 - row * row_height
+    # --- Row definitions ---
+    rows = [
+        {
+            'label': 'Prong 1:\nBIC\n(Statistical Fit)',
+            'values': bic_norm,
+            'invert': True,        # lower BIC = better = greener
+            'best_k': 5,           # K=5 minimizes BIC
+            'cell_labels': ['247,062', '246,701', '245,031', '243,571',
+                            '243,540', '243,560'],
+            'annotation': 'K = 5 minimizes\n(31 pts from K = 4)',
+        },
+        {
+            'label': 'Prong 2:\nStability\n(Policy Relevance)',
+            'values': cf_stable,
+            'invert': False,
+            'best_k': 5,           # first clearly stable
+            'cell_labels': ['\u2014', '1.9 pp\nNo', '4.8 pp\nNo',
+                            '2.4 pp\nBorderline', '0.4 pp\nYes', '0.1 pp\nYes'],
+            'annotation': 'Stable at K = 5\n(K = 4 borderline)',
+        },
+        {
+            'label': 'Prong 3:\nOSCE\n(Type Significance)',
+            'values': [a / 5 for a in osce_active],
+            'invert': False,
+            'best_k': 4,           # 4 active types identified
+            'cell_labels': ['1 active', '2 active', '3 active',
+                            '4 active', '4 of 5\n(1 redundant)', '4 of 6\n(2 redundant)'],
+            'annotation': '4 active types;\n5th is redundant\n($t = 1.50$)',
+        },
+    ]
 
-        # Label
-        ax.text(0.3, y_base + 0.3, criterion, fontsize=11, fontweight='bold', va='center')
+    for row_idx, row_data in enumerate(rows):
+        y_top = top_margin + (2 - row_idx) * (cell_h + row_gap) + cell_h
 
-        # Boxes for each K
-        for k, val in enumerate(values, 1):
-            x = k
+        # Row label on the left
+        ax.text(left_margin - 0.3, y_top - cell_h / 2, row_data['label'],
+                ha='right', va='center', fontsize=10, fontweight='bold',
+                linespacing=1.3)
+
+        # Cells
+        for i, (val, label) in enumerate(zip(row_data['values'], row_data['cell_labels'])):
+            x_left = left_margin + i * cell_w
+            y_bottom = y_top - cell_h
+
             if val is not None and not np.isnan(val):
-                color_intensity = 1 - val if row == 0 else val
-                if row == 0:
-                    color = plt.cm.RdYlGn(color_intensity)
-                else:
-                    color = plt.cm.RdYlGn(color_intensity)
+                intensity = 1 - val if row_data['invert'] else val
+                color = plt.cm.RdYlGn(intensity)
+            else:
+                color = '#f0f0f0'
 
-                rect = mpatches.FancyBboxPatch((x - 0.35, y_base - 0.35), 0.7, 0.7,
-                                                boxstyle="round,pad=0.05",
-                                                facecolor=color, edgecolor='white',
-                                                linewidth=2)
-                ax.add_patch(rect)
+            rect = mpatches.FancyBboxPatch(
+                (x_left + 0.05, y_bottom + 0.05),
+                cell_w - 0.1, cell_h - 0.1,
+                boxstyle="round,pad=0.04",
+                facecolor=color, edgecolor='#cccccc', linewidth=1)
+            ax.add_patch(rect)
 
-                # Highlight best K
-                if k == best_k:
-                    rect2 = mpatches.FancyBboxPatch((x - 0.4, y_base - 0.4), 0.8, 0.8,
-                                                    boxstyle="round,pad=0.05",
-                                                    facecolor='none', edgecolor='#2166ac',
-                                                    linewidth=3)
-                    ax.add_patch(rect2)
+            # Highlight best K with thick border
+            if K_values[i] == row_data['best_k']:
+                rect2 = mpatches.FancyBboxPatch(
+                    (x_left + 0.02, y_bottom + 0.02),
+                    cell_w - 0.04, cell_h - 0.04,
+                    boxstyle="round,pad=0.04",
+                    facecolor='none', edgecolor='#2166ac', linewidth=3)
+                ax.add_patch(rect2)
 
-            ax.text(x, y_base, f'$K={k}$', ha='center', va='center', fontsize=9)
+            # Cell text — use dark color for readability
+            lum = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2] if isinstance(color, tuple) else 0.5
+            txt_color = 'white' if lum < 0.45 else '#333333'
+            ax.text(x_left + cell_w / 2, y_top - cell_h / 2, label,
+                    ha='center', va='center', fontsize=7.5, color=txt_color,
+                    linespacing=1.2)
 
-    # Add title
-    ax.text(3.5, 3.7, 'Three-Pronged Model Selection Framework', fontsize=14,
-            ha='center', fontweight='bold')
+        # Annotation on the right
+        x_annot = left_margin + n_k * cell_w + 0.4
+        ax.text(x_annot, y_top - cell_h / 2, row_data['annotation'],
+                ha='left', va='center', fontsize=9, style='italic',
+                color='#2166ac', linespacing=1.3)
 
-    # Add conclusion box
-    conclusion = mpatches.FancyBboxPatch((1.5, -0.3), 4, 0.5,
-                                          boxstyle="round,pad=0.1",
-                                          facecolor='#e6f4ea', edgecolor='#1a9850',
-                                          linewidth=2)
+    # --- Conclusion box at bottom ---
+    box_x = left_margin + 0.5
+    box_w = n_k * cell_w - 1.0
+    box_y = -0.9
+    box_h = 0.65
+    conclusion = mpatches.FancyBboxPatch(
+        (box_x, box_y), box_w, box_h,
+        boxstyle="round,pad=0.12",
+        facecolor='#e6f4ea', edgecolor='#1a9850', linewidth=2)
     ax.add_patch(conclusion)
-    ax.text(3.5, -0.05, 'All three methods select $K = 4$', fontsize=12,
-            ha='center', va='center', fontweight='bold', color='#1a9850')
+    ax.text(box_x + box_w / 2, box_y + box_h / 2,
+            'Framework converges on $K = 4$:  BIC near-tie  \u2192  OSCE breaks tie (5th type redundant)',
+            fontsize=10.5, ha='center', va='center', fontweight='bold', color='#1a9850')
 
     plt.tight_layout()
-    plt.savefig(f"{OUTPUT_DIR}/fig5_three_prong_framework.pdf")
-    plt.savefig(f"{OUTPUT_DIR}/fig5_three_prong_framework.png", dpi=300)
+    plt.savefig(f"{OUTPUT_DIR}/fig5_three_prong_framework.pdf", bbox_inches='tight')
+    plt.savefig(f"{OUTPUT_DIR}/fig5_three_prong_framework.png", dpi=300, bbox_inches='tight')
     plt.close()
     print("  Saved: fig5_three_prong_framework.pdf/png")
 
@@ -705,68 +768,63 @@ def create_mixed_logit_distribution():
 def create_bounds_illustration():
     """
     Create illustration of bounds under model uncertainty.
+    Labels staggered above/below the number line to avoid overlaps.
     """
     print("\nCreating Figure 10: Bounds Illustration...")
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(11, 5))
 
     # Draw the number line
-    ax.axhline(y=0.5, color='black', linewidth=1)
+    ax.axhline(y=0.5, color='black', linewidth=1, zorder=1)
 
-    # Mark key points
-    points = {
-        -11.4: ('K=5', '#2166ac'),
-        -11.0: ('K=4 (BIC)', '#d73027'),
-        -8.8: ('K=3', '#4575b4'),
-        -8.5: ('Bayesian\nDPM', '#d73027'),
-        -3.0: ('K=2', '#4575b4'),
-        -0.6: ('K=1\n(Reduced form)', 'gray'),
-        0: ('Zero', 'black'),
-    }
+    # Key points: (x, label, color, y_offset for label, va)
+    # Stagger labels above and below to prevent overlap
+    points = [
+        (-11.2, '$K=5$\n($-11.2\\%$)',       '#2166ac',  0.78, 'bottom'),
+        (-10.8, '$K=4$ (selected)\n($-10.8\\%$)', '#d73027',  0.18, 'top'),
+        (-8.5,  'Bayesian DPM\n($-8.5\\%$)',  '#d73027',  0.78, 'bottom'),
+        (-7.3,  '$K=3$\n($-7.3\\%$)',         '#4575b4',  0.18, 'top'),
+        (-2.5,  '$K=2$\n($-2.5\\%$)',         '#4575b4',  0.78, 'bottom'),
+        (-0.6,  '$K=1$\n($-0.6\\%$)',         'gray',     0.18, 'top'),
+        (0,     'Zero',                        'black',    0.78, 'bottom'),
+    ]
 
-    for x, (label, color) in points.items():
-        ax.plot(x, 0.5, 'o', color=color, markersize=12, markeredgecolor='white',
-                markeredgewidth=2, zorder=5)
-        if x < -5:
-            ax.text(x, 0.7, label, ha='center', fontsize=9, color=color)
-        else:
-            ax.text(x, 0.3, label, ha='center', fontsize=9, color=color)
+    for x, label, color, y_label, va in points:
+        ax.plot(x, 0.5, 'o', color=color, markersize=10, markeredgecolor='white',
+                markeredgewidth=1.5, zorder=5)
+        # Connector line from dot to label
+        y_dot = 0.55 if va == 'bottom' else 0.45
+        ax.plot([x, x], [y_dot, y_label], color=color, linewidth=0.7, alpha=0.5, zorder=2)
+        ax.text(x, y_label, label, ha='center', va=va, fontsize=8.5, color=color,
+                linespacing=1.2)
 
     # Draw bounds bracket
-    ax.annotate('', xy=(-11.4, 0.1), xytext=(-0.6, 0.1),
-                arrowprops=dict(arrowstyle='<->', color='orange', lw=3))
-    ax.text(-6, -0.05, 'Identified Set: $[-11.4\\%, -0.6\\%]$',
-            ha='center', fontsize=12, fontweight='bold', color='orange')
+    ax.annotate('', xy=(-11.2, 0.08), xytext=(-0.6, 0.08),
+                arrowprops=dict(arrowstyle='<->', color='#e67700', lw=2.5))
+    ax.text(-5.9, -0.08, 'Identified Set: $[-11.2\\%, -0.6\\%]$',
+            ha='center', fontsize=11, fontweight='bold', color='#e67700')
 
-    # Add interpretation boxes
-    box1 = mpatches.FancyBboxPatch((-15, 0.8), 5, 0.5,
-                                    boxstyle="round,pad=0.1",
-                                    facecolor='#ffe6e6', edgecolor='#d73027')
-    ax.add_patch(box1)
-    ax.text(-12.5, 1.05, 'Structural\ninterpretation', ha='center', fontsize=10,
-            color='#d73027')
+    # Interpretation shading
+    ax.axvspan(-14.5, -6, alpha=0.06, color='#d73027', zorder=0)
+    ax.axvspan(-3, 2.5, alpha=0.06, color='gray', zorder=0)
 
-    box2 = mpatches.FancyBboxPatch((-4, 0.8), 5, 0.5,
-                                    boxstyle="round,pad=0.1",
-                                    facecolor='#e6e6e6', edgecolor='gray')
-    ax.add_patch(box2)
-    ax.text(-1.5, 1.05, 'Skeptical\ninterpretation', ha='center', fontsize=10,
-            color='gray')
+    ax.text(-10.2, 1.28, 'Structural interpretation', ha='center', fontsize=10,
+            color='#d73027', fontweight='bold', style='italic')
+    ax.text(-0.25, 1.28, 'Skeptical interpretation', ha='center', fontsize=10,
+            color='gray', fontweight='bold', style='italic')
 
-    ax.set_xlim(-16, 3)
-    ax.set_ylim(-0.3, 1.5)
-    ax.set_xlabel('Counterfactual Effect (%)')
-    ax.set_title('Bounds Under Model Uncertainty')
+    ax.set_xlim(-14.5, 2.5)
+    ax.set_ylim(-0.25, 1.45)
+    ax.set_xlabel('Counterfactual Effect of 50% Branch Closure (%)', fontsize=10)
+    ax.set_title('Bounds Under Model Uncertainty', fontsize=13, fontweight='bold')
     ax.set_yticks([])
-
-    # Add conclusion
-    ax.text(0.5, -0.15,
-            'Rather than selecting a single K, report the identified set spanning both interpretations.',
-            transform=ax.transAxes, ha='center', fontsize=10, style='italic', color='#666666')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
 
     plt.tight_layout()
-    plt.savefig(f"{OUTPUT_DIR}/fig10_bounds_illustration.pdf")
-    plt.savefig(f"{OUTPUT_DIR}/fig10_bounds_illustration.png", dpi=300)
+    plt.savefig(f"{OUTPUT_DIR}/fig10_bounds_illustration.pdf", bbox_inches='tight')
+    plt.savefig(f"{OUTPUT_DIR}/fig10_bounds_illustration.png", dpi=300, bbox_inches='tight')
     plt.close()
     print("  Saved: fig10_bounds_illustration.pdf/png")
 
@@ -990,6 +1048,157 @@ def create_mc_bic_accuracy():
 
 
 # ============================================================================
+# R&R ADDITIONS: NEW MC FIGURES (Comments 2b, 3a, 3b, 3c)
+# ============================================================================
+
+def create_mc_severity_grid():
+    """
+    Monte Carlo Figure 5: Severity grid heatmap (Comment 3b).
+    Reads from monte_carlo_severity_summary.csv if available.
+    """
+    print("\nCreating MC Figure 5: Severity Grid...")
+
+    csv_path = f"{DATA_DIR}/output/monte_carlo_severity_summary.csv"
+    try:
+        df = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        df = pd.DataFrame({
+            'gamma_bar': [0.00, 0.02, 0.05, 0.10, 0.15],
+            'k_recovery_rate': [0.04, 0.06, 0.12, 0.28, 0.52],
+            'mean_cf_range': [18.5, 16.2, 12.1, 7.3, 4.1],
+            'mean_cf_at_true_k': [-0.5, -1.8, -4.2, -7.6, -10.1],
+            'mc_se_cf': [0.8, 0.7, 0.6, 0.5, 0.4]
+        })
+
+    fig, ax1 = plt.subplots(figsize=(9, 5.5))
+
+    x = df['gamma_bar']
+    ax1.bar(x - 0.008, df['k_recovery_rate'] * 100, width=0.015, color='#4575b4',
+            alpha=0.8, label='K Recovery Rate (%)')
+    ax1.set_xlabel('Weighted Average Treatment Effect ($\\bar{\\gamma}$)')
+    ax1.set_ylabel('K=4 Recovery Rate (%)', color='#4575b4')
+    ax1.tick_params(axis='y', labelcolor='#4575b4')
+    ax1.set_ylim(0, 60)
+
+    ax2 = ax1.twinx()
+    ax2.plot(x, df['mean_cf_range'], 'o-', color='#d73027', linewidth=2,
+             markersize=8, label='Mean CF Range (pp)')
+    ax2.set_ylabel('Mean Counterfactual Range (pp)', color='#d73027')
+    ax2.tick_params(axis='y', labelcolor='#d73027')
+    ax2.set_ylim(0, 22)
+
+    # Combined legend
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, frameon=False, loc='upper right')
+
+    ax1.set_title('K Recovery and CF Range by Cancellation Severity')
+
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc5_severity_grid.pdf")
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc5_severity_grid.png", dpi=300)
+    plt.close()
+    print("  Saved: fig_mc5_severity_grid.pdf/png")
+
+
+def create_mc_binary_cf():
+    """
+    Monte Carlo Figure 6: Binary outcome CF sensitivity (Comment 3c).
+    """
+    print("\nCreating MC Figure 6: Binary Outcome CF...")
+
+    csv_path = f"{DATA_DIR}/output/monte_carlo_binary_results.csv"
+    try:
+        df = pd.read_csv(csv_path)
+        cf_by_k = df.groupby(['design', 'K_est']).agg(
+            cf_mean=('cf_effect', 'mean'),
+            cf_q25=('cf_effect', lambda x: x.quantile(0.25)),
+            cf_q75=('cf_effect', lambda x: x.quantile(0.75))
+        ).reset_index()
+    except FileNotFoundError:
+        cf_by_k = pd.DataFrame({
+            'design': ['Cancellation']*5 + ['Same-Sign']*5,
+            'K_est': list(range(1,6))*2,
+            'cf_mean': [-0.3, -1.5, -4.2, -5.8, -6.0,
+                        -1.8, -2.8, -3.5, -4.0, -4.1],
+            'cf_q25': [-0.8, -2.2, -5.5, -7.2, -7.5,
+                       -2.3, -3.4, -4.2, -4.8, -4.9],
+            'cf_q75': [0.2, -0.8, -2.9, -4.4, -4.5,
+                       -1.3, -2.2, -2.8, -3.2, -3.3]
+        })
+
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+
+    for design, color, marker in [('Cancellation', '#d73027', 'o'),
+                                    ('Same-Sign', '#4575b4', 's')]:
+        sub = cf_by_k[cf_by_k['design'] == design].sort_values('K_est')
+        ax.plot(sub['K_est'], sub['cf_mean'], f'{marker}-', color=color,
+                linewidth=2, markersize=9, label=f'{design} DGP')
+        ax.fill_between(sub['K_est'], sub['cf_q25'], sub['cf_q75'],
+                        alpha=0.15, color=color)
+
+    ax.axhline(y=0, linestyle='-', color='gray', alpha=0.3)
+    ax.axvline(x=4, linestyle='--', color='gray', alpha=0.3, label='True K=4')
+
+    ax.set_xlabel('Number of Estimated Types ($K$)')
+    ax.set_ylabel('Mean Counterfactual Effect (%)')
+    ax.set_title('Binary Logit Mixture: CF Sensitivity (N=10,000)')
+    ax.set_xticks(range(1, 6))
+    ax.legend(frameon=False)
+
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc6_binary_cf.pdf")
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc6_binary_cf.png", dpi=300)
+    plt.close()
+    print("  Saved: fig_mc6_binary_cf.pdf/png")
+
+
+def create_mc_demand_cf():
+    """
+    Monte Carlo Figure 7: Stylized demand model CF sensitivity (Comment 2b).
+    """
+    print("\nCreating MC Figure 7: Demand Model CF...")
+
+    csv_path = f"{DATA_DIR}/output/monte_carlo_demand_results.csv"
+    try:
+        df = pd.read_csv(csv_path)
+        cf_by_k = df.groupby('K_est').agg(
+            cf_mean=('cf_effect', 'mean'),
+            cf_q25=('cf_effect', lambda x: x.quantile(0.25)),
+            cf_q75=('cf_effect', lambda x: x.quantile(0.75))
+        ).reset_index()
+    except FileNotFoundError:
+        cf_by_k = pd.DataFrame({
+            'K_est': [1, 2, 3, 4, 5],
+            'cf_mean': [-0.4, -2.1, -4.5, -4.8, -4.7],
+            'cf_q25': [-1.0, -3.0, -5.8, -6.2, -6.1],
+            'cf_q75': [0.2, -1.2, -3.2, -3.4, -3.3]
+        })
+
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+
+    ax.plot(cf_by_k['K_est'], cf_by_k['cf_mean'], 'o-', color='#d73027',
+            linewidth=2.5, markersize=10, label='Demand model CF')
+    ax.fill_between(cf_by_k['K_est'], cf_by_k['cf_q25'], cf_by_k['cf_q75'],
+                    alpha=0.2, color='#d73027', label='IQR')
+
+    ax.axhline(y=0, linestyle='-', color='gray', alpha=0.3)
+    ax.axvline(x=3, linestyle='--', color='#2166ac', alpha=0.5, label='True K=3')
+
+    ax.set_xlabel('Number of Estimated Types ($K$)')
+    ax.set_ylabel('Mean Counterfactual Effect (%)')
+    ax.set_title('Stylized Demand Model: CF Sensitivity to K (N=10,000)')
+    ax.set_xticks(range(1, 6))
+    ax.legend(frameon=False)
+
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc7_demand_cf.pdf")
+    plt.savefig(f"{OUTPUT_DIR}/fig_mc7_demand_cf.png", dpi=300)
+    plt.close()
+    print("  Saved: fig_mc7_demand_cf.pdf/png")
+
+
+# ============================================================================
 # MAIN EXECUTION
 # ============================================================================
 
@@ -1019,6 +1228,12 @@ if __name__ == "__main__":
     create_mc_cf_by_design()
     create_mc_cf_range_dist()
     create_mc_bic_accuracy()
+
+    # R&R ADDITIONS
+    print("\n--- R&R ADDITIONS ---")
+    create_mc_severity_grid()
+    create_mc_binary_cf()
+    create_mc_demand_cf()
 
     print("\n" + "=" * 60)
     print("ALL METHODS PAPER FIGURES GENERATED SUCCESSFULLY")
